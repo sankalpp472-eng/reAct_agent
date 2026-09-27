@@ -122,6 +122,25 @@ class ArgoKnative:
         self.api.patch_namespaced_custom_object(
             "serving.knative.dev", "v1", "default", "services", fn, patch)
 
+    def _wait_revision_ready(self, fn, timeout=180):
+        """Changing min-scale creates a new revision. Make sure it becomes
+        Ready (otherwise traffic stays on the old, pinned revision)."""
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            st = self.api.get_namespaced_custom_object(
+                "serving.knative.dev", "v1", "default", "services", fn).get("status", {})
+            created, ready = st.get("latestCreatedRevisionName"), st.get("latestReadyRevisionName")
+            if created and created == ready:
+                return
+            rev = self.api.get_namespaced_custom_object(
+                "serving.knative.dev", "v1", "default", "revisions", created) if created else {}
+            cond = next((c for c in rev.get("status", {}).get("conditions", []) if c.get("type") == "Ready"), {})
+            if cond.get("status") == "False":
+                raise RuntimeError(f"new revision {created} of {fn} failed: {cond.get('reason')}: "
+                                   f"{cond.get('message')}")
+            time.sleep(2)
+        raise RuntimeError(f"new revision of {fn} not Ready within {timeout}s")
+
     def _pods(self, fn):
         """Pods of this service that could still serve: finished pods left
         behind (Completed/Error, e.g. after a k3s restart) don't count."""
@@ -132,8 +151,9 @@ class ArgoKnative:
 
     def make_dormant(self, fn):
         if fn not in self.patched:
-            self._set_min_scale(fn, "0")  # new revision that may scale to zero
             self.patched.add(fn)
+            self._set_min_scale(fn, "0")  # new revision that may scale to zero
+            self._wait_revision_ready(fn)
         print(f"  waiting for {fn} to scale to zero ...", flush=True)
         start = time.time()
         next_report = start + 60
@@ -165,7 +185,11 @@ class ArgoKnative:
     def finish(self):
         for fn in self.patched:  # back to Exp 1's always-warm setting
             self._set_min_scale(fn, "1")
-            print(f"restored min-scale 1 on {fn}")
+            try:
+                self._wait_revision_ready(fn)
+                print(f"restored min-scale 1 on {fn}")
+            except RuntimeError as e:
+                print(f"WARNING: restoring min-scale 1 on {fn}: {e}")
 
 
 # ------------------------------------------------------------ one trial
