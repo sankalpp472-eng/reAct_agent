@@ -1,0 +1,6 @@
+workload,run,iteration,tcycle_ms,t_llm_ms,t_faas_http_ms,torch_ms,troute_ms,n_tool_calls,missing_timing
+retail-44,1,1,10918,9000.777,1174.223,743.0,1026.219,1,False
+retail-44,1,2,9891,9000.644,211.356,679.0,204.374,1,False
+retail-44,1,3,10276,9003.291,226.709,1046.0,218.281,1,False
+retail-44,1,4,9709,9000.677,150.323,558.0,142.117,1,False
+retail-44,1,5,11691,11000.6,184.4,506.0,179.283,2,False

@@ -8,7 +8,8 @@ Input (JSON body):
   "step_id": 1,
   "history": [                     # optional, prior actor results in this run
     {"step_id": 1, "result": "..."}
-  ]
+  ],
+  "domain": "retail" | "airline"   # optional, see below
 }
 
 Output (JSON body):
@@ -24,13 +25,17 @@ The actor has three tools available via Gemini function calling:
   - http_request: call a specific, known HTTP endpoint
   - calculator:   safe arithmetic evaluation
 
+If "domain" is set, the actor gets that tau-bench domain's tools instead
+(served by the retail-tools / airline-tools function).
+
 See tools.py for the tool implementations and gemini_client.call_gemini_agentic
 for the tool-calling loop itself.
 """
 import json
 import re
+from . import telemetry
 from .gemini_client import call_gemini_agentic
-from .tools import TOOL_DECLARATIONS, execute_tool
+from .tools import TOOL_DECLARATIONS, TAU_DOMAINS, domain_tools, execute_tool
 
 # Enforced server-side on the post-tool-calling "restate as JSON" turn (see
 # gemini_client.call_gemini_agentic's final_response_schema). This is what
@@ -69,17 +74,39 @@ prose outside the JSON - of this exact shape:
 }
 """
 
+DOMAIN_INSTRUCTION = """You are the ACTOR in a planner-actor-evaluator agent loop,
+working as a {domain} customer service agent. You will be given the customer's
+request (the goal), the full plan, the history of steps already completed, and
+ONE specific step to execute now. Execute just that step and report the outcome.
+
+Use the provided tools to look up and change the customer's data - never invent
+ids, prices or other details you could look up. Tools that change data act
+immediately, so only call them when this step requires it.
+
+Once you are done, respond with ONLY a JSON object - no markdown code fences, no
+prose outside the JSON - of this exact shape:
+{{
+  "step_id": <int, same as input>,
+  "result": "<what you did / found / produced for this step>",
+  "status": "completed" or "failed"
+}}
+"""
+
 
 def handle(event, context):
+    telemetry.begin()  # t3
     try:
         payload = _parse_body(event.body)
         goal = payload.get("goal")
         plan = payload.get("plan")
         step_id = payload.get("step_id")
         history = payload.get("history", [])
+        domain = payload.get("domain") or None
 
         if not goal or not plan or step_id is None:
             return _resp(400, {"error": "Required fields: 'goal', 'plan', 'step_id'"})
+        if domain is not None and domain not in TAU_DOMAINS:
+            return _resp(400, {"error": f"'domain' must be one of {list(TAU_DOMAINS)}"})
 
         step = next((s for s in plan if s.get("id") == step_id), None)
         if step is None:
@@ -92,11 +119,18 @@ def handle(event, context):
             f"Step to execute now: {json.dumps(step)}\n"
         )
 
+        if domain:
+            tools_declarations, execute_tool_fn = domain_tools(domain)
+            system_instruction = DOMAIN_INSTRUCTION.format(domain=domain)
+        else:
+            tools_declarations, execute_tool_fn = TOOL_DECLARATIONS, execute_tool
+            system_instruction = SYSTEM_INSTRUCTION
+
         actor_output = call_gemini_agentic(
             prompt,
-            tools_declarations=TOOL_DECLARATIONS,
-            execute_tool_fn=execute_tool,
-            system_instruction=SYSTEM_INSTRUCTION,
+            tools_declarations=tools_declarations,
+            execute_tool_fn=execute_tool_fn,
+            system_instruction=system_instruction,
             final_response_schema=ACTOR_RESULT_SCHEMA,
             final_instruction=(
                 f"Restate your answer for step {step_id} as JSON only, matching "
@@ -164,4 +198,4 @@ def _parse_body(body):
 
 
 def _resp(status_code, body_dict):
-    return {"statusCode": status_code, "body": body_dict}
+    return {"statusCode": status_code, "body": telemetry.attach(body_dict)}
