@@ -1,0 +1,166 @@
+{
+  "name": "pae_agentic_loop",
+  "description": "Planner -> Actor -> Evaluator, replanning every single step, over faasd functions",
+  "version": 3,
+  "schemaVersion": 2,
+  "restartable": true,
+  "ownerEmail": "you@example.com",
+  "timeoutSeconds": 1800,
+  "timeoutPolicy": "TIME_OUT_WF",
+
+  "inputTemplate": {
+    "context": ""
+  },
+
+  "variables": {
+    "feedback": "",
+    "step_history": []
+  },
+
+  "tasks": [
+    {
+      "name": "init_vars",
+      "taskReferenceName": "init_vars",
+      "type": "SET_VARIABLE",
+      "inputParameters": {
+        "feedback": "",
+        "step_history": []
+      }
+    },
+    {
+      "name": "step_loop",
+      "taskReferenceName": "step_loop",
+      "type": "DO_WHILE",
+      "inputParameters": {
+        "value": "${init_vars.output}"
+      },
+      "loopCondition": "if ( $.evaluator_task['response']['body']['verdict'] != 'done' && $.append_history['result'].length < 8 ) { true; } else { false; }",
+      "loopOver": [
+        {
+          "name": "build_planner_context",
+          "taskReferenceName": "build_planner_context",
+          "type": "JSON_JQ_TRANSFORM",
+          "inputParameters": {
+            "base_context": "${workflow.input.context}",
+            "history": "${workflow.variables.step_history}",
+            "queryExpression": ".base_context + (if (.history | length) > 0 then \"\\n\\nSteps already completed so far (do not re-plan these, only plan what still remains): \" + (.history | tostring) else \"\" end)"
+          }
+        },
+        {
+          "name": "planner_task",
+          "taskReferenceName": "planner_task",
+          "type": "HTTP",
+          "inputParameters": {
+            "http_request": {
+              "uri": "http://10.217.17.247:8080/function/planner",
+              "method": "POST",
+              "connectionTimeOut": 10000,
+              "readTimeOut": 90000,
+              "body": {
+                "goal": "${workflow.input.goal}",
+                "context": "${build_planner_context.output.result}",
+                "feedback": "${workflow.variables.feedback}"
+              }
+            }
+          }
+        },
+        {
+          "name": "actor_task",
+          "taskReferenceName": "actor_task",
+          "type": "HTTP",
+          "inputParameters": {
+            "http_request": {
+              "uri": "http://10.217.17.247:8080/function/actor",
+              "method": "POST",
+              "connectionTimeOut": 10000,
+              "readTimeOut": 180000,
+              "body": {
+                "goal": "${workflow.input.goal}",
+                "plan": "${planner_task.output.response.body.plan}",
+                "step_id": "${planner_task.output.response.body.plan[0].id}",
+                "history": "${workflow.variables.step_history}"
+              }
+            }
+          }
+        },
+        {
+          "name": "append_history",
+          "taskReferenceName": "append_history",
+          "type": "JSON_JQ_TRANSFORM",
+          "inputParameters": {
+            "history": "${workflow.variables.step_history}",
+            "new_entry": "${actor_task.output.response.body}",
+            "queryExpression": ".history + [.new_entry]"
+          }
+        },
+        {
+          "name": "save_history",
+          "taskReferenceName": "save_history",
+          "type": "SET_VARIABLE",
+          "inputParameters": {
+            "step_history": "${append_history.output.result}"
+          }
+        },
+        {
+          "name": "evaluator_task",
+          "taskReferenceName": "evaluator_task",
+          "type": "HTTP",
+          "inputParameters": {
+            "http_request": {
+              "uri": "http://10.217.17.247:8080/function/evaluator",
+              "method": "POST",
+              "connectionTimeOut": 10000,
+              "readTimeOut": 90000,
+              "body": {
+                "goal": "${workflow.input.goal}",
+                "plan": "${planner_task.output.response.body.plan}",
+                "history": "${workflow.variables.step_history}"
+              }
+            }
+          }
+        },
+        {
+          "name": "save_feedback",
+          "taskReferenceName": "save_feedback",
+          "type": "SET_VARIABLE",
+          "inputParameters": {
+            "feedback": "${evaluator_task.output.response.body.feedback}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "final_switch",
+      "taskReferenceName": "final_switch",
+      "type": "SWITCH",
+      "inputParameters": {
+        "switchCaseValue": "${evaluator_task.output.response.body.verdict}"
+      },
+      "evaluatorType": "value-param",
+      "expression": "switchCaseValue",
+      "defaultCase": [
+        {
+          "name": "fail_task",
+          "taskReferenceName": "fail_task",
+          "type": "TERMINATE",
+          "inputParameters": {
+            "terminationStatus": "FAILED",
+            "terminationReason": "Loop exited without reaching a 'done' verdict (safety cap of 8 iterations hit)"
+          }
+        }
+      ],
+      "decisionCases": {
+        "done": [
+          {
+            "name": "mark_done",
+            "taskReferenceName": "mark_done",
+            "type": "SET_VARIABLE",
+            "inputParameters": {
+              "final_status": "done"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

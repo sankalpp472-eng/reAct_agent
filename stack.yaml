@@ -1,0 +1,47 @@
+version: 1.0
+provider:
+  name: openfaas
+  # faasd's gateway. If you're running this faas-cli command directly on the
+  # faasd host, 127.0.0.1:8080 is correct. If you're deploying remotely,
+  # point this at that host's IP/domain (and put it behind TLS/auth in prod).
+  gateway: http://127.0.0.1:8080
+
+functions:
+  planner:
+    lang: python3-http
+    handler: ./planner
+    image: sankalps2003/planner:latest        # change to your own registry, e.g. docker.io/you/planner:latest
+    environment:
+      GEMINI_MODEL: gemini-3.6-flash
+      write_debug: "true"
+      read_timeout: "90s"
+      write_timeout: "90s"
+      exec_timeout: "90s"
+    secrets:
+      - gemini-api-key
+
+  actor:
+    lang: python3-http
+    handler: ./actor
+    image: sankalps2003/actor:latest          # change to your own registry
+    environment:
+      GEMINI_MODEL: gemini-3.6-flash
+      write_debug: "true"
+      read_timeout: "180s"
+      write_timeout: "180s"
+      exec_timeout: "180s"
+    secrets:
+      - gemini-api-key
+      - tavily-api-key
+  evaluator:
+    lang: python3-http
+    handler: ./evaluator
+    image: sankalps2003/evaluator:latest      # change to your own registry
+    environment:
+      GEMINI_MODEL: gemini-3.6-flash
+      write_debug: "true"
+      read_timeout: "90s"
+      write_timeout: "90s"
+      exec_timeout: "90s"
+    secrets:
+      - gemini-api-key
