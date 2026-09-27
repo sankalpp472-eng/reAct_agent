@@ -92,6 +92,52 @@ curl -s http://<faasd-host>:8080/function/evaluator \
       }' | jq
 ```
 
+## 6. tau-bench tool servers (`retail-tools`, `airline-tools`)
+
+Two extra functions expose the tools from
+[tau-bench](https://github.com/sierra-research/tau-bench) (commit `59a200c`),
+one function per domain:
+
+- `retail-tools`  — 16 tools (`find_user_id_by_email`, `get_order_details`,
+  `cancel_pending_order`, `exchange_delivered_order_items`, ...)
+- `airline-tools` — 14 tools (`search_direct_flight`, `book_reservation`,
+  `update_reservation_flights`, `cancel_reservation`, ...)
+
+The tool code (`tau_tools/`) and mock database (`data/*.json`) are vendored
+unchanged from tau-bench (MIT, see `LICENSE-tau-bench`). All of a domain's
+tools share one in-memory DB, so writes (cancel, book, ...) are visible to
+later reads — faasd runs one replica per function, so there is one copy.
+They need no secrets and make no LLM calls.
+
+```bash
+faas-cli up -f stack.yaml --filter retail-tools
+faas-cli up -f stack.yaml --filter airline-tools
+
+GW=http://<faasd-host>:8080
+
+# List tool declarations (already in Gemini Interactions API format)
+curl -s $GW/function/retail-tools -d '{"action":"list_tools"}' | jq '.tools[].name'
+
+# Call a tool
+curl -s $GW/function/retail-tools \
+  -d '{"tool":"find_user_id_by_email","arguments":{"email":"isabella.lopez3271@example.com"}}' | jq
+# -> {"tool":"find_user_id_by_email","output":"isabella_lopez_6490","error":false}
+
+curl -s $GW/function/airline-tools \
+  -d '{"tool":"search_direct_flight","arguments":{"origin":"JFK","destination":"SFO","date":"2024-05-16"}}' | jq
+
+# Reset the DB to its original state (do this before each task)
+curl -s $GW/function/retail-tools -d '{"action":"reset"}'
+
+# tau-bench DB hash (compare against the expected end state to score a task)
+curl -s $GW/function/retail-tools -d '{"action":"hash"}'
+```
+
+Tool outputs are always strings, as in tau-bench. Tool-level failures come
+back as HTTP 200 with `"output": "Error: ..."` and `"error": true` so the
+model can read and react to them; only malformed requests (unknown tool,
+bad body) get a 4xx.
+
 ## Contract summary (for wiring into Conductor later)
 
 | Function  | Input                                              | Output                                                           |
@@ -99,6 +145,7 @@ curl -s http://<faasd-host>:8080/function/evaluator \
 | planner   | `{goal, context?, feedback?}`                       | `{goal, plan:[{id, description}]}`                                |
 | actor     | `{goal, plan, step_id, history?}`                   | `{step_id, description, result, status}`                          |
 | evaluator | `{goal, plan, history}`                             | `{verdict: done|continue|replan, feedback, next_step_id}`         |
+| retail-tools / airline-tools | `{tool, arguments}` or `{action: list_tools|reset|hash}` | `{tool, output, error}` / `{tools}` / `{status}` / `{hash}` |
 
 The typical loop: `planner` → loop( `actor` on `next_step_id` → append to `history` →
 `evaluator` ) until `verdict == "done"`; if `verdict == "replan"`, call `planner`
