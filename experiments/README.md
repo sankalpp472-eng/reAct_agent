@@ -191,3 +191,29 @@ python experiments/exp2b_cold.py --stack argo \
 On Argo, each trial also waits for the tool to scale to zero, so 5 trials per workload
 take a while. The Argo requeue setting in effect is recorded in `summary.json`, as in
 Experiment 1.
+
+## Sworkflow: workflow state per run (logical)
+
+`sworkflow.py` measures how much state each orchestrator keeps for one run, from the
+execution records the Exp 1 drivers already save in `raw/`:
+- **Conductor:** the execution with all its tasks, as returned by
+  `GET /api/workflow/{id}?includeTasks=true`.
+- **Argo:** the Workflow object that the Kubernetes API server keeps in its datastore
+  (etcd, or SQLite on a default k3s).
+
+Each record is re-serialized as compact JSON, so both stacks are measured the same way.
+The script reports total KB per run, KB per loop turn, and a split into:
+- **payload:** data passed between steps
+- **definitions:** copies of the workflow/task definitions stored with every run
+- **other:** ids, timestamps, statuses and metadata
+
+```bash
+python experiments/sworkflow.py experiments/results/exp1-conductor-<ts> experiments/results/exp1-argo-<ts>
+```
+
+It writes `sworkflow_runs.csv` into each folder and adds a `sworkflow` section to its
+`summary.json`. Only runs that completed with reward 1 are counted.
+
+This is the *logical* size of one run's state. Physical database growth is larger:
+indexes, Conductor's Elasticsearch/Redis copies, and the datastore keeping earlier
+versions of the Workflow object after each status update (until compaction) all add to it.
