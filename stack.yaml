@@ -50,3 +50,26 @@ functions:
       exec_timeout: "90s"
     secrets:
       - gemini-api-key
+
+  # tau-bench (https://github.com/sierra-research/tau-bench) tool servers.
+  # One function per domain; each serves all of that domain's tools over a
+  # shared in-memory mock DB. No secrets / LLM calls - pure Python.
+  retail-tools:
+    lang: python3-http
+    handler: ./retail-tools
+    image: sankalps2003/retail-tools:latest   # change to your own registry
+    environment:
+      write_debug: "false"
+      read_timeout: "30s"
+      write_timeout: "30s"
+      exec_timeout: "30s"
+
+  airline-tools:
+    lang: python3-http
+    handler: ./airline-tools
+    image: sankalps2003/airline-tools:latest  # change to your own registry
+    environment:
+      write_debug: "false"
+      read_timeout: "30s"
+      write_timeout: "30s"
+      exec_timeout: "30s"
