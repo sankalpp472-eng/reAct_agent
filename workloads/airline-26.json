@@ -1,0 +1,67 @@
+{
+  "id": "airline-26",
+  "domain": "airline",
+  "tool_function": "airline-tools",
+  "source": "sierra-research/tau-bench@59a200c tau_bench/envs/airline/tasks_test.py index 26",
+  "why_chosen": "Multi-reservation task mixing cancel, flight search, arithmetic and an upgrade, with a policy trap: IFOYYZ is basic economy without insurance and must NOT be cancelled, so the agent has to follow policy rather than just the request.",
+  "user_id": "aarav_ahmed_6699",
+  "goal": "A customer with user id aarav_ahmed_6699 wants to cancel two upcoming reservations, IFOYYZ and NQNU5R, and upgrade a third reservation, M20IZO, to business class. Use their credit card ending in 7334 for all charges. They are willing to comply with airline policy: only make the changes the policy allows, and explain any that it doesn't. The customer has already confirmed they want these changes made.",
+  "original_instruction": "Your user id is aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and upgrade a third (M20IZO) to business class. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes.",
+  "policy_file": "policies/airline.md",
+  "expected_actions": [
+    {
+      "name": "cancel_reservation",
+      "kwargs": {
+        "reservation_id": "NQNU5R"
+      }
+    },
+    {
+      "name": "get_reservation_details",
+      "kwargs": {
+        "reservation_id": "M20IZO"
+      }
+    },
+    {
+      "name": "search_direct_flight",
+      "kwargs": {
+        "origin": "JFK",
+        "destination": "ATL",
+        "date": "2024-05-22"
+      }
+    },
+    {
+      "name": "search_direct_flight",
+      "kwargs": {
+        "origin": "ATL",
+        "destination": "MCO",
+        "date": "2024-05-22"
+      }
+    },
+    {
+      "name": "calculate",
+      "kwargs": {
+        "expression": "430 + 412 - (136 + 109)"
+      }
+    },
+    {
+      "name": "update_reservation_flights",
+      "kwargs": {
+        "reservation_id": "M20IZO",
+        "cabin": "business",
+        "flights": [
+          {
+            "flight_number": "HAT268",
+            "date": "2024-05-22"
+          },
+          {
+            "flight_number": "HAT010",
+            "date": "2024-05-22"
+          }
+        ],
+        "payment_id": "credit_card_9074831"
+      }
+    }
+  ],
+  "expected_outputs": [],
+  "expected_db_hash": "989dedfa6228fcddc7cc44bf3e67325463035a530d3446d8dc0c65284bec6b6f"
+}
