@@ -1,0 +1,16 @@
+workload,run,used,stack,definitions_bytes,payload_bytes,turns,units,total_bytes,other_bytes,kb_per_turn
+airline-26,1,True,argo+knative,8001,134865,6,51,167076,24210,27.193
+airline-26,2,True,argo+knative,8001,134869,6,51,167059,24189,27.191
+airline-26,3,True,argo+knative,8001,134846,6,51,167033,24186,27.186
+airline-26,4,True,argo+knative,8001,134845,6,51,167000,24154,27.181
+airline-26,5,True,argo+knative,8001,134857,6,51,166996,24138,27.18
+retail-44,1,True,argo+knative,7831,62546,5,43,90804,20427,17.735
+retail-44,10,True,argo+knative,7831,62566,5,43,90801,20404,17.735
+retail-44,2,True,argo+knative,7831,62553,5,43,90806,20422,17.736
+retail-44,3,True,argo+knative,7831,62541,5,43,90781,20409,17.731
+retail-44,4,True,argo+knative,7831,62571,5,43,90824,20422,17.739
+retail-44,5,True,argo+knative,7831,62561,5,43,90803,20411,17.735
+retail-44,6,True,argo+knative,7831,62551,5,43,90800,20418,17.734
+retail-44,7,True,argo+knative,7831,62558,5,43,90792,20403,17.733
+retail-44,8,True,argo+knative,7831,62542,5,43,90778,20405,17.73
+retail-44,9,True,argo+knative,7831,62569,5,43,90824,20424,17.739
