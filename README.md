@@ -173,6 +173,12 @@ MOCK_LATENCY_S=0 python workloads/run_local.py workloads/retail-44.json         
 python workloads/run_local.py workloads/retail-44.json --gateway http://<faasd-host>:8080
 ```
 
+## 8. Experiments
+
+Every function adds a `_timing` object to its response body: handler entry/exit
+time, LLM time and, for the actor, per-tool-call timings. The Experiment 1
+driver uses these. See [`experiments/README.md`](experiments/README.md).
+
 ## Contract summary (for wiring into Conductor later)
 
 | Function  | Input                                              | Output                                                           |
