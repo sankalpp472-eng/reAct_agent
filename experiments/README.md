@@ -144,3 +144,50 @@ python experiments/exp1_argo.py --ingress knative://<node-ip>:80/default.example
 - **Reset and scoring:** these go through Kourier with a `Host:` header, so no DNS is needed.
 - **Output:** `experiments/results/exp1-argo-<timestamp>/`, with the same `dataplane_*.csv`
   files and `summary.json` → `dataplane` layout as the Conductor run.
+
+## Experiment 2b: cold tool function, through the orchestrator
+
+What does it cost the agent when a tool function has gone idle and must start again
+mid-task? `exp2b_cold.py` runs the normal workflow (Conductor or Argo), with the
+workload's tool function (`retail-tools` / `airline-tools`) made dormant first. Each
+trial is a pair of runs:
+
+1. **Make the tool dormant.** How depends on the platform:
+
+   | Platform | How the tool goes dormant | What the next request does |
+   |---|---|---|
+   | faasd | its process (containerd task) is stopped. faasd CE refuses `replicas: 0`, but it reports a stopped function as 0 replicas | the gateway (`scale_from_zero=true`) asks faasd to start a **new process in the existing container** and waits for it |
+   | Knative | `min-scale` is set to 0 for this experiment, and the driver waits until its pod is gone (default: ~60–90 s idle) | the activator holds the request while Knative creates a **new pod** (sandbox, queue-proxy, container) |
+
+   That difference in what "coming back from idle" involves is part of what's being
+   compared. State it in the write-up.
+2. **Cold run.** Run the workflow *without* the usual DB reset, which would wake the
+   function. A restarted function starts with a fresh DB anyway, so a cold run that
+   scores reward 1 also confirms the function really restarted.
+3. **Warm run.** Reset the DB and run the workflow again as a paired baseline.
+
+Only the tool function goes cold; planner, actor and evaluator stay warm. The actor's
+first tool call in the cold run is the one that hits the cold function.
+
+| Metric | Meaning |
+|---|---|
+| `delta_te2e_ms` | Te2e(cold) − Te2e(warm): the end-to-end cost of the cold tool, including whatever the orchestrator does meanwhile |
+| `tcold_tool_ms` | first tool call's round trip in the cold run (actor clock, t5 − t2) minus the warm run's median tool-call round trip: the cold start as the agent sees it |
+| `cold_handler_ms` | that first call's handler time (t4 − t3), which includes the tool's lazy DB load (app-level init) |
+| `first_call_error` | the cold call failed (e.g. timed out) instead of being slow. Failed calls are only recorded by actor images built with this change |
+
+Only trials where both runs score reward 1 go into `summary.json`.
+
+```bash
+# Conductor + faasd: run on the faasd host; stopping the task uses `sudo ctr`
+python experiments/exp2b_cold.py --stack conductor \
+    --conductor http://localhost:8082/api --gateway http://127.0.0.1:8080 --trials 5
+
+# Argo + Knative: min-scale goes back to 1 when the script ends
+python experiments/exp2b_cold.py --stack argo \
+    --ingress knative://<kourier-ip>:80/default.example.com --trials 5
+```
+
+On Argo, each trial also waits for the tool to scale to zero, so 5 trials per workload
+take a while. The Argo requeue setting in effect is recorded in `summary.json`, as in
+Experiment 1.
