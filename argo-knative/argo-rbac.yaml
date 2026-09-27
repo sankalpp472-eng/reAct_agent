@@ -1,0 +1,77 @@
+# Service account the pae-agentic-loop workflows run as. All steps are Argo
+# HTTP templates, which are executed by one "agent" pod per workflow (not a pod
+# per step); the agent needs to read its WorkflowTaskSet and report results.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pae-agent
+  namespace: argo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pae-agent
+  namespace: argo
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["workflowtasksets"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["argoproj.io"]
+    resources: ["workflowtasksets/status"]
+    verbs: ["patch"]
+  - apiGroups: ["argoproj.io"]
+    resources: ["workflowtaskresults"]
+    verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pae-agent
+  namespace: argo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pae-agent
+subjects:
+  - kind: ServiceAccount
+    name: pae-agent
+    namespace: argo
+---
+# The agent pod mounts the service account's token from a Secret named
+# <serviceaccount>.service-account-token; Kubernetes >= 1.24 no longer creates
+# it automatically.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pae-agent.service-account-token
+  namespace: argo
+  annotations:
+    kubernetes.io/service-account.name: pae-agent
+type: kubernetes.io/service-account-token
+---
+# Argo v3.6's install.yaml doesn't let the workflow controller itself patch
+# workflowtasksets/status, which it does to clear finished HTTP steps
+# ("error updating taskset ... forbidden" in its log). Grant it here.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argo-controller-taskset-status
+  namespace: argo
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["workflowtasksets/status"]
+    verbs: ["patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argo-controller-taskset-status
+  namespace: argo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: argo-controller-taskset-status
+subjects:
+  - kind: ServiceAccount
+    name: argo
+    namespace: argo

@@ -1,0 +1,188 @@
+# Knative Services for the five functions - the SAME images faas-cli builds for
+# faasd (python3-http template: of-watchdog + Flask on port 8080), with the same
+# environment as stack.yaml. deploy.sh replaces REGISTRY and TAG (default: latest).
+#
+# Autoscaling is pinned for Experiment 1 (warm, single replica - like faasd):
+#   min-scale/max-scale 1        one always-running pod, never scaled to zero
+#   target-burst-capacity 0      activator only sits in the request path while
+#                                scaling from zero, so warm requests go
+#                                Kourier -> queue-proxy -> container
+
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: planner
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+        autoscaling.knative.dev/target-burst-capacity: "0"
+        # set by deploy.sh on every deploy, so a re-deploy always creates a new
+        # revision and picks up freshly pushed :latest images
+        pae/deployed-at: "DEPLOYED_AT"
+    spec:
+      containerConcurrency: 0
+      timeoutSeconds: 300
+      containers:
+        - image: REGISTRY/planner:TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MOCK_LATENCY_S
+              value: "2.0"
+            - name: MOCK_LATENCY_JITTER_S
+              value: "0.0"
+            - name: MOCK_NUM_STEPS
+              value: "4"
+            - name: write_debug
+              value: "true"
+            - name: read_timeout
+              value: "90s"
+            - name: write_timeout
+              value: "90s"
+            - name: exec_timeout
+              value: "90s"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: actor
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+        autoscaling.knative.dev/target-burst-capacity: "0"
+        # set by deploy.sh on every deploy, so a re-deploy always creates a new
+        # revision and picks up freshly pushed :latest images
+        pae/deployed-at: "DEPLOYED_AT"
+    spec:
+      containerConcurrency: 0
+      timeoutSeconds: 300
+      containers:
+        - image: REGISTRY/actor:TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MOCK_LATENCY_S
+              value: "2.0"
+            - name: MOCK_LATENCY_JITTER_S
+              value: "0.0"
+            - name: MOCK_ACTOR_TOOL_ROUNDS
+              value: "1"
+            - name: TOOLS_URL_TEMPLATE
+              value: "http://{name}.default.svc.cluster.local"
+            - name: write_debug
+              value: "true"
+            - name: read_timeout
+              value: "180s"
+            - name: write_timeout
+              value: "180s"
+            - name: exec_timeout
+              value: "180s"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: evaluator
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+        autoscaling.knative.dev/target-burst-capacity: "0"
+        # set by deploy.sh on every deploy, so a re-deploy always creates a new
+        # revision and picks up freshly pushed :latest images
+        pae/deployed-at: "DEPLOYED_AT"
+    spec:
+      containerConcurrency: 0
+      timeoutSeconds: 300
+      containers:
+        - image: REGISTRY/evaluator:TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MOCK_LATENCY_S
+              value: "1.0"
+            - name: MOCK_LATENCY_JITTER_S
+              value: "0.0"
+            - name: write_debug
+              value: "true"
+            - name: read_timeout
+              value: "90s"
+            - name: write_timeout
+              value: "90s"
+            - name: exec_timeout
+              value: "90s"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: retail-tools
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+        autoscaling.knative.dev/target-burst-capacity: "0"
+        # set by deploy.sh on every deploy, so a re-deploy always creates a new
+        # revision and picks up freshly pushed :latest images
+        pae/deployed-at: "DEPLOYED_AT"
+    spec:
+      containerConcurrency: 0
+      timeoutSeconds: 300
+      containers:
+        - image: REGISTRY/retail-tools:TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: write_debug
+              value: "false"
+            - name: read_timeout
+              value: "30s"
+            - name: write_timeout
+              value: "30s"
+            - name: exec_timeout
+              value: "30s"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: airline-tools
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+        autoscaling.knative.dev/max-scale: "1"
+        autoscaling.knative.dev/target-burst-capacity: "0"
+        # set by deploy.sh on every deploy, so a re-deploy always creates a new
+        # revision and picks up freshly pushed :latest images
+        pae/deployed-at: "DEPLOYED_AT"
+    spec:
+      containerConcurrency: 0
+      timeoutSeconds: 300
+      containers:
+        - image: REGISTRY/airline-tools:TAG
+          ports:
+            - containerPort: 8080
+          env:
+            - name: write_debug
+              value: "false"
+            - name: read_timeout
+              value: "30s"
+            - name: write_timeout
+              value: "30s"
+            - name: exec_timeout
+              value: "30s"

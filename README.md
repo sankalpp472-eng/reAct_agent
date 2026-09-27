@@ -173,7 +173,13 @@ MOCK_LATENCY_S=0 python workloads/run_local.py workloads/retail-44.json         
 python workloads/run_local.py workloads/retail-44.json --gateway http://<faasd-host>:8080
 ```
 
-## 8. Experiments
+## 8. The second stack: Argo Workflows + Knative
+
+The same functions (same images) and the same loop also run on Argo Workflows +
+Knative Serving, for the orchestrator comparison. See
+[`argo-knative/README.md`](argo-knative/README.md).
+
+## 9. Experiments
 
 Every function adds a `_timing` object to its response body: handler entry/exit
 time, LLM time and, for the actor, per-tool-call timings. The Experiment 1

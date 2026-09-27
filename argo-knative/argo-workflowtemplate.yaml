@@ -1,0 +1,149 @@
+# Argo Workflows version of conductor-agentic-loop/pae_agentic_loop_v2.json.
+#
+# Same loop, same function contracts: every turn calls planner -> actor ->
+# evaluator (Knative Services), and repeats until the evaluator says "done" or
+# `maxturns` turns have run (the Conductor workflow's safety cap is 8).
+#
+#   Conductor                         Argo
+#   DO_WHILE                          template `turn` calling itself (recursion)
+#   HTTP task                         HTTP template (run by one agent pod per workflow)
+#   JSON_JQ_TRANSFORM / SET_VARIABLE  expression templates ({{=...}}) evaluated by
+#                                     the controller; state is passed as parameters
+#
+# Like the Conductor workflow's append_history, the history entry built from the
+# actor's response keeps only step_id/description/result/status, so the
+# functions' `_timing` never goes into the agent's history.
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: pae-agentic-loop
+  namespace: argo
+spec:
+  entrypoint: main
+  serviceAccountName: pae-agent
+  arguments:
+    parameters:
+      - name: goal
+      - name: domain
+        value: ""
+      - name: context
+        value: ""
+      - name: maxturns
+        value: "8"
+      # Knative Services are reached at http://<name>.<fnbase>
+      - name: fnbase
+        value: "default.svc.cluster.local"
+
+  templates:
+    - name: main
+      steps:
+        - - name: turn
+            template: turn
+            arguments:
+              parameters:
+                - name: history
+                  value: "[]"
+                - name: feedback
+                  value: ""
+                - name: iteration
+                  value: "1"
+
+    - name: turn
+      inputs:
+        parameters:
+          - name: history
+          - name: feedback
+          - name: iteration
+      steps:
+        - - name: planner
+            template: call
+            arguments:
+              parameters:
+                - name: url
+                  value: "http://planner.{{workflow.parameters.fnbase}}"
+                - name: body
+                  value: >-
+                    {{=toJson({
+                      "goal": workflow.parameters.goal,
+                      "context": inputs.parameters.history == "[]"
+                        ? workflow.parameters.context
+                        : workflow.parameters.context + "\n\nSteps already completed so far (do not re-plan these, only plan what still remains): " + inputs.parameters.history,
+                      "feedback": inputs.parameters.feedback
+                    })}}
+
+        - - name: actor
+            template: call
+            arguments:
+              parameters:
+                - name: url
+                  value: "http://actor.{{workflow.parameters.fnbase}}"
+                - name: body
+                  value: >-
+                    {{=toJson({
+                      "goal": workflow.parameters.goal,
+                      "plan": jsonpath(steps.planner.outputs.result, "$.plan"),
+                      "step_id": jsonpath(steps.planner.outputs.result, "$.plan[0].id"),
+                      "history": jsonpath(inputs.parameters.history, "$"),
+                      "domain": workflow.parameters.domain
+                    })}}
+
+        - - name: evaluator
+            template: call
+            arguments:
+              parameters:
+                - name: url
+                  value: "http://evaluator.{{workflow.parameters.fnbase}}"
+                # history + [actor result without _timing]
+                - name: body
+                  value: >-
+                    {{=toJson({
+                      "goal": workflow.parameters.goal,
+                      "plan": jsonpath(steps.planner.outputs.result, "$.plan"),
+                      "history": jsonpath(
+                        (inputs.parameters.history == "[]" ? "[" : sprig.trimSuffix("]", inputs.parameters.history) + ",")
+                        + toJson({
+                          "step_id": jsonpath(steps.actor.outputs.result, "$.step_id"),
+                          "description": jsonpath(steps.actor.outputs.result, "$.description"),
+                          "result": jsonpath(steps.actor.outputs.result, "$.result"),
+                          "status": jsonpath(steps.actor.outputs.result, "$.status")
+                        })
+                        + "]", "$")
+                    })}}
+
+        - - name: next
+            template: turn
+            when: >-
+              {{=jsonpath(steps.evaluator.outputs.result, "$.verdict") != "done"
+                && asInt(inputs.parameters.iteration) < asInt(workflow.parameters.maxturns)}}
+            arguments:
+              parameters:
+                - name: history
+                  value: >-
+                    {{=(inputs.parameters.history == "[]" ? "[" : sprig.trimSuffix("]", inputs.parameters.history) + ",")
+                      + toJson({
+                        "step_id": jsonpath(steps.actor.outputs.result, "$.step_id"),
+                        "description": jsonpath(steps.actor.outputs.result, "$.description"),
+                        "result": jsonpath(steps.actor.outputs.result, "$.result"),
+                        "status": jsonpath(steps.actor.outputs.result, "$.status")
+                      })
+                      + "]"}}
+                - name: feedback
+                  value: '{{=jsonpath(steps.evaluator.outputs.result, "$.feedback")}}'
+                - name: iteration
+                  value: '{{=string(asInt(inputs.parameters.iteration) + 1)}}'
+
+    # One POST to a Knative Service; the response body becomes outputs.result.
+    - name: call
+      inputs:
+        parameters:
+          - name: url
+          - name: body
+      http:
+        url: "{{inputs.parameters.url}}"
+        method: POST
+        headers:
+          - name: Content-Type
+            value: application/json
+        body: "{{inputs.parameters.body}}"
+        timeoutSeconds: 300
+        successCondition: "response.statusCode == 200"
