@@ -9,7 +9,14 @@
   "timeoutPolicy": "TIME_OUT_WF",
 
   "inputTemplate": {
-    "context": ""
+    "context": "",
+    "domain": ""
+  },
+
+  "outputParameters": {
+    "verdict": "${evaluator_task.output.response.body.verdict}",
+    "final_answer": "${evaluator_task.output.response.body.feedback}",
+    "step_history": "${workflow.variables.step_history}"
   },
 
   "variables": {
@@ -78,7 +85,8 @@
                 "goal": "${workflow.input.goal}",
                 "plan": "${planner_task.output.response.body.plan}",
                 "step_id": "${planner_task.output.response.body.plan[0].id}",
-                "history": "${workflow.variables.step_history}"
+                "history": "${workflow.variables.step_history}",
+                "domain": "${workflow.input.domain}"
               }
             }
           }

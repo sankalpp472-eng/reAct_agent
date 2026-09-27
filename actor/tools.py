@@ -4,6 +4,10 @@ Tool implementations the actor can call via Gemini function calling.
 - web_search: live web search via the Tavily API (https://tavily.com)
 - http_request: generic HTTP call to a specific known URL
 - calculator: safe arithmetic evaluation (no arbitrary code execution)
+
+Plus, when the actor is given a tau-bench "domain" ("retail" or "airline"),
+that domain's tools instead - served by the <domain>-tools faasd function and
+called through the gateway (see domain_tools()).
 """
 import ast
 import math
@@ -12,6 +16,12 @@ import os
 import requests
 
 TAVILY_SECRET_PATH = "/var/openfaas/secrets/tavily-api-key"
+
+# Gateway the actor uses to reach the tau-bench tool functions. From inside a
+# faasd function the gateway is at gateway.openfaas:8080; override with the
+# TOOLS_GATEWAY_URL env var (e.g. http://<faasd-host>:8080) when testing locally.
+TOOLS_GATEWAY_URL = os.environ.get("TOOLS_GATEWAY_URL", "http://gateway.openfaas:8080")
+TAU_DOMAINS = ("retail", "airline")
 
 # --- Tool declarations, passed to Gemini's function-calling API ---
 # Each entry needs a top-level "type": "function" - the Interactions API
@@ -104,6 +114,43 @@ def execute_tool(name, args):
     if name == "calculator":
         return _calculator(args.get("expression", ""))
     return {"error": f"Unknown tool: {name}"}
+
+
+# ------------------------- tau-bench domain tools -------------------------
+
+_domain_declarations = {}
+
+
+def _call_tool_function(domain, body, timeout=30):
+    resp = requests.post(
+        f"{TOOLS_GATEWAY_URL.rstrip('/')}/function/{domain}-tools", json=body, timeout=timeout
+    )
+    try:
+        data = resp.json()
+    except ValueError:
+        data = {"error": resp.text[:1000]}
+    if resp.status_code >= 400:
+        return {"error": data.get("error", f"HTTP {resp.status_code}")}
+    return data
+
+
+def domain_tools(domain):
+    """(declarations, execute_fn) for a tau-bench domain. Declarations come
+    from the tool function's list_tools (already in Gemini format) and are
+    cached for the life of this process. execute_fn returns the tool
+    function's {"tool", "output", "error"} body, or {"error": "..."}."""
+    if domain not in TAU_DOMAINS:
+        raise ValueError(f"Unknown domain {domain!r}, expected one of {TAU_DOMAINS}")
+    if domain not in _domain_declarations:
+        listed = _call_tool_function(domain, {"action": "list_tools"})
+        if "tools" not in listed:
+            raise RuntimeError(f"Could not list {domain}-tools: {listed.get('error')}")
+        _domain_declarations[domain] = listed["tools"]
+
+    def execute(name, args):
+        return _call_tool_function(domain, {"tool": name, "arguments": args or {}})
+
+    return _domain_declarations[domain], execute
 
 
 # ----------------------------- web_search -----------------------------

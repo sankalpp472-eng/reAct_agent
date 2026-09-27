@@ -1,0 +1,56 @@
+{
+  "id": "retail-44",
+  "domain": "retail",
+  "tool_function": "retail-tools",
+  "source": "sierra-research/tau-bench@59a200c tau_bench/envs/retail/tasks_test.py index 44",
+  "why_chosen": "Every retail tool category in one short task: identity lookup, order lookup, product search, arithmetic, and a state-changing modify; plus a numeric answer (17.99) to check.",
+  "user_id": "aarav_anderson_8794",
+  "goal": "A customer, Aarav Anderson (zip code 19031), wants to change the Desk Lamp in their pending order #W9300146 to the cheapest Desk Lamp that is currently available. Any price difference should go to their gift card. Tell them how much they get back in total. The customer has already confirmed they want this change made.",
+  "original_instruction": "You are Aarav Anderson, residing in Philadelphia 19031. You're a private person and are reluctant to share information unless it's absolutely necessary. You want to change the Desk Lamp in order #W9300146 that you've placed for the cheapest Desk Lamp that's available. Any price difference should go to a gift card. You also want to know how much you get back in total.",
+  "policy_file": "policies/retail.md",
+  "expected_actions": [
+    {
+      "name": "find_user_id_by_name_zip",
+      "kwargs": {
+        "first_name": "Aarav",
+        "last_name": "Anderson",
+        "zip": "19031"
+      }
+    },
+    {
+      "name": "get_order_details",
+      "kwargs": {
+        "order_id": "#W9300146"
+      }
+    },
+    {
+      "name": "get_product_details",
+      "kwargs": {
+        "product_id": "6817146515"
+      }
+    },
+    {
+      "name": "calculate",
+      "kwargs": {
+        "expression": "135.24 - 153.23"
+      }
+    },
+    {
+      "name": "modify_pending_order_items",
+      "kwargs": {
+        "order_id": "#W9300146",
+        "item_ids": [
+          "9190635437"
+        ],
+        "new_item_ids": [
+          "5320792178"
+        ],
+        "payment_method_id": "gift_card_7245904"
+      }
+    }
+  ],
+  "expected_outputs": [
+    "17.99"
+  ],
+  "expected_db_hash": "951f3d25bb42dbdb7be305c51e2dee0b45e5bfe83e7376a27861a0336f3e5dd1"
+}

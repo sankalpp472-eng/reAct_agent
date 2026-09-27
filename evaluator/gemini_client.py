@@ -26,6 +26,13 @@ the loop" purely from the prompt the handler builds:
 Step ids are GLOBAL (1..MOCK_NUM_STEPS) and stay stable across re-plans, so the
 history is easy to read and each run is fully reproducible.
 
+Workload scripts: if the goal matches one of the tau-bench workloads in
+mock_workloads.py, all three roles follow that workload's script instead of
+the generic plan above. The actor then makes the scripted tool calls for real
+(through execute_tool_fn -> the retail-tools / airline-tools faasd function,
+so the actor request must carry "domain"), one simulated model turn per call,
+and the evaluator returns the workload's final answer as its "done" feedback.
+
 Environment variables (set per function in stack.yaml):
   MOCK_LATENCY_S          base seconds to sleep per simulated LLM call  (default 2.0)
   MOCK_LATENCY_JITTER_S   +/- uniform jitter added to each sleep         (default 0.0)
@@ -43,12 +50,15 @@ import re
 import sys
 import time
 
+from .mock_workloads import find_workload, script_plan, script_step
+
 MODEL = "mock-gemini"
 
 _LATENCY_S = float(os.environ.get("MOCK_LATENCY_S", "2.0"))
 _JITTER_S = float(os.environ.get("MOCK_LATENCY_JITTER_S", "0.0"))
 _NUM_STEPS = int(os.environ.get("MOCK_NUM_STEPS", "4"))
 _ACTOR_TOOL_ROUNDS = int(os.environ.get("MOCK_ACTOR_TOOL_ROUNDS", "1"))
+_TOOL_OUTPUT_CHARS = 600  # per tool output, in the actor's result text
 _seed = os.environ.get("MOCK_SEED")
 _rng = random.Random(int(_seed)) if _seed is not None else random.Random()
 
@@ -142,11 +152,15 @@ def _planner_answer(prompt):
     # build_planner_context in the Conductor workflow appends this marker + history JSON
     history = _json_after("only plan what still remains):", prompt, default=[])
     done = _completed_ids(history)
-    remaining = [s for s in _master_plan() if s["id"] not in done]
+    workload = find_workload(goal)
+    master = script_plan(workload) if workload else _master_plan()
+    remaining = [s for s in master if s["id"] not in done]
     if not remaining:
         # The real planner handler rejects an empty plan with 502; keep a
         # single wrap-up step so the loop can reach the evaluator instead.
-        remaining = [{"id": _NUM_STEPS + 1, "description": "Confirm the goal is fully achieved"}]
+        remaining = [{"id": len(master) + 1, "description": "Confirm the goal is fully achieved"}]
+    if workload:
+        _log(f"planner: workload {workload['id']}")
     _log(f"planner: {len(done)} completed, returning {len(remaining)} remaining steps")
     return {"goal": goal, "plan": remaining}
 
@@ -156,7 +170,19 @@ def _evaluator_answer(prompt):
     history = _json_after("History of executed steps:", prompt, default=[]) or []
     done = _completed_ids(history)
     pending = [s["id"] for s in plan if s.get("id") not in done]
-    if not pending:
+    workload = find_workload(_goal(prompt))
+    last = history[-1] if history and isinstance(history[-1], dict) else {}
+    if workload and last.get("status") == "failed":
+        # The planner re-plans everything not yet completed, so the failed
+        # step comes back as the first step of the new plan.
+        verdict = {
+            "verdict": "replan",
+            "feedback": f"Step {last.get('step_id')} failed, retry it: {last.get('result', '')}",
+            "next_step_id": None,
+        }
+    elif workload and not pending:
+        verdict = {"verdict": "done", "feedback": workload["final_answer"], "next_step_id": None}
+    elif not pending:
         verdict = {
             "verdict": "done",
             "feedback": f"All {len(plan)} planned step(s) completed (mock).",
@@ -170,6 +196,48 @@ def _evaluator_answer(prompt):
         }
     _log(f"evaluator: verdict={verdict['verdict']} next={verdict['next_step_id']}")
     return verdict
+
+
+def _tool_failed(out):
+    # execute_tool_fn returns the tool server's {"tool", "output", "error": bool},
+    # or {"error": "<message>"} if the call itself failed.
+    return not isinstance(out, dict) or bool(out.get("error"))
+
+
+def _scripted_actor(prompt, workload, execute_tool_fn, final_response_schema):
+    step = _json_after("Step to execute now:", prompt, default={}) or {}
+    step_id = step.get("id")
+    script = script_step(workload, step_id)
+    _simulate_latency(f"actor turn 1 (initial, workload {workload['id']} step {step_id})")
+
+    if script is None:
+        # Planner's wrap-up step (see _planner_answer): nothing left to call.
+        answer = {"step_id": step_id, "result": workload["final_answer"], "status": "completed"}
+    else:
+        outputs, failed = [], False
+        for i, (name, args) in enumerate(script["calls"]):
+            try:
+                out = execute_tool_fn(name, args)
+            except Exception as e:
+                out = {"error": str(e)}
+            failed = failed or _tool_failed(out)
+            text = out.get("output", out.get("error")) if isinstance(out, dict) else out
+            outputs.append(f"{name}({json.dumps(args)}) -> {str(text)[:_TOOL_OUTPUT_CHARS]}")
+            _simulate_latency(f"actor turn {i + 2} (after tool call {name})")
+        result = (
+            "Tool call failed. " if failed else f"{script['result']} "
+        ) + "Tool calls: " + " | ".join(outputs)
+        answer = {
+            "step_id": step_id,
+            "result": result,
+            "status": "failed" if failed else "completed",
+        }
+    _log(f"actor: workload {workload['id']} step {step_id} -> {answer['status']}")
+
+    if final_response_schema is None:
+        return json.dumps(answer)
+    _simulate_latency("actor final structuring turn")
+    return answer
 
 
 def _actor_answer(prompt, tool_results):
@@ -206,6 +274,10 @@ def call_gemini_agentic(
     final_response_schema=None,
     final_instruction=None,
 ):
+    workload = find_workload(_goal(prompt))
+    if workload:
+        return _scripted_actor(prompt, workload, execute_tool_fn, final_response_schema)
+
     # Turn 1: initial model call (with tools attached)
     _simulate_latency("actor turn 1 (initial)")
 

@@ -138,12 +138,47 @@ back as HTTP 200 with `"output": "Error: ..."` and `"error": true` so the
 model can read and react to them; only malformed requests (unknown tool,
 bad body) get a 4xx.
 
+## 7. Mock LLM and the tau-bench workloads
+
+`gemini_client.py` in planner/actor/evaluator is currently a **mock**: no API
+calls, just a sleep (`MOCK_LATENCY_S`) and a scripted answer. For most goals it
+plays a generic 4-step plan. If the goal matches one of the workloads in
+[`workloads/`](workloads/README.md) (see `mock_workloads.py`), all three
+functions follow that workload's script instead:
+
+- **planner**: returns the workload's remaining steps.
+- **actor**: makes the step's tool calls for real against `retail-tools` /
+  `airline-tools`, so the mock DB actually changes.
+- **evaluator**: returns `continue` until every step is done, then `done` with
+  the answer for the customer as `feedback`. It returns `replan` if a step failed.
+
+A run can therefore be scored like a real tau-bench run. `gemini_client.py` and
+`mock_workloads.py` must stay identical in all three function directories.
+
+The actor gets a domain's tools when its request has `"domain": "retail"` or
+`"airline"`. It reaches the tool function through `TOOLS_GATEWAY_URL` (default
+`http://gateway.openfaas:8080`). The Conductor workflow passes
+`${workflow.input.domain}` through, and returns `final_answer` and
+`step_history` as workflow outputs. So start it with:
+
+```json
+{"goal": "<the workload's goal>", "domain": "retail", "context": ""}
+```
+
+To run a workload end to end without Conductor (it resets the DB, runs the
+loop the way the workflow does, and scores the result):
+
+```bash
+MOCK_LATENCY_S=0 python workloads/run_local.py workloads/retail-44.json            # all in-process
+python workloads/run_local.py workloads/retail-44.json --gateway http://<faasd-host>:8080
+```
+
 ## Contract summary (for wiring into Conductor later)
 
 | Function  | Input                                              | Output                                                           |
 |-----------|-----------------------------------------------------|--------------------------------------------------------------------|
 | planner   | `{goal, context?, feedback?}`                       | `{goal, plan:[{id, description}]}`                                |
-| actor     | `{goal, plan, step_id, history?}`                   | `{step_id, description, result, status}`                          |
+| actor     | `{goal, plan, step_id, history?, domain?}`          | `{step_id, description, result, status}`                          |
 | evaluator | `{goal, plan, history}`                             | `{verdict: done|continue|replan, feedback, next_step_id}`         |
 | retail-tools / airline-tools | `{tool, arguments}` or `{action: list_tools|reset|hash}` | `{tool, output, error}` / `{tools}` / `{status}` / `{hash}` |
 
