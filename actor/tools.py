@@ -131,9 +131,15 @@ _domain_declarations = {}
 
 def _call_tool_function(domain, body, timeout=30):
     t2 = telemetry.now_ms()  # request leaves the actor
-    resp = requests.post(
-        TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools"), json=body, timeout=timeout
-    )
+    try:
+        resp = requests.post(
+            TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools"), json=body, timeout=timeout
+        )
+    except requests.RequestException:
+        # still record the attempt (e.g. a cold function that timed out)
+        if "tool" in body:
+            telemetry.record_tool_call(body["tool"], t2, telemetry.now_ms(), None)
+        raise
     t5 = telemetry.now_ms()  # response back at the actor
     try:
         data = resp.json()
