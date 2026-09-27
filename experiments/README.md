@@ -217,3 +217,8 @@ It writes `sworkflow_runs.csv` into each folder and adds a `sworkflow` section t
 This is the *logical* size of one run's state. Physical database growth is larger:
 indexes, Conductor's Elasticsearch/Redis copies, and the datastore keeping earlier
 versions of the Workflow object after each status update (until compaction) all add to it.
+
+## Figures
+
+`plots.py` draws the comparison figures from Exp 1 result folders into `experiments/plots/`.
+See [`plots/README.md`](plots/README.md) for what each figure shows and its main finding.
