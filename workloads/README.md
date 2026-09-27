@@ -35,12 +35,31 @@ few-shot agent).
 - `expected_db_hash`: the tool server's `{"action":"hash"}` value after replaying
   `expected_actions` on a freshly reset DB (computed with the vendored tools).
 
+## Known quirk in airline-26's ground truth
+
+tau-bench's expected actions cancel `NQNU5R`, but both of its flights had already
+landed (2024-05-13/14) by the policy's "current time" (2024-05-15). The policy says
+only trips that haven't been flown can be cancelled. We keep tau-bench's ground truth
+(so `expected_db_hash` includes that cancellation). Just be aware that a strictly
+policy-following agent could refuse it and score 0.
+
 ## Running and scoring a workload
+
+The mock LLM has a script for each workload (`mock_workloads.py` in the function
+directories). `run_local.py` runs the whole loop and scores it. With the mock, both
+workloads currently score reward 1.0:
+
+```bash
+MOCK_LATENCY_S=0 python workloads/run_local.py workloads/retail-44.json
+MOCK_LATENCY_S=0 python workloads/run_local.py workloads/airline-26.json
+```
+
+To score a run you drove yourself, e.g. through Conductor:
 
 ```bash
 GW=http://<faasd-host>:8080
 python workloads/score.py workloads/retail-44.json --gateway $GW --reset   # before the run
-# ... run the workflow with goal = the workload's "goal" ...
+# ... run the workflow with goal and domain from the workload file; final_answer is a workflow output ...
 python workloads/score.py workloads/retail-44.json --gateway $GW --answer "<final answer>"
 ```
 

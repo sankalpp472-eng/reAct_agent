@@ -35,6 +35,20 @@ def _call(gateway, function, body):
         return json.loads(resp.read())
 
 
+def score(workload, gateway, answer):
+    normalized = answer.lower().replace(",", "")
+    db_hash = _call(gateway, workload["tool_function"], {"action": "hash"})["hash"]
+    db_ok = db_hash == workload["expected_db_hash"]
+    outputs = {o: o.lower() in normalized for o in workload["expected_outputs"]}
+    return {
+        "workload": workload["id"],
+        "reward": 1.0 if db_ok and all(outputs.values()) else 0.0,
+        "db_state_correct": db_ok,
+        "db_hash": db_hash,
+        "outputs_found": outputs,
+    }
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("workload", help="path to a workloads/*.json file")
@@ -55,21 +69,9 @@ def main():
     if answer and os.path.isfile(answer):
         with open(answer) as f:
             answer = f.read()
-    normalized = answer.lower().replace(",", "")
-
-    db_hash = _call(args.gateway, fn, {"action": "hash"})["hash"]
-    db_ok = db_hash == w["expected_db_hash"]
-    outputs = {o: o.lower() in normalized for o in w["expected_outputs"]}
-    reward = 1.0 if db_ok and all(outputs.values()) else 0.0
-
-    print(json.dumps({
-        "workload": w["id"],
-        "reward": reward,
-        "db_state_correct": db_ok,
-        "db_hash": db_hash,
-        "outputs_found": outputs,
-    }, indent=2))
-    return 0 if reward == 1.0 else 1
+    result = score(w, args.gateway, answer)
+    print(json.dumps(result, indent=2))
+    return 0 if result["reward"] == 1.0 else 1
 
 
 if __name__ == "__main__":
