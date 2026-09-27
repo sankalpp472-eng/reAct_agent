@@ -16,6 +16,7 @@ Output (JSON body):
 }
 """
 import json
+from . import telemetry
 from .gemini_client import call_gemini_json
 
 SYSTEM_INSTRUCTION = """You are the EVALUATOR in a planner-actor-evaluator agent loop.
@@ -49,6 +50,7 @@ EVALUATION_SCHEMA = {
 
 
 def handle(event, context):
+    telemetry.begin()  # t3
     try:
         payload = _parse_body(event.body)
         goal = payload.get("goal")
@@ -90,4 +92,4 @@ def _parse_body(body):
 
 
 def _resp(status_code, body_dict):
-    return {"statusCode": status_code, "body": body_dict}
+    return {"statusCode": status_code, "body": telemetry.attach(body_dict)}

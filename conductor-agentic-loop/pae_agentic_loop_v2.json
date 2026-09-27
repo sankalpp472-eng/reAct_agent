@@ -98,7 +98,7 @@
           "inputParameters": {
             "history": "${workflow.variables.step_history}",
             "new_entry": "${actor_task.output.response.body}",
-            "queryExpression": ".history + [.new_entry]"
+            "queryExpression": ".history + [.new_entry | del(._timing)]"
           }
         },
         {

@@ -108,6 +108,7 @@ def run(workload, gateway):
             "goal": goal, "plan": plan, "step_id": plan[0]["id"],
             "history": history, "domain": domain,
         })
+        step.pop("_timing", None)  # like the workflow's append_history
         history.append(step)
         evaluation = _post(gateway, "evaluator", {"goal": goal, "plan": plan, "history": history})
         feedback = evaluation.get("feedback", "")

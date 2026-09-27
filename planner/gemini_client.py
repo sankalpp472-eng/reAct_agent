@@ -51,6 +51,7 @@ import sys
 import time
 
 from .mock_workloads import find_workload, script_plan, script_step
+from .telemetry import record_llm
 
 MODEL = "mock-gemini"
 
@@ -85,7 +86,9 @@ def _simulate_latency(label):
     delay = max(0.0, _LATENCY_S + _rng.uniform(-_JITTER_S, _JITTER_S))
     start = time.time()
     time.sleep(delay)
-    _log(f"{label}: slept {time.time() - start:.3f}s")
+    elapsed = time.time() - start
+    record_llm(elapsed * 1000.0)  # counts toward T_LLM (see telemetry.py)
+    _log(f"{label}: slept {elapsed:.3f}s")
     return delay
 
 

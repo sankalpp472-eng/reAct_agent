@@ -15,6 +15,8 @@ import operator
 import os
 import requests
 
+from . import telemetry
+
 TAVILY_SECRET_PATH = "/var/openfaas/secrets/tavily-api-key"
 
 # Gateway the actor uses to reach the tau-bench tool functions. From inside a
@@ -122,13 +124,18 @@ _domain_declarations = {}
 
 
 def _call_tool_function(domain, body, timeout=30):
+    t2 = telemetry.now_ms()  # request leaves the actor
     resp = requests.post(
         f"{TOOLS_GATEWAY_URL.rstrip('/')}/function/{domain}-tools", json=body, timeout=timeout
     )
+    t5 = telemetry.now_ms()  # response back at the actor
     try:
         data = resp.json()
     except ValueError:
         data = {"error": resp.text[:1000]}
+    callee_timing = data.pop("_timing", None) if isinstance(data, dict) else None
+    if "tool" in body:
+        telemetry.record_tool_call(body["tool"], t2, t5, callee_timing)
     if resp.status_code >= 400:
         return {"error": data.get("error", f"HTTP {resp.status_code}")}
     return data

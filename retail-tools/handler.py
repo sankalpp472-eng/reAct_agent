@@ -35,6 +35,7 @@ import os
 import threading
 from hashlib import sha256
 
+from . import telemetry
 from .tau_tools import ALL_TOOLS
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -96,6 +97,7 @@ def _data_hash():
 
 
 def handle(event, context):
+    telemetry.begin()  # t3
     try:
         payload = _parse_body(event.body)
         if not payload and event.method == "GET":
@@ -163,4 +165,4 @@ def _parse_body(body):
 
 
 def _resp(status_code, body_dict):
-    return {"statusCode": status_code, "body": body_dict}
+    return {"statusCode": status_code, "body": telemetry.attach(body_dict)}

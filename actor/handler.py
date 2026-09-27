@@ -33,6 +33,7 @@ for the tool-calling loop itself.
 """
 import json
 import re
+from . import telemetry
 from .gemini_client import call_gemini_agentic
 from .tools import TOOL_DECLARATIONS, TAU_DOMAINS, domain_tools, execute_tool
 
@@ -93,6 +94,7 @@ prose outside the JSON - of this exact shape:
 
 
 def handle(event, context):
+    telemetry.begin()  # t3
     try:
         payload = _parse_body(event.body)
         goal = payload.get("goal")
@@ -196,4 +198,4 @@ def _parse_body(body):
 
 
 def _resp(status_code, body_dict):
-    return {"statusCode": status_code, "body": body_dict}
+    return {"statusCode": status_code, "body": telemetry.attach(body_dict)}
