@@ -1,0 +1,2 @@
+workload,run,te2e_ms,n_turns,t_llm_ms,torch_run_ms,troute_orch_ms,troute_tool_ms,troute_orch_estimated,rfriction,twarm_tool_mean_ms,troute_tool_mean_ms,workflow,phase,verdict,reward,missing_timing,te2e_engine_s
+retail-44,1,272563.894,5,47005.713,222704.829,1560.438,868.198,True,4.789,12.882,144.7,pae-agentic-loop-f4hb8,Succeeded,done,1.0,False,272.0

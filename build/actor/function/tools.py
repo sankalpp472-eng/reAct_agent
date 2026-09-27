@@ -23,6 +23,12 @@ TAVILY_SECRET_PATH = "/var/openfaas/secrets/tavily-api-key"
 # faasd function the gateway is at gateway.openfaas:8080; override with the
 # TOOLS_GATEWAY_URL env var (e.g. http://<faasd-host>:8080) when testing locally.
 TOOLS_GATEWAY_URL = os.environ.get("TOOLS_GATEWAY_URL", "http://gateway.openfaas:8080")
+# Full URL of a tool function; {name} is e.g. "retail-tools". Defaults to the
+# OpenFaaS gateway's /function/<name> route. On Knative set it to the service's
+# cluster-local address instead, e.g. http://{name}.default.svc.cluster.local
+TOOLS_URL_TEMPLATE = os.environ.get(
+    "TOOLS_URL_TEMPLATE", TOOLS_GATEWAY_URL.rstrip("/") + "/function/{name}"
+)
 TAU_DOMAINS = ("retail", "airline")
 
 # --- Tool declarations, passed to Gemini's function-calling API ---
@@ -126,7 +132,7 @@ _domain_declarations = {}
 def _call_tool_function(domain, body, timeout=30):
     t2 = telemetry.now_ms()  # request leaves the actor
     resp = requests.post(
-        f"{TOOLS_GATEWAY_URL.rstrip('/')}/function/{domain}-tools", json=body, timeout=timeout
+        TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools"), json=body, timeout=timeout
     )
     t5 = telemetry.now_ms()  # response back at the actor
     try:

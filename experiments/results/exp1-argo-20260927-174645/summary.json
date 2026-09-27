@@ -1,0 +1,151 @@
+{
+  "config": {
+    "ingress": "knative://10.43.54.21:80/default.example.com",
+    "namespace": "argo",
+    "template": "pae-agentic-loop",
+    "workloads": [
+      "workloads/retail-44.json"
+    ],
+    "runs": 1,
+    "warmup": 0,
+    "pause": 1.0,
+    "timeout": 900,
+    "delete": false,
+    "out": "/home/sankalp/functions/pae-faasd/experiments/results"
+  },
+  "stack": "argo+knative",
+  "argo_requeue_time": "10s (default)",
+  "runs_total": 1,
+  "dataplane": {
+    "overall": {
+      "runs": 0,
+      "per_run": {
+        "Te2e_ms": {
+          "n": 0
+        },
+        "T_LLM_ms": {
+          "n": 0
+        },
+        "Torch_run_ms": {
+          "n": 0
+        },
+        "Troute_orch_ms": {
+          "n": 0
+        },
+        "Troute_tool_ms": {
+          "n": 0
+        },
+        "Rfriction": {
+          "n": 0
+        }
+      },
+      "per_turn": {
+        "Tcycle_ms": {
+          "n": 0
+        },
+        "Torch_ms": {
+          "n": 0
+        }
+      },
+      "per_tool_call": {
+        "Twarm_ms": {
+          "n": 0
+        },
+        "Troute_ms": {
+          "n": 0
+        }
+      },
+      "per_function_call": {
+        "planner": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        },
+        "actor": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        },
+        "evaluator": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        }
+      }
+    },
+    "retail-44": {
+      "runs": 0,
+      "per_run": {
+        "Te2e_ms": {
+          "n": 0
+        },
+        "T_LLM_ms": {
+          "n": 0
+        },
+        "Torch_run_ms": {
+          "n": 0
+        },
+        "Troute_orch_ms": {
+          "n": 0
+        },
+        "Troute_tool_ms": {
+          "n": 0
+        },
+        "Rfriction": {
+          "n": 0
+        }
+      },
+      "per_turn": {
+        "Tcycle_ms": {
+          "n": 0
+        },
+        "Torch_ms": {
+          "n": 0
+        }
+      },
+      "per_tool_call": {
+        "Twarm_ms": {
+          "n": 0
+        },
+        "Troute_ms": {
+          "n": 0
+        }
+      },
+      "per_function_call": {
+        "planner": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        },
+        "actor": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        },
+        "evaluator": {
+          "Twarm_ms": {
+            "n": 0
+          },
+          "Troute_ms": {
+            "n": 0
+          }
+        }
+      }
+    }
+  }
+}
