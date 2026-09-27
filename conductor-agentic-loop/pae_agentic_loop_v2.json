@@ -52,7 +52,7 @@
           "type": "HTTP",
           "inputParameters": {
             "http_request": {
-              "uri": "http://10.217.17.247:8080/function/planner",
+              "uri": "http://172.17.0.1:8080/function/planner",
               "method": "POST",
               "connectionTimeOut": 10000,
               "readTimeOut": 90000,
@@ -70,7 +70,7 @@
           "type": "HTTP",
           "inputParameters": {
             "http_request": {
-              "uri": "http://10.217.17.247:8080/function/actor",
+              "uri": "http://172.17.0.1:8080/function/actor",
               "method": "POST",
               "connectionTimeOut": 10000,
               "readTimeOut": 180000,
@@ -107,7 +107,7 @@
           "type": "HTTP",
           "inputParameters": {
             "http_request": {
-              "uri": "http://10.217.17.247:8080/function/evaluator",
+              "uri": "http://172.17.0.1:8080/function/evaluator",
               "method": "POST",
               "connectionTimeOut": 10000,
               "readTimeOut": 90000,

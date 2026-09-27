@@ -12,7 +12,9 @@ functions:
     handler: ./planner
     image: sankalps2003/planner:latest        # change to your own registry, e.g. docker.io/you/planner:latest
     environment:
-      GEMINI_MODEL: gemini-3.6-flash
+      MOCK_LATENCY_S: "2.0"
+      MOCK_LATENCY_JITTER_S: "0.0"
+      MOCK_NUM_STEPS: "4"
       write_debug: "true"
       read_timeout: "90s"
       write_timeout: "90s"
@@ -25,7 +27,9 @@ functions:
     handler: ./actor
     image: sankalps2003/actor:latest          # change to your own registry
     environment:
-      GEMINI_MODEL: gemini-3.6-flash
+      MOCK_LATENCY_S: "2.0"
+      MOCK_LATENCY_JITTER_S: "0.0"
+      MOCK_ACTOR_TOOL_ROUNDS: "1"
       write_debug: "true"
       read_timeout: "180s"
       write_timeout: "180s"
@@ -38,7 +42,8 @@ functions:
     handler: ./evaluator
     image: sankalps2003/evaluator:latest      # change to your own registry
     environment:
-      GEMINI_MODEL: gemini-3.6-flash
+      MOCK_LATENCY_S: "1.0"
+      MOCK_LATENCY_JITTER_S: "0.0"
       write_debug: "true"
       read_timeout: "90s"
       write_timeout: "90s"

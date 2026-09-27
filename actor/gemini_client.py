@@ -1,94 +1,199 @@
 """
-Shared Gemini client for planner/actor/evaluator, using Google's Interactions API
-(https://ai.google.dev/gemini-api/docs/interactions-overview), which replaced the
-older generateContent endpoint. Copy this file into each function's directory.
+MOCK Gemini client - drop-in replacement for the real gemini_client.py.
+
+Same public API as the real client:
+    call_gemini_json(prompt, system_instruction=None, response_schema=None, timeout=85)
+    call_gemini_agentic(prompt, tools_declarations, execute_tool_fn, ...)
+
+so planner/actor/evaluator handlers need NO changes. No network calls, no API
+key needed. Every "LLM call" is replaced by a sleep (to simulate inference
+latency) followed by a deterministic, pre-scripted answer.
+
+Because OpenFaaS functions are stateless, the mock works out "where we are in
+the loop" purely from the prompt the handler builds:
+
+  planner   -> counts completed steps listed in the context ("Steps already
+               completed so far ...: [...]") and returns the REMAINING steps
+               of a fixed master plan of MOCK_NUM_STEPS steps.
+  actor     -> reads "Step to execute now: {...}" and returns a canned result,
+               optionally running MOCK_ACTOR_TOOL_ROUNDS fake tool calls
+               (calculator only, so no Tavily/network) to exercise the
+               tool-calling loop.
+  evaluator -> reads the plan + history and returns "done" once every step in
+               the plan has a completed entry in history, else "continue" with
+               the next pending step id.
+
+Step ids are GLOBAL (1..MOCK_NUM_STEPS) and stay stable across re-plans, so the
+history is easy to read and each run is fully reproducible.
+
+Environment variables (set per function in stack.yaml):
+  MOCK_LATENCY_S          base seconds to sleep per simulated LLM call  (default 2.0)
+  MOCK_LATENCY_JITTER_S   +/- uniform jitter added to each sleep         (default 0.0)
+  MOCK_SEED               seed for the jitter RNG (unset = non-deterministic)
+  MOCK_NUM_STEPS          planner only: size of the master plan          (default 4)
+  MOCK_ACTOR_TOOL_ROUNDS  actor only: fake tool-call round trips         (default 1)
+
+Actor latency mirrors the real client, which makes 1 initial call + 1 call per
+tool round + 1 "restate as JSON" call, i.e. (MOCK_ACTOR_TOOL_ROUNDS + 2) sleeps.
 """
-import os
 import json
-import requests
+import os
+import random
+import re
+import sys
+import time
 
-MODEL = "gemini-2.5-flash"
-API_BASE = "https://generativelanguage.googleapis.com/v1beta/interactions"
-API_REVISION = "2026-05-20"  # pins the request/response schema explicitly
+MODEL = "mock-gemini"
 
+_LATENCY_S = float(os.environ.get("MOCK_LATENCY_S", "2.0"))
+_JITTER_S = float(os.environ.get("MOCK_LATENCY_JITTER_S", "0.0"))
+_NUM_STEPS = int(os.environ.get("MOCK_NUM_STEPS", "4"))
+_ACTOR_TOOL_ROUNDS = int(os.environ.get("MOCK_ACTOR_TOOL_ROUNDS", "1"))
+_seed = os.environ.get("MOCK_SEED")
+_rng = random.Random(int(_seed)) if _seed is not None else random.Random()
 
-def _api_key():
-    # faasd mounts secrets at /var/openfaas/secrets/<name>; some setups use /run/secrets.
-    for path in ("/var/openfaas/secrets/gemini-api-key", "/run/secrets/gemini-api-key"):
-        if os.path.exists(path):
-            with open(path) as f:
-                return f.read().strip()
-    # Fallback for local testing outside faasd
-    key = os.environ.get("GEMINI_API_KEY")
-    if not key:
-        raise RuntimeError(
-            "Gemini API key not found in secret mount or GEMINI_API_KEY env var"
-        )
-    return key
-
-
-def _headers():
-    return {
-        "x-goog-api-key": _api_key(),
-        "Content-Type": "application/json",
-        "Api-Revision": API_REVISION,
-    }
+_STEP_TEMPLATES = [
+    "Gather background information relevant to the goal",
+    "Collect concrete options and data points",
+    "Compare the options and compute costs/trade-offs",
+    "Select the best option against the goal's constraints",
+    "Draft the final answer for the goal",
+    "Double-check the final answer for completeness",
+]
 
 
-def _extract_output_text(interaction):
-    """The REST API doesn't hand back a convenience `output_text` field (that's
-    an SDK-only helper) - reconstruct it by joining the text parts of every
-    model_output step. Whitespace-only output (e.g. a stray newline with no
-    real content) is treated the same as "no text found" so callers get a
-    clear error instead of silently receiving whitespace and failing later
-    with a cryptic json.loads error."""
-    texts = []
-    for step in interaction.get("steps", []):
-        if step.get("type") == "model_output":
-            for part in step.get("content", []):
-                if part.get("type") == "text":
-                    texts.append(part.get("text", ""))
-    joined = "".join(texts).strip()
-    return joined if joined else None
+# ----------------------------------------------------------------------------
+# helpers
+# ----------------------------------------------------------------------------
 
+def _log(msg):
+    # stderr shows up in `faas-cli logs <fn>` / journalctl for faasd
+    print(f"[mock-llm] {msg}", file=sys.stderr, flush=True)
+
+
+def _simulate_latency(label):
+    delay = max(0.0, _LATENCY_S + _rng.uniform(-_JITTER_S, _JITTER_S))
+    start = time.time()
+    time.sleep(delay)
+    _log(f"{label}: slept {time.time() - start:.3f}s")
+    return delay
+
+
+def _json_after(marker, text, default=None):
+    """Return the JSON value that immediately follows `marker` in `text`."""
+    idx = text.find(marker)
+    if idx == -1:
+        return default
+    rest = text[idx + len(marker):].lstrip()
+    try:
+        value, _ = json.JSONDecoder().raw_decode(rest)
+        return value
+    except ValueError:
+        return default
+
+
+def _goal(prompt):
+    m = re.search(r"^Goal:\s*(.*)$", prompt, re.MULTILINE)
+    return m.group(1).strip() if m else ""
+
+
+def _completed_ids(history):
+    ids = set()
+    for h in history or []:
+        if isinstance(h, dict) and h.get("status") == "completed" and h.get("step_id") is not None:
+            ids.add(h["step_id"])
+    return ids
+
+
+def _master_plan():
+    plan = []
+    for i in range(1, _NUM_STEPS + 1):
+        if i <= len(_STEP_TEMPLATES):
+            desc = _STEP_TEMPLATES[i - 1]
+        else:
+            desc = f"Additional work item {i}"
+        plan.append({"id": i, "description": desc})
+    return plan
+
+
+# ----------------------------------------------------------------------------
+# role detection + scripted answers
+# ----------------------------------------------------------------------------
+
+def _detect_role(system_instruction, response_schema):
+    si = system_instruction or ""
+    if "PLANNER" in si:
+        return "planner"
+    if "EVALUATOR" in si:
+        return "evaluator"
+    if "ACTOR" in si:
+        return "actor"
+    # fallback on schema shape
+    props = (response_schema or {}).get("properties", {})
+    if "plan" in props:
+        return "planner"
+    if "verdict" in props:
+        return "evaluator"
+    return "unknown"
+
+
+def _planner_answer(prompt):
+    goal = _goal(prompt)
+    # build_planner_context in the Conductor workflow appends this marker + history JSON
+    history = _json_after("only plan what still remains):", prompt, default=[])
+    done = _completed_ids(history)
+    remaining = [s for s in _master_plan() if s["id"] not in done]
+    if not remaining:
+        # The real planner handler rejects an empty plan with 502; keep a
+        # single wrap-up step so the loop can reach the evaluator instead.
+        remaining = [{"id": _NUM_STEPS + 1, "description": "Confirm the goal is fully achieved"}]
+    _log(f"planner: {len(done)} completed, returning {len(remaining)} remaining steps")
+    return {"goal": goal, "plan": remaining}
+
+
+def _evaluator_answer(prompt):
+    plan = _json_after("Full plan:", prompt, default=[]) or []
+    history = _json_after("History of executed steps:", prompt, default=[]) or []
+    done = _completed_ids(history)
+    pending = [s["id"] for s in plan if s.get("id") not in done]
+    if not pending:
+        verdict = {
+            "verdict": "done",
+            "feedback": f"All {len(plan)} planned step(s) completed (mock).",
+            "next_step_id": None,
+        }
+    else:
+        verdict = {
+            "verdict": "continue",
+            "feedback": f"{len(pending)} step(s) still pending (mock).",
+            "next_step_id": pending[0],
+        }
+    _log(f"evaluator: verdict={verdict['verdict']} next={verdict['next_step_id']}")
+    return verdict
+
+
+def _actor_answer(prompt, tool_results):
+    step = _json_after("Step to execute now:", prompt, default={}) or {}
+    step_id = step.get("id")
+    desc = step.get("description", "")
+    result = f"[mock] Executed step {step_id}: {desc}."
+    if tool_results:
+        result += f" Tool outputs: {json.dumps(tool_results)}"
+    return {"step_id": step_id, "result": result, "status": "completed"}
+
+
+# ----------------------------------------------------------------------------
+# public API (same signatures as the real client)
+# ----------------------------------------------------------------------------
 
 def call_gemini_json(prompt, system_instruction=None, response_schema=None, timeout=85):
-    """Single-turn call. If response_schema (a JSON Schema dict) is given, uses
-    the Interactions API's structured-output mode so the model is constrained
-    to emit valid JSON matching it - used by planner and evaluator."""
-    body = {"model": MODEL, "input": prompt}
-    if system_instruction:
-        body["system_instruction"] = system_instruction
-    if response_schema:
-        body["response_format"] = {
-            "type": "text",
-            "mime_type": "application/json",
-            "schema": response_schema,
-        }
-
-    resp = requests.post(API_BASE, headers=_headers(), json=body, timeout=timeout)
-    _raise_with_body(resp)
-    interaction = resp.json()
-
-    output_text = _extract_output_text(interaction)
-    if output_text is None:
-        raise RuntimeError(f"Gemini response had no text output: {interaction}")
-
-    return json.loads(output_text)
-
-
-def _raise_with_body(resp):
-    """requests' raise_for_status() only includes the status line, not the
-    response body - Gemini's actual error explanation lives in the body, so
-    surface it instead of a bare '400 Client Error'."""
-    if resp.status_code >= 400:
-        try:
-            detail = resp.json()
-        except ValueError:
-            detail = resp.text
-        raise requests.HTTPError(
-            f"{resp.status_code} error calling Gemini: {detail}", response=resp
-        )
+    role = _detect_role(system_instruction, response_schema)
+    _simulate_latency(f"{role} call_gemini_json")
+    if role == "planner":
+        return _planner_answer(prompt)
+    if role == "evaluator":
+        return _evaluator_answer(prompt)
+    raise RuntimeError(f"mock gemini_client: can't tell which role this prompt is for ({role})")
 
 
 def call_gemini_agentic(
@@ -101,119 +206,34 @@ def call_gemini_agentic(
     final_response_schema=None,
     final_instruction=None,
 ):
-    """Multi-turn tool-calling loop, used by actor. Sends the prompt with tool
-    declarations, executes any function_call steps locally via execute_tool_fn,
-    and feeds results back using previous_interaction_id chaining (the
-    Interactions API manages conversation state server-side) until the model
-    stops calling tools and returns final text.
+    # Turn 1: initial model call (with tools attached)
+    _simulate_latency("actor turn 1 (initial)")
 
-    tools_declarations: list of {"type": "function", "name", "description",
-    "parameters"} dicts - see TOOL_DECLARATIONS in tools.py.
-    execute_tool_fn: callable(tool_name: str, args: dict) -> JSON-serializable result.
-
-    IMPORTANT: `response_format` (structured/JSON-schema output) and `tools`
-    (function calling) cannot both be set on the same request - most tool-
-    calling APIs, including this one, drop JSON-mode constraints whenever
-    tools are attached, since the model needs freedom to emit function_call
-    steps instead of final text. That means a system_instruction saying
-    "reply with ONLY JSON" is just a suggestion during the tool-calling
-    phase, and the model is free to ignore it (e.g. by returning a nice
-    markdown write-up instead of the requested JSON object).
-
-    If final_response_schema is given, once the model stops calling tools we
-    make ONE additional follow-up turn - chained via previous_interaction_id,
-    with `tools` dropped and `response_format` turned on - asking the model to
-    restate its just-given answer in that exact JSON shape. This turn's JSON
-    is schema-enforced server-side, so it can't fail the way free-form text
-    can. In that case this function returns a parsed dict instead of a raw
-    string; pass a custom final_instruction to control the restating prompt.
-    """
-    body = {"model": MODEL, "input": prompt, "tools": tools_declarations}
-    if system_instruction:
-        body["system_instruction"] = system_instruction
-
-    resp = requests.post(API_BASE, headers=_headers(), json=body, timeout=timeout)
-    _raise_with_body(resp)
-    interaction = resp.json()
-    interaction_id = interaction.get("id")
-
-    for _ in range(max_tool_rounds):
-        function_calls = [
-            s for s in interaction.get("steps", []) if s.get("type") == "function_call"
-        ]
-        if not function_calls:
-            break
-
-        # Execute every call from this turn (handles parallel function calls)
-        result_steps = []
-        for call in function_calls:
-            tool_name = call.get("name")
-            call_id = call.get("id")
-            args = call.get("arguments", {})
-            try:
-                tool_result = execute_tool_fn(tool_name, args)
-            except Exception as e:
-                tool_result = {"error": str(e)}
-            result_steps.append(
-                {
-                    "type": "function_result",
-                    "name": tool_name,
-                    "call_id": call_id,
-                    "result": [{"type": "text", "text": json.dumps(tool_result)}],
-                }
-            )
-
-        follow_up_body = {
-            "model": MODEL,
-            "previous_interaction_id": interaction_id,
-            "tools": tools_declarations,
-            "input": result_steps,
-        }
-        resp = requests.post(API_BASE, headers=_headers(), json=follow_up_body, timeout=timeout)
-        _raise_with_body(resp)
-        interaction = resp.json()
-        interaction_id = interaction.get("id")
-    else:
-        # The for-loop ran to completion without `break`, i.e. the model was
-        # still issuing function_calls after max_tool_rounds full round-trips.
-        # Surface this explicitly rather than falling through to
-        # _extract_output_text on an interaction that may have no real
-        # final-answer text at all.
+    if _ACTOR_TOOL_ROUNDS > max_tool_rounds:
         raise RuntimeError(
             f"Exceeded max_tool_rounds ({max_tool_rounds}) without the model "
             f"returning a final answer (still issuing tool calls)"
         )
 
-    output_text = _extract_output_text(interaction)
-    if output_text is None:
-        raise RuntimeError(f"Gemini agentic call ended with no text output: {interaction}")
+    # Tool rounds: "model" asks for a calculator call, we run it through the
+    # real execute_tool_fn (local, no network), then another model turn.
+    tool_results = []
+    step = _json_after("Step to execute now:", prompt, default={}) or {}
+    base = step.get("id") or 1
+    for r in range(_ACTOR_TOOL_ROUNDS):
+        expr = f"{base} * 100 + {r}"
+        try:
+            out = execute_tool_fn("calculator", {"expression": expr})
+        except Exception as e:
+            out = {"error": str(e)}
+        tool_results.append({"tool": "calculator", "expression": expr, "output": out})
+        _simulate_latency(f"actor turn {r + 2} (after tool round {r + 1})")
+
+    answer = _actor_answer(prompt, tool_results)
 
     if final_response_schema is None:
-        return output_text
+        return json.dumps(answer)
 
-    # Phase 2: force the free-form answer above into schema-valid JSON. No
-    # `tools` here on purpose - that's what lets response_format take effect.
-    structure_body = {
-        "model": MODEL,
-        "previous_interaction_id": interaction_id,
-        "input": final_instruction or (
-            "Restate your previous answer as JSON only, matching the required schema. "
-            "Do not add commentary, markdown, or code fences."
-        ),
-        "response_format": {
-            "type": "text",
-            "mime_type": "application/json",
-            "schema": final_response_schema,
-        },
-    }
-    resp = requests.post(API_BASE, headers=_headers(), json=structure_body, timeout=timeout)
-    _raise_with_body(resp)
-    structured_interaction = resp.json()
-
-    structured_text = _extract_output_text(structured_interaction)
-    if structured_text is None:
-        raise RuntimeError(
-            f"Gemini failed to produce structured JSON on the follow-up turn: "
-            f"{structured_interaction}"
-        )
-    return json.loads(structured_text)
+    # Final "restate as JSON" turn
+    _simulate_latency("actor final structuring turn")
+    return answer
