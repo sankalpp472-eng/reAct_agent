@@ -31,7 +31,7 @@ functions:
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_ACTOR_TOOL_ROUNDS: "1"
       # where the actor reaches retail-tools / airline-tools (tau-bench domains)
-      TOOLS_GATEWAY_URL: http://gateway.openfaas:8080
+      TOOLS_GATEWAY_URL: http://172.17.0.1:8080
       write_debug: "true"
       read_timeout: "180s"
       write_timeout: "180s"
