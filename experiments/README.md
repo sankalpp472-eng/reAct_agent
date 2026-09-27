@@ -102,3 +102,45 @@ This prints a line per run and a summary table. It writes to
 | `calls.csv` | one row per function call (planner/actor/evaluator and each tool call): t5−t2, Twarm, Troute, LLM time |
 | `summary.json` | n / mean / p50 / p95 / std / min / max for each metric, overall and per workload |
 | `raw/*.json` | the full Conductor execution JSON of each run, so metrics can be recomputed later |
+| `dataplane_*.csv`, `summary.json` → `dataplane` | the stack-independent metrics below, for comparing with Argo + Knative |
+
+## Comparing the two stacks: data-plane metrics
+
+Argo records node start/finish times only to the **second**, so the Conductor task
+timestamps used above have no ms-precise Argo equivalent. To compare the stacks fairly,
+both drivers also compute the same metrics from timestamps that exist on both, in
+`dataplane.py`:
+- the driver's t0/t7
+- the functions' own t3/t4 and LLM time
+- the actor's t2/t5 for tool calls
+
+**Use the `dataplane` numbers when comparing the stacks.** They are the same
+definitions and code on both sides.
+
+| Metric | Data-plane definition |
+|---|---|
+| Te2e | t7 − t0 (unchanged) |
+| Twarm, Troute (tool calls) | unchanged: measured the same way on both stacks |
+| Troute (orchestrator → function) | Conductor: measured, (t5 − t2) − Twarm. Argo: **estimated** as the run's median tool-call Troute, which takes the same Kourier → queue-proxy → container path |
+| Tcycle | planner-to-planner: t3(planner, turn k+1) − t3(planner, turn k). A full turn *including* the loop-back, so a bit larger than the Conductor-task Tcycle. The last turn has none |
+| Torch (per turn) | Tcycle − Σ(Twarm + Troute) of that turn's 3 calls |
+| Torch_run | Te2e − Σ(Twarm + Troute) over all orchestrator → function calls: everything the orchestrator does outside the calls, including dispatch and completion |
+| Rfriction | (Torch_run + ΣTroute orchestrator hops + ΣTroute tool hops) / ΣT_LLM |
+
+Tcycle compares t3 values from *different* functions, so all functions must share a
+clock. That holds on a single faasd host and on a single-node k3s cluster.
+
+## Experiment 1 on Argo + Knative
+
+Set up the stack first (see [`argo-knative/README.md`](../argo-knative/README.md)), then:
+
+```bash
+pip install kubernetes
+python experiments/exp1_argo.py --ingress knative://<node-ip>:80/default.example.com --runs 10 --warmup 1
+```
+
+- **How it works:** it submits Workflows through the Kubernetes API (your kubeconfig),
+  and a watch on the Workflow gives t7.
+- **Reset and scoring:** these go through Kourier with a `Host:` header, so no DNS is needed.
+- **Output:** `experiments/results/exp1-argo-<timestamp>/`, with the same `dataplane_*.csv`
+  files and `summary.json` → `dataplane` layout as the Conductor run.

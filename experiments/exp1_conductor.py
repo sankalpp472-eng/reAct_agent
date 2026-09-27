@@ -45,6 +45,8 @@ from datetime import datetime
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "workloads"))
 from score import _call, score  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import dataplane  # noqa: E402
 
 WORKFLOW = "pae_agentic_loop"
 HTTP_TASKS = ("planner_task", "actor_task", "evaluator_task")
@@ -258,7 +260,25 @@ def run_once(args, workload):
     result = score(workload, gw, answer if status == "COMPLETED" else "")
     run_row, cycle_rows, call_rows = compute_metrics(wf, t0, t7)
     run_row.update(workflow_id=wf_id, status=status, reward=result["reward"])
-    return wf, run_row, cycle_rows, call_rows
+    dp = dataplane.dataplane_metrics(dataplane_calls(wf), t0, t7)
+    return wf, run_row, cycle_rows, call_rows, dp
+
+
+def dataplane_calls(wf):
+    """planner/actor/evaluator calls for dataplane.py; hop_ms = t5 - t2 from the
+    HTTP task's start/end (Conductor clock)."""
+    calls = []
+    for t in wf.get("tasks", []):
+        body = ((t.get("outputData") or {}).get("response") or {}).get("body")
+        timing = body.get("_timing") if isinstance(body, dict) else None
+        if t.get("taskType") != "HTTP" or timing is None:
+            continue
+        calls.append({
+            "name": _ref(t).replace("_task", ""), "t3": timing["t3"], "t4": timing["t4"],
+            "llm_ms": timing["llm_ms"], "tool_calls": timing.get("tool_calls", []),
+            "hop_ms": t["endTime"] - t["startTime"],
+        })
+    return calls
 
 
 def _write_csv(path, rows):
@@ -290,12 +310,13 @@ def main():
     os.makedirs(os.path.join(out_dir, "raw"), exist_ok=True)
 
     runs, cycles, calls = [], [], []
+    dp_runs, dp_turns, dp_calls = [], [], []
     for path in args.workloads:
         with open(path) as f:
             workload = json.load(f)
         for i in range(-args.warmup, args.runs):
             label = "warmup" if i < 0 else f"run {i + 1}/{args.runs}"
-            wf, run_row, cycle_rows, call_rows = run_once(args, workload)
+            wf, run_row, cycle_rows, call_rows, dp = run_once(args, workload)
             print(f"[{workload['id']}] {label}: {run_row['status']} reward={run_row['reward']} "
                   f"Te2e={run_row['te2e_ms']:.0f}ms cycles={run_row['n_cycles']} "
                   f"Torch={run_row['torch_ms']:.0f}ms Troute={run_row['troute_ms']:.0f}ms "
@@ -309,6 +330,10 @@ def main():
                 runs.append({**key, **run_row})
                 cycles += [{**key, **c} for c in cycle_rows]
                 calls += [{**key, **c} for c in call_rows]
+                dp_keep = {k: run_row[k] for k in ("status", "reward", "missing_timing")}
+                dp_runs.append({**key, **dp[0], **dp_keep})
+                dp_turns += [{**key, **t} for t in dp[1]]
+                dp_calls += [{**key, **c} for c in dp[2]]
                 with open(os.path.join(out_dir, "raw", f"{workload['id']}-run{i + 1}.json"), "w") as f:
                     json.dump(wf, f)
             time.sleep(args.pause)
@@ -316,11 +341,21 @@ def main():
     _write_csv(os.path.join(out_dir, "runs.csv"), runs)
     _write_csv(os.path.join(out_dir, "cycles.csv"), cycles)
     _write_csv(os.path.join(out_dir, "calls.csv"), calls)
+    _write_csv(os.path.join(out_dir, "dataplane_runs.csv"), dp_runs)
+    _write_csv(os.path.join(out_dir, "dataplane_turns.csv"), dp_turns)
+    _write_csv(os.path.join(out_dir, "dataplane_calls.csv"), dp_calls)
 
     summary = {"config": {k: v for k, v in vars(args).items()}, "overall": summarize(runs, cycles, calls)}
     for wid in sorted({r["workload"] for r in runs}):
         pick = lambda rows: [r for r in rows if r["workload"] == wid]  # noqa: E731
         summary[wid] = summarize(pick(runs), pick(cycles), pick(calls))
+    # Same definitions as exp1_argo.py - use these to compare the two stacks
+    dp_ok = [r for r in dp_runs if r["status"] == "COMPLETED" and r["reward"] == 1.0 and not r["missing_timing"]]
+    summary["stack"] = "conductor+faasd"
+    summary["dataplane"] = {"overall": dataplane.summarize(dp_ok, dp_turns, dp_calls)}
+    for wid in sorted({r["workload"] for r in dp_runs}):
+        summary["dataplane"][wid] = dataplane.summarize(
+            [r for r in dp_ok if r["workload"] == wid], dp_turns, dp_calls)
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
         json.dump(summary, f, indent=2)
 
@@ -335,10 +370,13 @@ def main():
         ("Troute (per tool call)", o["per_tool_call"]["Troute_ms"]),
         ("Rfriction (per run)", o["per_run"]["Rfriction"]),
     ]
+    print("\nConductor + faasd (Conductor task timestamps)")
     print(f"{'metric':<24}{'n':>5}{'mean':>12}{'p50':>12}{'p95':>12}{'std':>12}")
     for name, s in rows:
         if s["n"]:
             print(f"{name:<24}{s['n']:>5}{s['mean']:>12}{s['p50']:>12}{s['p95']:>12}{s['std']:>12}")
+    dataplane.print_table(summary["dataplane"]["overall"],
+                          "Conductor + faasd (data-plane metrics, comparable with exp1_argo.py)")
     return 0
 
 

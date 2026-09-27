@@ -15,6 +15,12 @@ Usage:
   python workloads/score.py workloads/retail-44.json --gateway http://<faasd-host>:8080 \\
       --answer "Done. You get back 17.99 to your gift card."
 
+--gateway is either
+  http://<faasd-host>:8080                      OpenFaaS: POST <gateway>/function/<fn>
+  knative://<ingress-host:port>/<domain-suffix>  Knative: POST http://<ingress>/ with
+                                                 Host: <fn>.<domain-suffix>, e.g.
+                                                 knative://10.0.0.5:80/default.example.com
+
 Stdlib only, so it runs anywhere.
 """
 import argparse
@@ -24,11 +30,20 @@ import sys
 import urllib.request
 
 
+def _target(gateway, function):
+    """(url, extra headers) for calling `function` through `gateway`."""
+    if gateway.startswith("knative://"):
+        ingress, _, domain = gateway[len("knative://"):].partition("/")
+        return f"http://{ingress}/", {"Host": f"{function}.{domain.strip('/')}"}
+    return f"{gateway.rstrip('/')}/function/{function}", {}
+
+
 def _call(gateway, function, body):
+    url, headers = _target(gateway, function)
     req = urllib.request.Request(
-        f"{gateway.rstrip('/')}/function/{function}",
+        url,
         data=json.dumps(body).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **headers},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
