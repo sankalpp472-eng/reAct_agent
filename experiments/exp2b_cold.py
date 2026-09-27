@@ -123,22 +123,34 @@ class ArgoKnative:
             "serving.knative.dev", "v1", "default", "services", fn, patch)
 
     def _pods(self, fn):
+        """Pods of this service that could still serve: finished pods left
+        behind (Completed/Error, e.g. after a k3s restart) don't count."""
         pods = self.core.list_namespaced_pod(
             "default", label_selector=f"serving.knative.dev/service={fn}").items
-        return len(pods)
+        return [f"{p.metadata.name} ({p.status.phase}{', terminating' if p.metadata.deletion_timestamp else ''})"
+                for p in pods if p.status.phase not in ("Succeeded", "Failed")]
 
     def make_dormant(self, fn):
         if fn not in self.patched:
             self._set_min_scale(fn, "0")  # new revision that may scale to zero
             self.patched.add(fn)
         print(f"  waiting for {fn} to scale to zero ...", flush=True)
-        deadline = time.time() + self.args.scale_down_timeout
-        while time.time() < deadline:
-            if self._pods(fn) == 0:
+        start = time.time()
+        next_report = start + 60
+        while time.time() - start < self.args.scale_down_timeout:
+            pods = self._pods(fn)
+            if not pods:
+                print(f"  {fn} at zero after {time.time() - start:.0f}s", flush=True)
                 time.sleep(2)  # let Knative's routing settle on the zero state
                 return
+            if time.time() >= next_report:
+                print(f"  still waiting ({time.time() - start:.0f}s): {', '.join(pods)}", flush=True)
+                next_report += 60
             time.sleep(2)
-        raise RuntimeError(f"{fn} did not scale to zero within {self.args.scale_down_timeout}s")
+        raise RuntimeError(
+            f"{fn} did not scale to zero within {self.args.scale_down_timeout}s; still there: "
+            f"{', '.join(self._pods(fn))}. Check: kubectl get revision,podautoscaler,pods -n default "
+            f"| grep {fn}")
 
     def run(self, workload):
         wf_input = {"goal": workload["goal"], "domain": workload["domain"], "context": ""}
