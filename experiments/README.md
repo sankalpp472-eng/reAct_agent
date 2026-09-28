@@ -175,6 +175,19 @@ first tool call in the cold run is the one that hits the cold function.
 | `tcold_tool_ms` | first tool call's round trip in the cold run (actor clock, t5 − t2) minus the warm run's median tool-call round trip: the cold start as the agent sees it |
 | `cold_handler_ms` | that first call's handler time (t4 − t3), which includes the tool's lazy DB load (app-level init) |
 | `first_call_error` | the cold call failed (e.g. timed out) instead of being slow. Failed calls are only recorded by actor images built with this change |
+| `first_call_error_detail` | why it failed: the exception, or the HTTP status and body (needs a rebuilt actor) |
+| `extra_turns` | loop turns in the cold run minus the warm run: a failed tool call makes the evaluator ask for a re-plan, which costs one extra plan → act → evaluate turn |
+| `time_to_first_tool_ok_ms` | first tool request sent → first successful tool answer back. Equals the cold call's round trip when it succeeds; includes the retry turn when it fails |
+
+`tcold_tool_ms` and `cold_handler_ms` are only defined when the cold call succeeded.
+
+**faasd's first call can fail.** With faasd CE, the gateway's scale-from-zero waits until
+the containerd task is *running*, not until the function is *listening*. The first request
+can then reach the new process before its watchdog is up and get a 502 after ~1–2 s. The
+agent recovers (the evaluator asks for a re-plan and the step is retried), so the run still
+scores reward 1, but it costs one extra turn (~10 s with the mock LLM). Knative's activator
+instead holds the request until the new pod is ready. Report this difference as a finding:
+it is what an agent without its own retry logic sees on each platform.
 
 Only trials where both runs score reward 1 go into `summary.json`.
 
