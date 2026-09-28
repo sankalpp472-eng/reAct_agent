@@ -1,0 +1,104 @@
+{
+  "stack": "conductor+faasd",
+  "cold_mechanism": "containerd task stopped; gateway scale_from_zero",
+  "config": {
+    "stack": "conductor",
+    "conductor": "http://localhost:8082/api",
+    "gateway": "http://127.0.0.1:8080",
+    "ctr": "ctr",
+    "ingress": null,
+    "scale_down_timeout": 600,
+    "workloads": [
+      "workloads/retail-44.json"
+    ],
+    "trials": 1,
+    "timeout": 900,
+    "out": "/home/sankalp/functions/pae-faasd/experiments/results"
+  },
+  "trials_total": 1,
+  "trials_used": 1,
+  "overall": {
+    "trials": 1,
+    "delta_te2e_ms": {
+      "n": 1,
+      "mean": 11031.611,
+      "p50": 11031.611,
+      "p95": 11031.611,
+      "std": 0.0,
+      "min": 11031.611,
+      "max": 11031.611
+    },
+    "tcold_tool_ms": {
+      "n": 1,
+      "mean": 1754.636,
+      "p50": 1754.636,
+      "p95": 1754.636,
+      "std": 0.0,
+      "min": 1754.636,
+      "max": 1754.636
+    },
+    "cold_first_call_http_ms": {
+      "n": 1,
+      "mean": 1807.728,
+      "p50": 1807.728,
+      "p95": 1807.728,
+      "std": 0.0,
+      "min": 1807.728,
+      "max": 1807.728
+    },
+    "cold_handler_ms": {
+      "n": 0
+    },
+    "warm_tool_http_median_ms": {
+      "n": 1,
+      "mean": 53.091,
+      "p50": 53.091,
+      "p95": 53.091,
+      "std": 0.0,
+      "min": 53.091,
+      "max": 53.091
+    }
+  },
+  "retail-44": {
+    "trials": 1,
+    "delta_te2e_ms": {
+      "n": 1,
+      "mean": 11031.611,
+      "p50": 11031.611,
+      "p95": 11031.611,
+      "std": 0.0,
+      "min": 11031.611,
+      "max": 11031.611
+    },
+    "tcold_tool_ms": {
+      "n": 1,
+      "mean": 1754.636,
+      "p50": 1754.636,
+      "p95": 1754.636,
+      "std": 0.0,
+      "min": 1754.636,
+      "max": 1754.636
+    },
+    "cold_first_call_http_ms": {
+      "n": 1,
+      "mean": 1807.728,
+      "p50": 1807.728,
+      "p95": 1807.728,
+      "std": 0.0,
+      "min": 1807.728,
+      "max": 1807.728
+    },
+    "cold_handler_ms": {
+      "n": 0
+    },
+    "warm_tool_http_median_ms": {
+      "n": 1,
+      "mean": 53.091,
+      "p50": 53.091,
+      "p95": 53.091,
+      "std": 0.0,
+      "min": 53.091,
+      "max": 53.091
+    }
+  }
+}

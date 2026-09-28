@@ -1,0 +1,2 @@
+workload,trial,status_cold,reward_cold,status_warm,reward_warm,te2e_cold_ms,te2e_warm_ms,delta_te2e_ms,first_tool,first_call_error,cold_first_call_http_ms,cold_handler_ms,warm_tool_http_median_ms,tcold_tool_ms,torch_run_cold_ms,torch_run_warm_ms
+retail-44,1,COMPLETED,1.0,COMPLETED,1.0,63203.489,52171.878,11031.611,find_user_id_by_name_zip,True,1807.728,,53.091,1754.636,3788.489,3591.878

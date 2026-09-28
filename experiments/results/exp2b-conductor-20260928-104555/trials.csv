@@ -1,0 +1,11 @@
+workload,trial,status_cold,reward_cold,status_warm,reward_warm,te2e_cold_ms,te2e_warm_ms,delta_te2e_ms,turns_cold,turns_warm,first_tool,first_call_error,first_call_attempts,first_call_error_detail,failed_tool_calls_cold,cold_first_call_http_ms,cold_handler_ms,warm_tool_http_median_ms,tcold_tool_ms,time_to_first_tool_ok_ms,torch_run_cold_ms,torch_run_warm_ms
+retail-44,1,COMPLETED,1.0,COMPLETED,1.0,53312.908,51333.541,1979.367,5,5,find_user_id_by_name_zip,False,10,,0,1741.256,40.333,22.142,1719.114,1741.256,3839.908,3388.541
+retail-44,2,COMPLETED,1.0,COMPLETED,1.0,53411.209,52380.429,1030.78,5,5,find_user_id_by_name_zip,False,8,,0,1563.62,44.093,18.776,1544.844,1563.62,3838.209,4489.429
+retail-44,3,COMPLETED,1.0,COMPLETED,1.0,53719.55,52155.187,1564.363,5,5,find_user_id_by_name_zip,False,10,,0,1840.588,61.204,20.334,1820.254,1840.588,3711.55,4168.187
+retail-44,4,COMPLETED,1.0,COMPLETED,1.0,53655.871,52111.606,1544.265,5,5,find_user_id_by_name_zip,False,8,,0,1615.424,39.579,16.101,1599.323,1615.424,3964.871,3966.606
+retail-44,5,COMPLETED,1.0,COMPLETED,1.0,55821.931,52827.472,2994.459,5,5,find_user_id_by_name_zip,False,10,,0,1874.526,57.812,25.419,1849.108,1874.526,4749.931,4503.472
+airline-26,1,COMPLETED,1.0,COMPLETED,1.0,66293.772,63655.494,2638.278,6,6,get_user_details,False,11,,0,2055.72,182.483,20.579,2035.141,2055.72,5072.772,4654.494
+airline-26,2,COMPLETED,1.0,COMPLETED,1.0,65088.282,64814.175,274.108,6,6,get_user_details,False,8,,0,1704.102,85.914,22.722,1681.38,1704.102,4193.282,5176.175
+airline-26,3,COMPLETED,1.0,COMPLETED,1.0,65453.662,64032.492,1421.17,6,6,get_user_details,False,10,,0,1996.67,149.885,21.498,1975.172,1996.67,4472.662,4673.492
+airline-26,4,COMPLETED,1.0,COMPLETED,1.0,66183.387,64497.988,1685.399,6,6,get_user_details,False,9,,0,1829.975,94.828,17.184,1812.791,1829.975,5024.387,5444.988
+airline-26,5,COMPLETED,1.0,COMPLETED,1.0,64993.244,63977.96,1015.284,6,6,get_user_details,False,8,,0,1632.773,99.978,17.781,1614.991,1632.773,4512.244,4767.96

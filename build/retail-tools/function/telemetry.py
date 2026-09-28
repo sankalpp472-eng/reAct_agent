@@ -43,13 +43,19 @@ def record_llm(ms):
         timing["llm_calls"] += 1
 
 
-def record_tool_call(tool, t2, t5, callee_timing):
+def record_tool_call(tool, t2, t5, callee_timing, error=None, attempts=1):
     """t2/t5: when the caller sent the request / got the response.
-    callee_timing: the tool function's own `_timing` (for its t3/t4)."""
+    callee_timing: the tool function's own `_timing` (for its t3/t4).
+    error: why the call failed (exception, or HTTP status + body), if it did.
+    attempts: requests sent (> 1 when a cold function was retried)."""
     timing = getattr(_local, "timing", None)
     if timing is None:
         return
     entry = {"tool": tool, "t2": t2, "t5": t5, "http_ms": t5 - t2}
+    if error:
+        entry["error"] = error
+    if attempts > 1:
+        entry["attempts"] = attempts
     if callee_timing:
         twarm = callee_timing["t4"] - callee_timing["t3"]
         entry.update(

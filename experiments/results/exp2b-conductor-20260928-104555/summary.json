@@ -1,0 +1,222 @@
+{
+  "stack": "conductor+faasd",
+  "cold_mechanism": "containerd task stopped; gateway scale_from_zero",
+  "config": {
+    "stack": "conductor",
+    "conductor": "http://localhost:8082/api",
+    "gateway": "http://127.0.0.1:8080",
+    "ctr": "ctr",
+    "ingress": null,
+    "scale_down_timeout": 600,
+    "workloads": [
+      "/home/sankalp/functions/pae-faasd/workloads/retail-44.json",
+      "/home/sankalp/functions/pae-faasd/workloads/airline-26.json"
+    ],
+    "trials": 5,
+    "timeout": 900,
+    "out": "/home/sankalp/functions/pae-faasd/experiments/results"
+  },
+  "trials_total": 10,
+  "trials_used": 10,
+  "overall": {
+    "trials": 10,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 10,
+      "mean": 0.0,
+      "p50": 0.0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 10,
+      "mean": 1785.465,
+      "p50": 1785.615,
+      "p95": 2029.148,
+      "std": 163.509,
+      "min": 1563.62,
+      "max": 2055.72
+    },
+    "delta_te2e_ms": {
+      "n": 10,
+      "mean": 1614.747,
+      "p50": 1554.314,
+      "p95": 2834.178,
+      "std": 791.049,
+      "min": 274.108,
+      "max": 2994.459
+    },
+    "tcold_tool_ms": {
+      "n": 10,
+      "mean": 1765.212,
+      "p50": 1765.952,
+      "p95": 2008.155,
+      "std": 162.302,
+      "min": 1544.844,
+      "max": 2035.141
+    },
+    "cold_first_call_http_ms": {
+      "n": 10,
+      "mean": 1785.465,
+      "p50": 1785.615,
+      "p95": 2029.148,
+      "std": 163.509,
+      "min": 1563.62,
+      "max": 2055.72
+    },
+    "cold_handler_ms": {
+      "n": 10,
+      "mean": 85.611,
+      "p50": 73.559,
+      "p95": 167.814,
+      "std": 48.383,
+      "min": 39.579,
+      "max": 182.483
+    },
+    "warm_tool_http_median_ms": {
+      "n": 10,
+      "mean": 20.254,
+      "p50": 20.457,
+      "p95": 24.205,
+      "std": 2.847,
+      "min": 16.101,
+      "max": 25.419
+    }
+  },
+  "airline-26": {
+    "trials": 5,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 5,
+      "mean": 0.0,
+      "p50": 0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 5,
+      "mean": 1843.848,
+      "p50": 1829.975,
+      "p95": 2043.91,
+      "std": 182.016,
+      "min": 1632.773,
+      "max": 2055.72
+    },
+    "delta_te2e_ms": {
+      "n": 5,
+      "mean": 1406.848,
+      "p50": 1421.17,
+      "p95": 2447.702,
+      "std": 870.436,
+      "min": 274.108,
+      "max": 2638.278
+    },
+    "tcold_tool_ms": {
+      "n": 5,
+      "mean": 1823.895,
+      "p50": 1812.791,
+      "p95": 2023.147,
+      "std": 181.373,
+      "min": 1614.991,
+      "max": 2035.141
+    },
+    "cold_first_call_http_ms": {
+      "n": 5,
+      "mean": 1843.848,
+      "p50": 1829.975,
+      "p95": 2043.91,
+      "std": 182.016,
+      "min": 1632.773,
+      "max": 2055.72
+    },
+    "cold_handler_ms": {
+      "n": 5,
+      "mean": 122.618,
+      "p50": 99.978,
+      "p95": 175.964,
+      "std": 41.711,
+      "min": 85.914,
+      "max": 182.483
+    },
+    "warm_tool_http_median_ms": {
+      "n": 5,
+      "mean": 19.953,
+      "p50": 20.579,
+      "p95": 22.477,
+      "std": 2.389,
+      "min": 17.184,
+      "max": 22.722
+    }
+  },
+  "retail-44": {
+    "trials": 5,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 5,
+      "mean": 0.0,
+      "p50": 0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 5,
+      "mean": 1727.083,
+      "p50": 1741.256,
+      "p95": 1867.739,
+      "std": 136.025,
+      "min": 1563.62,
+      "max": 1874.526
+    },
+    "delta_te2e_ms": {
+      "n": 5,
+      "mean": 1822.647,
+      "p50": 1564.363,
+      "p95": 2791.441,
+      "std": 736.371,
+      "min": 1030.78,
+      "max": 2994.459
+    },
+    "tcold_tool_ms": {
+      "n": 5,
+      "mean": 1706.529,
+      "p50": 1719.114,
+      "p95": 1843.337,
+      "std": 133.281,
+      "min": 1544.844,
+      "max": 1849.108
+    },
+    "cold_first_call_http_ms": {
+      "n": 5,
+      "mean": 1727.083,
+      "p50": 1741.256,
+      "p95": 1867.739,
+      "std": 136.025,
+      "min": 1563.62,
+      "max": 1874.526
+    },
+    "cold_handler_ms": {
+      "n": 5,
+      "mean": 48.604,
+      "p50": 44.093,
+      "p95": 60.526,
+      "std": 10.171,
+      "min": 39.579,
+      "max": 61.204
+    },
+    "warm_tool_http_median_ms": {
+      "n": 5,
+      "mean": 20.554,
+      "p50": 20.334,
+      "p95": 24.763,
+      "std": 3.508,
+      "min": 16.101,
+      "max": 25.419
+    }
+  }
+}

@@ -13,6 +13,8 @@ import ast
 import math
 import operator
 import os
+import time
+
 import requests
 
 from . import telemetry
@@ -129,11 +131,59 @@ def execute_tool(name, args):
 _domain_declarations = {}
 
 
+# Cold-start retry. faasd CE's scale-from-zero forwards the request as soon as
+# the function's containerd task is running, before the new process listens,
+# so the first call to a cold function fails with the gateway's
+# "HTTP 500: Can't reach service for: <fn>". With TOOL_COLD_RETRY_S > 0 the
+# actor re-sends such calls every TOOL_COLD_RETRY_INTERVAL_S until the function
+# answers (like Knative's activator, which holds the request instead). Only
+# failures where the request never reached the handler are retried, so a tool
+# call is never executed twice. The recorded call spans first send -> answer.
+TOOL_COLD_RETRY_S = float(os.environ.get("TOOL_COLD_RETRY_S", "0"))
+TOOL_COLD_RETRY_INTERVAL_S = float(os.environ.get("TOOL_COLD_RETRY_INTERVAL_S", "0.05"))
+
+
+def _not_reached(resp):
+    """True if the handler never answered: a 5xx without the `_timing` that
+    the tool handler adds to every response it sends, errors included. On a
+    restarted faasd function that is first the gateway's 500 "Can't reach
+    service", then the watchdog's empty 500 while the Python server inside
+    is still starting."""
+    if resp.status_code < 500:
+        return False
+    try:
+        return "_timing" not in resp.json()
+    except ValueError:
+        return True
+
+
 def _call_tool_function(domain, body, timeout=30):
     t2 = telemetry.now_ms()  # request leaves the actor
-    resp = requests.post(
-        TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools"), json=body, timeout=timeout
-    )
+    url = TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools")
+    attempts = 0
+    while True:
+        attempts += 1
+        retry_left = telemetry.now_ms() - t2 < TOOL_COLD_RETRY_S * 1000.0
+        try:
+            resp = requests.post(url, json=body, timeout=timeout)
+        except requests.ConnectionError as e:
+            if retry_left:
+                time.sleep(TOOL_COLD_RETRY_INTERVAL_S)
+                continue
+            err = e
+        except requests.RequestException as e:
+            err = e
+        else:
+            if retry_left and _not_reached(resp):
+                time.sleep(TOOL_COLD_RETRY_INTERVAL_S)
+                continue
+            break
+        # still record the attempt (e.g. a cold function that timed out)
+        if "tool" in body:
+            telemetry.record_tool_call(body["tool"], t2, telemetry.now_ms(), None,
+                                       error=f"{type(err).__name__}: {str(err)[:300]}",
+                                       attempts=attempts)
+        raise err
     t5 = telemetry.now_ms()  # response back at the actor
     try:
         data = resp.json()
@@ -141,9 +191,14 @@ def _call_tool_function(domain, body, timeout=30):
         data = {"error": resp.text[:1000]}
     callee_timing = data.pop("_timing", None) if isinstance(data, dict) else None
     if "tool" in body:
-        telemetry.record_tool_call(body["tool"], t2, t5, callee_timing)
+        # no _timing means the handler never answered (e.g. the gateway's own
+        # 502 while a restarted function isn't listening yet)
+        error = None if resp.status_code < 400 and callee_timing else \
+            f"HTTP {resp.status_code}: {resp.text[:300]}"
+        telemetry.record_tool_call(body["tool"], t2, t5, callee_timing, error=error, attempts=attempts)
     if resp.status_code >= 400:
-        return {"error": data.get("error", f"HTTP {resp.status_code}")}
+        # `or`: an empty error body must still read as a failure
+        return {"error": data.get("error") or f"HTTP {resp.status_code}"}
     return data
 
 
