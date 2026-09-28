@@ -1,212 +1,181 @@
-# Planner / Actor / Evaluator — faasd functions (Gemini-powered)
+# Orchestrating an agentic loop on serverless: Conductor + faasd vs Argo + Knative
 
-Three OpenFaaS functions, meant to run on **faasd**, each calling the Gemini API:
+A study comparing two orchestrator + FaaS stacks running the **same** agent loop:
 
-- `planner`   — takes a goal, returns a step-by-step plan (JSON)
-- `actor`     — executes one step of the plan, returns a result (JSON)
-- `evaluator` — looks at the plan + history of results, decides `done` / `continue` / `replan`
+| | Stack A (lighter) | Stack B (heavier) |
+|---|---|---|
+| Orchestrator | Conductor OSS: JSON workflow, `DO_WHILE` loop of HTTP + JQ tasks | Argo Workflows 3.6: recursive steps, HTTP templates run by an agent pod |
+| FaaS | faasd (OpenFaaS): gateway → watchdog → function | Knative Serving 1.19 + Kourier: Kourier → queue-proxy → function |
+| Runs on | containerd, no Kubernetes | k3s 1.33 |
 
-They're plain HTTP JSON functions (no orchestration logic inside them) so you can
-drive the loop from Conductor, a shell script, or anything else that can make
-HTTP calls to the faasd gateway.
+Only the orchestrator and the FaaS platform change. Both stacks use the same function
+images, the same loop, the same workloads and the same measurement code.
 
-## 0. Prerequisites (on the faasd host)
+## The agent
 
-- faasd already installed and running (`sudo systemctl status faasd`)
-- `faas-cli` installed on the machine you deploy from:
-  ```bash
-  curl -sSL https://cli.openfaas.com | sudo sh
-  ```
-- The `python3-http` template pulled into this project:
-  ```bash
-  cd pae-faasd
-  faas-cli template store pull python3-http
-  ```
-  This adds a `template/` folder that `stack.yaml` needs at build time.
+A plan → act → evaluate loop, at most 8 turns, built from five functions:
 
-- Docker (or Podman) available for `faas-cli build`, and a container registry
-  you can push to (Docker Hub, GHCR, a self-hosted registry, etc.) — faasd
-  pulls images, it doesn't build them for you.
+| Function | Role |
+|---|---|
+| `planner` | Takes the goal (plus the history so far) and returns the remaining steps |
+| `actor` | Executes one step by calling the domain's tools |
+| `evaluator` | Looks at the plan and history, and decides `done` / `continue` / `replan` |
+| `retail-tools`, `airline-tools` | The [τ-bench](https://github.com/sierra-research/tau-bench) tools (commit `59a200c`, MIT, see `retail-tools/LICENSE-tau-bench`), one function per domain, over an in-memory mock database |
 
-## 1. Get a Gemini API key
+**Workloads.** The agent solves two τ-bench tasks ([`workloads/`](workloads/README.md)):
+- **retail-44** (5 turns): swap a desk lamp in a pending order for the cheapest one available, refund the difference to the gift card and report it ($17.99).
+- **airline-26** (6 turns): cancel two reservations and upgrade a third to business class, following the airline policy, which forbids cancelling one of them.
 
-Create one at https://aistudio.google.com/apikey.
+Each run is scored as in τ-bench: the database end state and the expected answer.
 
-## 2. Log in to faasd and create the secret
+**Mock LLM.** The planner, actor and evaluator use a mock of the Gemini client
+(`gemini_client.py` + `mock_workloads.py`). It replays each workload's scripted steps and
+sleeps to stand in for real API latency: 2 s / 2 s / 1 s per planner / actor / evaluator
+call (`MOCK_LATENCY_S`). The actor's tool calls are real calls to the tool functions, so
+the database really changes and runs can be scored.
+- This study measures orchestration and FaaS overhead. LLM quality and fine-tuning are
+  out of scope, so the testbed is effectively a simulator.
+- Every run does identical work, so differences in latency come from the stack.
+
+## Repository layout
+
+| Path | What |
+|---|---|
+| `planner/`, `actor/`, `evaluator/` | Agent functions (OpenFaaS `python3-http` template). `gemini_client.py`, `mock_workloads.py` and `telemetry.py` must stay identical in all of them |
+| `retail-tools/`, `airline-tools/` | τ-bench tool functions (`tau_tools/`, `data/*.json` vendored from τ-bench) |
+| `stack.yaml` | faasd deployment of all five functions |
+| `conductor-agentic-loop/` | The Conductor workflow `pae_agentic_loop` |
+| `argo-knative/` | Stack B: install, Knative Services, Argo WorkflowTemplate. See its [README](argo-knative/README.md) |
+| `workloads/` | The two τ-bench tasks, scoring (`score.py`), and a local runner without an orchestrator (`run_local.py`) |
+| `experiments/` | Experiment drivers, metrics and plots. See its [README](experiments/README.md) |
+| `experiments/results/` | Raw and summarized results of every run |
+| `experiments/plots/` | Figures (PNG + PDF). See its [README](experiments/plots/README.md) |
+
+## Running Stack A: Conductor + faasd
+
+Prerequisites: faasd running, `faas-cli`, Docker to build, a registry faasd can pull from,
+and Conductor OSS.
 
 ```bash
-# Get the faasd gateway password (on the faasd host)
-sudo cat /var/lib/faasd/secrets/basic-auth-password
+faas-cli template store pull python3-http          # once; adds template/
 
-# From your deploy machine:
-export OPENFAAS_URL=http://<faasd-host>:8080
-faas-cli login --username admin --password <the-password-above>
+# The functions declare these secrets. The mock never reads them, so placeholders are fine
+faas-cli secret create gemini-api-key --from-literal=unused
+faas-cli secret create tavily-api-key --from-literal=unused
 
-# Store the Gemini key as an OpenFaaS secret (never put it in stack.yaml directly)
-faas-cli secret create gemini-api-key --from-literal="<YOUR_GEMINI_API_KEY>"
-```
-
-## 3. Update image names
-
-In `stack.yaml`, change `pae/planner:latest` etc. to `<your-registry-username>/planner:latest`
-(and same for actor/evaluator) so `faas-cli` can push them somewhere faasd can pull from.
-
-## 4. Build, push, deploy
-
-```bash
-cd pae-faasd
+# Change the image names in stack.yaml to your registry, then build + push + deploy
 faas-cli up -f stack.yaml
-```
-`up` = build + push + deploy in one shot. You can also run the three steps separately:
-```bash
-faas-cli build   -f stack.yaml
-faas-cli push    -f stack.yaml
-faas-cli deploy  -f stack.yaml
-```
 
-## 5. Test each function
-
-```bash
-# Planner
-curl -s http://<faasd-host>:8080/function/planner \
-  -H 'Content-Type: application/json' \
-  -d '{"goal": "Plan a 3-day trip to Lisbon under $800"}' | jq
-
-# Actor  (use a step id from the planner's output, e.g. 1)
-curl -s http://<faasd-host>:8080/function/actor \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "goal": "Plan a 3-day trip to Lisbon under $800",
-        "plan": [{"id":1,"description":"Find flight options under $300"}],
-        "step_id": 1,
-        "history": []
-      }' | jq
-
-# Evaluator
-curl -s http://<faasd-host>:8080/function/evaluator \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "goal": "Plan a 3-day trip to Lisbon under $800",
-        "plan": [{"id":1,"description":"Find flight options under $300"}],
-        "history": [{"step_id":1,"result":"Found a $260 round trip","status":"completed"}]
-      }' | jq
+# Register the workflow (the HTTP tasks call the faasd gateway at 172.17.0.1:8080)
+CONDUCTOR=http://localhost:8082/api
+jq -s '.' conductor-agentic-loop/pae_agentic_loop_v2.json \
+  | curl -s -X PUT "$CONDUCTOR/metadata/workflow" -H 'Content-Type: application/json' -d @-
 ```
 
-## 6. tau-bench tool servers (`retail-tools`, `airline-tools`)
+Start a run with the workload's goal and domain:
+```bash
+curl -s "$CONDUCTOR/workflow/pae_agentic_loop" -H 'Content-Type: application/json' \
+  -d "{\"goal\": $(jq .goal workloads/retail-44.json), \"domain\": \"retail\", \"context\": \"\"}"
+```
+The workflow returns `final_answer` and `step_history` as outputs. Reset the tool
+database before each run (`{"action":"reset"}`, below).
 
-Two extra functions expose the tools from
-[tau-bench](https://github.com/sierra-research/tau-bench) (commit `59a200c`),
-one function per domain:
+## Running Stack B: Argo Workflows + Knative
 
-- `retail-tools`  — 16 tools (`find_user_id_by_email`, `get_order_details`,
-  `cancel_pending_order`, `exchange_delivered_order_items`, ...)
-- `airline-tools` — 14 tools (`search_direct_flight`, `book_reservation`,
-  `update_reservation_flights`, `cancel_reservation`, ...)
+The same images run as Knative Services, and the loop runs as an Argo WorkflowTemplate.
+Install, deploy and troubleshooting steps are in [`argo-knative/README.md`](argo-knative/README.md).
+Run only one stack at a time.
 
-The tool code (`tau_tools/`) and mock database (`data/*.json`) are vendored
-unchanged from tau-bench (MIT, see `LICENSE-tau-bench`). All of a domain's
-tools share one in-memory DB, so writes (cancel, book, ...) are visible to
-later reads — faasd runs one replica per function, so there is one copy.
-They need no secrets and make no LLM calls.
+## Experiments and results
+
+Each function adds a `_timing` object to its response: handler entry/exit, LLM time,
+and for the actor, each tool call's send/receive times and attempts. The drivers combine
+these with their own clocks, so both stacks are measured by the same code
+([`experiments/README.md`](experiments/README.md)).
+
+**Experiment 1: warm baseline** (`exp1_conductor.py`, `exp1_argo.py`; figures 1–8).
+Medians, Conductor + faasd vs Argo + Knative with Argo's default 10 s requeue:
+
+| Metric | Conductor + faasd | Argo + Knative |
+|---|---|---|
+| Te2e, retail-44 / airline-26 | 53 s / 64 s | 294 s / 337 s |
+| Orchestration per loop turn (Torch) | 0.75 s | 41 s |
+| Actor → tool routing (Troute) | 20 ms | 127 ms |
+| Rfriction = overhead / LLM time | 0.11 | 4.97 |
+| Workflow state per run (Sworkflow), retail-44 / airline-26 | 293 KB / 513 KB | 89 KB / 163 KB |
+| Task success | 100% | 100% |
+
+**Experiment 2b: cold tool function, through the orchestrator** (`exp2b_cold.py`;
+figures 9–12). The tool function is made dormant, then the workflow runs. Medians,
+retail-44 / airline-26:
+
+| Metric | Conductor + faasd | Argo + Knative |
+|---|---|---|
+| Tcold = T_first_invocation − Twarm | 1.72 s / 1.81 s | 2.91 s / 3.04 s |
+| Of which platform start (overall) | 1.69 s: new process in the existing container | 2.80 s: new pod |
+
+Without a retry, faasd's first call to a cold function fails, because its gateway
+forwards before the function is listening. The agent then needs an extra turn (+11 s).
+The actor therefore retries such calls (`TOOL_COLD_RETRY_S`). Knative's activator holds
+the request instead.
+
+Findings and caveats for each figure are in [`experiments/plots/README.md`](experiments/plots/README.md).
+
+**Still to do:** Experiment 1 on Argo with the tuned 2 s requeue, and Experiment 3
+(scaling time Tscale, control-plane CPU/RAM).
+
+## Function contracts
+
+| Function | Input | Output |
+|---|---|---|
+| planner | `{goal, context?, feedback?}` | `{goal, plan: [{id, description}]}` |
+| actor | `{goal, plan, step_id, history?, domain?}` | `{step_id, description, result, status}` |
+| evaluator | `{goal, plan, history}` | `{verdict: done\|continue\|replan, feedback, next_step_id}` |
+| retail-tools / airline-tools | `{tool, arguments}` or `{action: list_tools\|reset\|hash}` | `{tool, output, error}` / `{tools}` / `{status}` / `{hash}` |
+
+Every response also carries `_timing`. The mock picks a workload's script when the goal
+contains that workload's key strings (see `mock_workloads.py`); any other goal gets a
+generic plan. With `"domain": "retail"` or `"airline"`, the actor uses that domain's tool
+function, reached through `TOOLS_GATEWAY_URL` on faasd or `TOOLS_URL_TEMPLATE` on Knative.
+
+Tool outputs are strings, as in τ-bench. A tool-level failure comes back as HTTP 200
+with `"error": true`, so the agent can react to it. Only malformed requests get a 4xx.
+
+### Trying the functions by hand (faasd)
 
 ```bash
-faas-cli up -f stack.yaml --filter retail-tools
-faas-cli up -f stack.yaml --filter airline-tools
+GW=http://127.0.0.1:8080
+GOAL=$(jq -r .goal workloads/retail-44.json)
 
-GW=http://<faasd-host>:8080
-
-# List tool declarations (already in Gemini Interactions API format)
-curl -s $GW/function/retail-tools -d '{"action":"list_tools"}' | jq '.tools[].name'
-
-# Call a tool
-curl -s $GW/function/retail-tools \
-  -d '{"tool":"find_user_id_by_email","arguments":{"email":"isabella.lopez3271@example.com"}}' | jq
-# -> {"tool":"find_user_id_by_email","output":"isabella_lopez_6490","error":false}
-
-curl -s $GW/function/airline-tools \
-  -d '{"tool":"search_direct_flight","arguments":{"origin":"JFK","destination":"SFO","date":"2024-05-16"}}' | jq
-
-# Reset the DB to its original state (do this before each task)
 curl -s $GW/function/retail-tools -d '{"action":"reset"}'
+curl -s $GW/function/retail-tools -d '{"tool":"find_user_id_by_name_zip","arguments":{"first_name":"Aarav","last_name":"Anderson","zip":"19031"}}' | jq
+curl -s $GW/function/retail-tools -d '{"action":"hash"}' | jq
 
-# tau-bench DB hash (compare against the expected end state to score a task)
-curl -s $GW/function/retail-tools -d '{"action":"hash"}'
+curl -s $GW/function/planner -H 'Content-Type: application/json' \
+  -d "$(jq -n --arg g "$GOAL" '{goal: $g, context: ""}')" | jq
+
+curl -s $GW/function/actor -H 'Content-Type: application/json' -d "$(jq -n --arg g "$GOAL" '{
+  goal: $g, domain: "retail", step_id: 1, history: [],
+  plan: [{id: 1, description: "Authenticate the customer: look up the user id for Aarav Anderson, zip 19031"}]}')" \
+  | jq '{status, result, tool_calls: ._timing.tool_calls}'
+
+curl -s $GW/function/evaluator -H 'Content-Type: application/json' -d "$(jq -n --arg g "$GOAL" '{
+  goal: $g, plan: [{id: 1, description: "Authenticate"}, {id: 2, description: "Get the order"}],
+  history: [{step_id: 1, status: "completed", result: "Authenticated."}]}')" | jq
 ```
 
-Tool outputs are always strings, as in tau-bench. Tool-level failures come
-back as HTTP 200 with `"output": "Error: ..."` and `"error": true` so the
-model can read and react to them; only malformed requests (unknown tool,
-bad body) get a 4xx.
-
-## 7. Mock LLM and the tau-bench workloads
-
-`gemini_client.py` in planner/actor/evaluator is currently a **mock**: no API
-calls, just a sleep (`MOCK_LATENCY_S`) and a scripted answer. For most goals it
-plays a generic 4-step plan. If the goal matches one of the workloads in
-[`workloads/`](workloads/README.md) (see `mock_workloads.py`), all three
-functions follow that workload's script instead:
-
-- **planner**: returns the workload's remaining steps.
-- **actor**: makes the step's tool calls for real against `retail-tools` /
-  `airline-tools`, so the mock DB actually changes.
-- **evaluator**: returns `continue` until every step is done, then `done` with
-  the answer for the customer as `feedback`. It returns `replan` if a step failed.
-
-A run can therefore be scored like a real tau-bench run. `gemini_client.py` and
-`mock_workloads.py` must stay identical in all three function directories.
-
-The actor gets a domain's tools when its request has `"domain": "retail"` or
-`"airline"`. It reaches the tool function through `TOOLS_GATEWAY_URL` (default
-`http://gateway.openfaas:8080`). The Conductor workflow passes
-`${workflow.input.domain}` through, and returns `final_answer` and
-`step_history` as workflow outputs. So start it with:
-
-```json
-{"goal": "<the workload's goal>", "domain": "retail", "context": ""}
-```
-
-To run a workload end to end without Conductor (it resets the DB, runs the
-loop the way the workflow does, and scores the result):
-
+To run a workload end to end without an orchestrator (resets the DB, runs the loop,
+scores the result):
 ```bash
 MOCK_LATENCY_S=0 python workloads/run_local.py workloads/retail-44.json            # all in-process
-python workloads/run_local.py workloads/retail-44.json --gateway http://<faasd-host>:8080
+python workloads/run_local.py workloads/retail-44.json --gateway http://127.0.0.1:8080
 ```
 
-## 8. The second stack: Argo Workflows + Knative
+## Using a real LLM
 
-The same functions (same images) and the same loop also run on Argo Workflows +
-Knative Serving, for the orchestrator comparison. See
-[`argo-knative/README.md`](argo-knative/README.md).
-
-## 9. Experiments
-
-Every function adds a `_timing` object to its response body: handler entry/exit
-time, LLM time and, for the actor, per-tool-call timings. The Experiment 1
-driver uses these. See [`experiments/README.md`](experiments/README.md).
-
-## Contract summary (for wiring into Conductor later)
-
-| Function  | Input                                              | Output                                                           |
-|-----------|-----------------------------------------------------|--------------------------------------------------------------------|
-| planner   | `{goal, context?, feedback?}`                       | `{goal, plan:[{id, description}]}`                                |
-| actor     | `{goal, plan, step_id, history?, domain?}`          | `{step_id, description, result, status}`                          |
-| evaluator | `{goal, plan, history}`                             | `{verdict: done|continue|replan, feedback, next_step_id}`         |
-| retail-tools / airline-tools | `{tool, arguments}` or `{action: list_tools|reset|hash}` | `{tool, output, error}` / `{tools}` / `{status}` / `{hash}` |
-
-The typical loop: `planner` → loop( `actor` on `next_step_id` → append to `history` →
-`evaluator` ) until `verdict == "done"`; if `verdict == "replan"`, call `planner`
-again with `feedback` and reset `history`. That loop-and-branch logic is exactly
-what we'll model as a Conductor workflow next.
-
-## Notes / things to harden before production
-
-- Gemini calls have no retry/backoff here — add one if you hit rate limits.
-- `call_gemini_json` assumes the model returns valid JSON (enforced via
-  `response_mime_type: application/json`); still wrap with your own
-  validation if you tighten the schema further.
-- Secrets are read from `/var/openfaas/secrets/gemini-api-key` (mounted by
-  the `secrets:` block in `stack.yaml`) — don't bake the key into the image.
-- Consider setting `read_timeout` / `write_timeout` / `exec_timeout` in
-  `stack.yaml` if Gemini responses are slow (LLM calls can exceed OpenFaaS's
-  default 5s timeout).
+`gemini_client.py` keeps the real client's function signatures (`call_gemini_json`,
+`call_gemini_agentic`). To run with Gemini, swap the mock for a real client, then create
+the `gemini-api-key` secret with a real key. The key is mounted at
+`/var/openfaas/secrets/gemini-api-key`; never put it in `stack.yaml` or the image.
+Expect longer and more variable LLM times, which would change Rfriction but not the
+orchestration and routing overheads.
