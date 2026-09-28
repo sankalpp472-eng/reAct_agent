@@ -183,7 +183,8 @@ first tool call in the cold run is the one that hits the cold function.
 
 **faasd's first call can fail.** With faasd CE, the gateway's scale-from-zero waits until
 the containerd task is *running*, not until the function is *listening*. The first request
-can then reach the new process before its watchdog is up and get a 502 after ~1–2 s. The
+can then arrive before the new process is up, and the gateway gives up after ~1–1.5 s with
+`HTTP 500: Can't reach service for: <function>.` (seen in the Conductor + faasd runs). The
 agent recovers (the evaluator asks for a re-plan and the step is retried), so the run still
 scores reward 1, but it costs one extra turn (~10 s with the mock LLM). Knative's activator
 instead holds the request until the new pod is ready. Report this difference as a finding:
