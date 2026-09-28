@@ -126,20 +126,31 @@ class ArgoKnative:
         """Changing min-scale creates a new revision. Make sure it becomes
         Ready (otherwise traffic stays on the old, pinned revision)."""
         deadline = time.time() + timeout
+        created = None
         while time.time() < deadline:
-            st = self.api.get_namespaced_custom_object(
-                "serving.knative.dev", "v1", "default", "services", fn).get("status", {})
+            svc = self.api.get_namespaced_custom_object(
+                "serving.knative.dev", "v1", "default", "services", fn)
+            st = svc.get("status", {})
             created, ready = st.get("latestCreatedRevisionName"), st.get("latestReadyRevisionName")
-            if created and created == ready:
+            # right after a patch the status still describes the previous
+            # revision; only trust it once Knative has seen this generation
+            seen = st.get("observedGeneration", 0) >= svc["metadata"]["generation"]
+            if seen and created and created == ready:
                 return
-            rev = self.api.get_namespaced_custom_object(
-                "serving.knative.dev", "v1", "default", "revisions", created) if created else {}
-            cond = next((c for c in rev.get("status", {}).get("conditions", []) if c.get("type") == "Ready"), {})
+            cond = self._revision_ready(created) if seen and created else {}
             if cond.get("status") == "False":
                 raise RuntimeError(f"new revision {created} of {fn} failed: {cond.get('reason')}: "
                                    f"{cond.get('message')}")
             time.sleep(2)
-        raise RuntimeError(f"new revision of {fn} not Ready within {timeout}s")
+        cond = self._revision_ready(created) if created else {}
+        raise RuntimeError(f"new revision {created} of {fn} not Ready within {timeout}s "
+                           f"({cond.get('reason')}: {cond.get('message')}). Check: kubectl describe "
+                           f"revision {created}; kubectl get pods | grep {created}")
+
+    def _revision_ready(self, name):
+        rev = self.api.get_namespaced_custom_object(
+            "serving.knative.dev", "v1", "default", "revisions", name)
+        return next((c for c in rev.get("status", {}).get("conditions", []) if c.get("type") == "Ready"), {})
 
     def _pods(self, fn):
         """Pods of this service that could still serve: finished pods left
