@@ -191,10 +191,12 @@ instead holds the request until the new pod is ready.
 
 **Cold-start retry (on by default): `TOOL_COLD_RETRY_S`.** To measure
 Tcold = T_first_invocation − Twarm on faasd too, the actor re-sends a tool call every 50 ms
-(`TOOL_COLD_RETRY_INTERVAL_S`) while the gateway can't reach the function: connection
-refused, 502/503/504, or the 500 above. It gives up after `TOOL_COLD_RETRY_S` seconds (30 in
-`stack.yaml` and `knative-services.yaml`). It only retries requests that never reached the
-handler, so no tool runs twice. The retries are recorded as a single tool call, from the
+(`TOOL_COLD_RETRY_INTERVAL_S`) while the function can't answer yet. That is a refused
+connection, or a 5xx without the `_timing` the tool handler adds to every response (errors
+included). On faasd the gateway's 500 above comes first. Then comes an empty 500 from the
+function's watchdog, while the Python server behind it is still starting. The actor gives up
+after `TOOL_COLD_RETRY_S` seconds (30 in `stack.yaml` and `knative-services.yaml`). Only
+requests the handler never answered are retried, so no tool runs twice. The retries are recorded as a single tool call, from the
 first send to the answer:
 - `cold_first_call_http_ms` is T_first_invocation.
 - `tcold_tool_ms` is Tcold.

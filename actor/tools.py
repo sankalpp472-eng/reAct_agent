@@ -144,9 +144,17 @@ TOOL_COLD_RETRY_INTERVAL_S = float(os.environ.get("TOOL_COLD_RETRY_INTERVAL_S", 
 
 
 def _not_reached(resp):
-    """True if the gateway couldn't reach the function (the handler never ran)."""
-    return resp.status_code in (502, 503, 504) or (
-        resp.status_code == 500 and "Can't reach service" in resp.text)
+    """True if the handler never answered: a 5xx without the `_timing` that
+    the tool handler adds to every response it sends, errors included. On a
+    restarted faasd function that is first the gateway's 500 "Can't reach
+    service", then the watchdog's empty 500 while the Python server inside
+    is still starting."""
+    if resp.status_code < 500:
+        return False
+    try:
+        return "_timing" not in resp.json()
+    except ValueError:
+        return True
 
 
 def _call_tool_function(domain, body, timeout=30):
@@ -189,7 +197,8 @@ def _call_tool_function(domain, body, timeout=30):
             f"HTTP {resp.status_code}: {resp.text[:300]}"
         telemetry.record_tool_call(body["tool"], t2, t5, callee_timing, error=error, attempts=attempts)
     if resp.status_code >= 400:
-        return {"error": data.get("error", f"HTTP {resp.status_code}")}
+        # `or`: an empty error body must still read as a failure
+        return {"error": data.get("error") or f"HTTP {resp.status_code}"}
     return data
 
 
