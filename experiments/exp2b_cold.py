@@ -194,13 +194,20 @@ class ArgoKnative:
 
 # ------------------------------------------------------------ one trial
 
-def first_tool_call(calls):
-    tcs = sorted((tc for c in calls for tc in c.get("tool_calls", [])), key=lambda tc: tc["t2"])
-    return tcs[0] if tcs else None
+def tool_calls(calls):
+    return sorted((tc for c in calls for tc in c.get("tool_calls", [])), key=lambda tc: tc["t2"])
 
 
 def warm_tool_http(calls):
     return [tc["http_ms"] for c in calls for tc in c.get("tool_calls", []) if "twarm_ms" in tc]
+
+
+def planner_turns(calls):
+    return sum(1 for c in calls if c["name"] == "planner")
+
+
+def _ms(v):
+    return "n/a" if v is None else f"{v:.0f}ms"
 
 
 def trial(stack, workload):
@@ -216,19 +223,30 @@ def trial(stack, workload):
     wf_w, st_w, ok_w, ans_w, calls_w, t0w, t7w = stack.run(workload)
     reward_w = score(workload, stack.tool_gw, ans_w)["reward"]
 
-    first = first_tool_call(calls_c)
+    tcs = tool_calls(calls_c)
+    first = tcs[0] if tcs else None
+    first_ok = next((tc for tc in tcs if "twarm_ms" in tc), None)
+    failed = bool(first) and "twarm_ms" not in first
     warm_med = statistics.median(warm_tool_http(calls_w)) if warm_tool_http(calls_w) else None
     row = {
         "status_cold": st_c, "reward_cold": reward_c,
         "status_warm": st_w, "reward_warm": reward_w,
         "te2e_cold_ms": t7c - t0c, "te2e_warm_ms": t7w - t0w,
         "delta_te2e_ms": (t7c - t0c) - (t7w - t0w),
+        "turns_cold": planner_turns(calls_c), "turns_warm": planner_turns(calls_w),
         "first_tool": first["tool"] if first else None,
-        "first_call_error": bool(first) and "twarm_ms" not in first,
+        "first_call_error": failed,
+        # recorded by actor images built with the error-recording change
+        "first_call_error_detail": first.get("error") if failed else None,
+        "failed_tool_calls_cold": sum(1 for tc in tcs if "twarm_ms" not in tc),
         "cold_first_call_http_ms": first["http_ms"] if first else None,
-        "cold_handler_ms": first.get("twarm_ms") if first else None,
+        "cold_handler_ms": first.get("twarm_ms") if first and not failed else None,
         "warm_tool_http_median_ms": warm_med,
-        "tcold_tool_ms": (first["http_ms"] - warm_med) if first and warm_med is not None else None,
+        # the cold start as the agent sees it - only defined if the cold call succeeded
+        "tcold_tool_ms": (first["http_ms"] - warm_med) if first and not failed and warm_med is not None else None,
+        # first attempt sent -> first successful tool answer back; with a failed
+        # first call this includes the agent's retry (re-plan turn)
+        "time_to_first_tool_ok_ms": (first_ok["t5"] - first["t2"]) if first and first_ok else None,
     }
     dp_c = dataplane.dataplane_metrics(calls_c, t0c, t7c)[0] if calls_c else {}
     dp_w = dataplane.dataplane_metrics(calls_w, t0w, t7w)[0] if calls_w else {}
@@ -283,12 +301,17 @@ def main():
                 rows.append(row)
                 with open(os.path.join(out_dir, "raw", f"{workload['id']}-trial{i + 1}.json"), "w") as f:
                     json.dump(raw, f)
+                if row["first_call_error"]:
+                    first = (f"first tool call FAILED after {row['cold_first_call_http_ms']:.0f}ms "
+                             f"({row['first_call_error_detail'] or 'error not recorded: rebuild the actor'}), "
+                             f"first tool answer after {_ms(row['time_to_first_tool_ok_ms'])}")
+                else:
+                    first = f"Tcold_tool={_ms(row['tcold_tool_ms'])}"
                 print(f"[{workload['id']}] trial {i + 1}/{args.trials}: "
-                      f"cold {row['status_cold']} r={row['reward_cold']} Te2e={row['te2e_cold_ms']:.0f}ms | "
-                      f"warm {row['status_warm']} r={row['reward_warm']} Te2e={row['te2e_warm_ms']:.0f}ms | "
-                      f"dTe2e={row['delta_te2e_ms']:.0f}ms "
-                      f"Tcold_tool={row['tcold_tool_ms'] if row['tcold_tool_ms'] is None else round(row['tcold_tool_ms'])}ms"
-                      + (" (first tool call FAILED)" if row["first_call_error"] else ""), flush=True)
+                      f"cold {row['status_cold']} r={row['reward_cold']} Te2e={row['te2e_cold_ms']:.0f}ms "
+                      f"turns={row['turns_cold']} | "
+                      f"warm {row['status_warm']} r={row['reward_warm']} Te2e={row['te2e_warm_ms']:.0f}ms "
+                      f"turns={row['turns_warm']} | dTe2e={row['delta_te2e_ms']:.0f}ms | {first}", flush=True)
     finally:
         stack.finish()
 
@@ -299,6 +322,9 @@ def main():
     def block(rs):
         return {
             "trials": len(rs),
+            "first_call_failed": sum(1 for r in rs if r["first_call_error"]),
+            "extra_turns": dataplane.stats([r["turns_cold"] - r["turns_warm"] for r in rs]),
+            "time_to_first_tool_ok_ms": dataplane.stats([r["time_to_first_tool_ok_ms"] for r in rs]),
             "delta_te2e_ms": dataplane.stats([r["delta_te2e_ms"] for r in rs]),
             "tcold_tool_ms": dataplane.stats([r["tcold_tool_ms"] for r in rs]),
             "cold_first_call_http_ms": dataplane.stats([r["cold_first_call_http_ms"] for r in rs]),
@@ -313,10 +339,11 @@ def main():
         json.dump(summary, f, indent=2)
 
     o = summary["overall"]
-    print(f"\nResults in {out_dir}  ({len(ok)}/{len(rows)} trials used: both runs reward 1)")
+    print(f"\nResults in {out_dir}  ({len(ok)}/{len(rows)} trials used: both runs reward 1; "
+          f"first tool call failed in {o['first_call_failed']})")
     print(f"{'metric':<28}{'n':>4}{'mean':>12}{'p50':>12}{'p95':>12}{'std':>12}")
-    for name in ("delta_te2e_ms", "tcold_tool_ms", "cold_first_call_http_ms", "cold_handler_ms",
-                 "warm_tool_http_median_ms"):
+    for name in ("delta_te2e_ms", "extra_turns", "time_to_first_tool_ok_ms", "tcold_tool_ms",
+                 "cold_first_call_http_ms", "cold_handler_ms", "warm_tool_http_median_ms"):
         s = o[name]
         if s.get("n"):
             print(f"{name:<28}{s['n']:>4}{s['mean']:>12}{s['p50']:>12}{s['p95']:>12}{s['std']:>12}")

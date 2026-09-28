@@ -135,10 +135,11 @@ def _call_tool_function(domain, body, timeout=30):
         resp = requests.post(
             TOOLS_URL_TEMPLATE.format(name=f"{domain}-tools"), json=body, timeout=timeout
         )
-    except requests.RequestException:
+    except requests.RequestException as e:
         # still record the attempt (e.g. a cold function that timed out)
         if "tool" in body:
-            telemetry.record_tool_call(body["tool"], t2, telemetry.now_ms(), None)
+            telemetry.record_tool_call(body["tool"], t2, telemetry.now_ms(), None,
+                                       error=f"{type(e).__name__}: {str(e)[:300]}")
         raise
     t5 = telemetry.now_ms()  # response back at the actor
     try:
@@ -147,7 +148,11 @@ def _call_tool_function(domain, body, timeout=30):
         data = {"error": resp.text[:1000]}
     callee_timing = data.pop("_timing", None) if isinstance(data, dict) else None
     if "tool" in body:
-        telemetry.record_tool_call(body["tool"], t2, t5, callee_timing)
+        # no _timing means the handler never answered (e.g. the gateway's own
+        # 502 while a restarted function isn't listening yet)
+        error = None if resp.status_code < 400 and callee_timing else \
+            f"HTTP {resp.status_code}: {resp.text[:300]}"
+        telemetry.record_tool_call(body["tool"], t2, t5, callee_timing, error=error)
     if resp.status_code >= 400:
         return {"error": data.get("error", f"HTTP {resp.status_code}")}
     return data
