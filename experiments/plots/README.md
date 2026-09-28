@@ -64,8 +64,8 @@ python experiments/plots_exp2b.py --conductor <exp2b-conductor dir> --argo <exp2
 ## Notes for the write-up
 
 - **Without a retry, faasd's first call fails.** In the first Conductor runs, with the retry
-  off (`exp2b-conductor-20260928-084127`), the first call to the cold tool failed with
-  `HTTP 500: Can't reach service for: retail-tools.` after ~1.1–1.4 s. The agent needed
+  off (e.g. `exp2b-conductor-20260928-084127`), the first call to the cold tool failed after
+  ~1.1–1.8 s with `HTTP 500: Can't reach service for: retail-tools.` The agent needed
   an extra re-plan turn, costing about +11 s end to end. faasd CE has no readiness check
   on scale-from-zero, while Knative's activator holds the request until the pod is ready.
   The retry in the actor is what makes Tcold measurable on faasd.
