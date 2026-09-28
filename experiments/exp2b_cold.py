@@ -303,7 +303,7 @@ def main():
                     json.dump(raw, f)
                 if row["first_call_error"]:
                     first = (f"first tool call FAILED after {row['cold_first_call_http_ms']:.0f}ms "
-                             f"({row['first_call_error_detail'] or 'error not recorded: rebuild the actor'}), "
+                             f"({' '.join((row['first_call_error_detail'] or 'error not recorded: rebuild the actor').split())}), "
                              f"first tool answer after {_ms(row['time_to_first_tool_ok_ms'])}")
                 else:
                     first = f"Tcold_tool={_ms(row['tcold_tool_ms'])}"
