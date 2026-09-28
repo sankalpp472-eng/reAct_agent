@@ -157,7 +157,7 @@ trial is a pair of runs:
    | Platform | How the tool goes dormant | What the next request does |
    |---|---|---|
    | faasd | its process (containerd task) is stopped. faasd CE refuses `replicas: 0`, but it reports a stopped function as 0 replicas | the gateway (`scale_from_zero=true`) asks faasd to start a **new process in the existing container** and waits for it |
-   | Knative | `min-scale` is set to 0 for this experiment, and the driver waits until its pod is gone (default: ~60–90 s idle) | the activator holds the request while Knative creates a **new pod** (sandbox, queue-proxy, container) |
+   | Knative | `min-scale` is set to 0 for this experiment, in a new revision pinned to the image digest the running one uses (no Docker Hub lookup, no image pull). The driver waits until its pod is gone (default: ~60–90 s idle) | the activator holds the request while Knative creates a **new pod** (sandbox, queue-proxy, container) |
 
    That difference in what "coming back from idle" involves is part of what's being
    compared. State it in the write-up.

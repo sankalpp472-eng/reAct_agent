@@ -122,6 +122,26 @@ class ArgoKnative:
         self.api.patch_namespaced_custom_object(
             "serving.knative.dev", "v1", "default", "services", fn, patch)
 
+    def _pin_digest_and_scale_to_zero(self, fn):
+        """New revision with min-scale 0, pinned to the image digest the
+        running revision already uses. A tag like :latest would make Knative
+        re-resolve it on Docker Hub for every new revision (which fails when
+        the registry is slow to reach). A digest skips that, and the node
+        runs the image it already has, so Tcold never includes a pull."""
+        svc = self.api.get_namespaced_custom_object("serving.knative.dev", "v1", "default", "services", fn)
+        rev = self.api.get_namespaced_custom_object(
+            "serving.knative.dev", "v1", "default", "revisions", svc["status"]["latestReadyRevisionName"])
+        digest = next((c.get("imageDigest") for c in rev.get("status", {}).get("containerStatuses", [])
+                       if c.get("imageDigest")), None)
+        ops = [{"op": "add", "path": "/spec/template/metadata/annotations/autoscaling.knative.dev~1min-scale",
+                "value": "0"}]
+        if digest:
+            ops.append({"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": digest})
+            print(f"  {fn}: pinned to {digest}", flush=True)
+        self.api.patch_namespaced_custom_object(
+            "serving.knative.dev", "v1", "default", "services", fn, ops,
+            _content_type="application/json-patch+json")
+
     def _wait_revision_ready(self, fn, timeout=180):
         """Changing min-scale creates a new revision. Make sure it becomes
         Ready (otherwise traffic stays on the old, pinned revision)."""
@@ -163,7 +183,7 @@ class ArgoKnative:
     def make_dormant(self, fn):
         if fn not in self.patched:
             self.patched.add(fn)
-            self._set_min_scale(fn, "0")  # new revision that may scale to zero
+            self._pin_digest_and_scale_to_zero(fn)  # new revision that may scale to zero
             self._wait_revision_ready(fn)
         print(f"  waiting for {fn} to scale to zero ...", flush=True)
         start = time.time()
