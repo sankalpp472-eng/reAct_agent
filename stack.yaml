@@ -32,6 +32,8 @@ functions:
       MOCK_ACTOR_TOOL_ROUNDS: "1"
       # where the actor reaches retail-tools / airline-tools (tau-bench domains)
       TOOLS_GATEWAY_URL: http://172.17.0.1:8080
+      # re-send a tool call that hit a not-yet-listening cold function (see actor/tools.py)
+      TOOL_COLD_RETRY_S: "30"
       write_debug: "true"
       read_timeout: "180s"
       write_timeout: "180s"

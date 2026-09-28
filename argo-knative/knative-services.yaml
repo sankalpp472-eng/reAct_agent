@@ -78,6 +78,8 @@ spec:
               value: "1"
             - name: TOOLS_URL_TEMPLATE
               value: "http://{name}.default.svc.cluster.local"
+            - name: TOOL_COLD_RETRY_S   # same as on faasd; Knative's activator normally holds the request
+              value: "30"
             - name: write_debug
               value: "true"
             - name: read_timeout
