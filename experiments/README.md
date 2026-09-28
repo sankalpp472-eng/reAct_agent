@@ -187,8 +187,21 @@ can then arrive before the new process is up, and the gateway gives up after ~1â
 `HTTP 500: Can't reach service for: <function>.` (seen in the Conductor + faasd runs). The
 agent recovers (the evaluator asks for a re-plan and the step is retried), so the run still
 scores reward 1, but it costs one extra turn (~10 s with the mock LLM). Knative's activator
-instead holds the request until the new pod is ready. Report this difference as a finding:
-it is what an agent without its own retry logic sees on each platform.
+instead holds the request until the new pod is ready.
+
+**Cold-start retry (on by default): `TOOL_COLD_RETRY_S`.** To measure
+Tcold = T_first_invocation âˆ’ Twarm on faasd too, the actor re-sends a tool call every 50 ms
+(`TOOL_COLD_RETRY_INTERVAL_S`) while the gateway can't reach the function: connection
+refused, 502/503/504, or the 500 above. It gives up after `TOOL_COLD_RETRY_S` seconds (30 in
+`stack.yaml` and `knative-services.yaml`). It only retries requests that never reached the
+handler, so no tool runs twice. The retries are recorded as a single tool call, from the
+first send to the answer:
+- `cold_first_call_http_ms` is T_first_invocation.
+- `tcold_tool_ms` is Tcold.
+- `first_call_attempts` is how many requests it took, and shows the faasd race happened.
+
+Set `TOOL_COLD_RETRY_S: "0"` and redeploy the actor to see the no-retry behaviour
+(a failed call and an extra turn). That behaviour is itself a finding worth reporting.
 
 Only trials where both runs score reward 1 go into `summary.json`.
 

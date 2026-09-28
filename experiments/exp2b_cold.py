@@ -236,6 +236,8 @@ def trial(stack, workload):
         "turns_cold": planner_turns(calls_c), "turns_warm": planner_turns(calls_w),
         "first_tool": first["tool"] if first else None,
         "first_call_error": failed,
+        # > 1: the actor re-sent the cold call until the function answered (TOOL_COLD_RETRY_S)
+        "first_call_attempts": first.get("attempts", 1) if first else None,
         # recorded by actor images built with the error-recording change
         "first_call_error_detail": first.get("error") if failed else None,
         "failed_tool_calls_cold": sum(1 for tc in tcs if "twarm_ms" not in tc),
@@ -306,7 +308,8 @@ def main():
                              f"({' '.join((row['first_call_error_detail'] or 'error not recorded: rebuild the actor').split())}), "
                              f"first tool answer after {_ms(row['time_to_first_tool_ok_ms'])}")
                 else:
-                    first = f"Tcold_tool={_ms(row['tcold_tool_ms'])}"
+                    first = (f"Tcold_tool={_ms(row['tcold_tool_ms'])} "
+                             f"(first call {_ms(row['cold_first_call_http_ms'])}, {row['first_call_attempts']} attempts)")
                 print(f"[{workload['id']}] trial {i + 1}/{args.trials}: "
                       f"cold {row['status_cold']} r={row['reward_cold']} Te2e={row['te2e_cold_ms']:.0f}ms "
                       f"turns={row['turns_cold']} | "
