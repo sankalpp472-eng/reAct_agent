@@ -1,0 +1,11 @@
+workload,trial,status_cold,reward_cold,status_warm,reward_warm,te2e_cold_ms,te2e_warm_ms,delta_te2e_ms,turns_cold,turns_warm,first_tool,first_call_error,first_call_attempts,first_call_error_detail,failed_tool_calls_cold,cold_first_call_http_ms,cold_handler_ms,warm_tool_http_median_ms,tcold_tool_ms,time_to_first_tool_ok_ms,torch_run_cold_ms,torch_run_warm_ms
+retail-44,1,Succeeded,1.0,Succeeded,1.0,131067.197,132716.563,-1649.365,5,5,find_user_id_by_name_zip,False,1,,0,2847.393,154.873,80.741,2766.651,2847.393,79632.739,83720.044
+retail-44,2,Succeeded,1.0,Succeeded,1.0,128689.773,127554.099,1135.675,5,5,find_user_id_by_name_zip,False,2,,0,2950.599,124.471,43.287,2907.312,2950.599,77538.788,79592.967
+retail-44,3,Succeeded,1.0,Succeeded,1.0,135070.452,125766.276,9304.176,5,5,find_user_id_by_name_zip,False,3,,0,3012.591,47.825,118.708,2893.883,3012.591,83258.785,76309.483
+retail-44,4,Succeeded,1.0,Succeeded,1.0,129477.481,140840.594,-11363.113,5,5,find_user_id_by_name_zip,False,1,,0,3546.912,199.285,107.076,3439.836,3546.912,77126.775,91658.502
+retail-44,5,Succeeded,1.0,Succeeded,1.0,131819.74,128274.402,3545.338,5,5,find_user_id_by_name_zip,False,4,,0,3251.218,93.419,75.683,3175.534,3251.218,80219.547,79673.031
+airline-26,1,Succeeded,1.0,Succeeded,1.0,155346.04,153059.882,2286.158,6,6,get_user_details,False,2,,0,2956.523,200.851,66.296,2890.228,2956.523,92382.448,93454.43
+airline-26,2,Succeeded,1.0,Succeeded,1.0,162910.743,155348.698,7562.045,6,6,get_user_details,False,3,,0,3341.189,347.184,69.835,3271.354,3341.189,99602.375,95576.708
+airline-26,3,Succeeded,1.0,Succeeded,1.0,151265.908,155817.648,-4551.74,6,6,get_user_details,False,1,,0,3038.188,247.894,64.4,2973.789,3038.188,88418.969,96225.243
+airline-26,4,Succeeded,1.0,Succeeded,1.0,156770.332,155657.378,1112.954,6,6,get_user_details,False,1,,0,3089.692,289.753,52.889,3036.803,3089.692,94280.655,96281.409
+airline-26,5,Succeeded,1.0,Succeeded,1.0,162744.552,153217.341,9527.21,6,6,get_user_details,False,3,,0,3721.998,436.973,55.406,3666.592,3721.998,99302.872,93784.158
