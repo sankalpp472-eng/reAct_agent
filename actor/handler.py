@@ -89,13 +89,9 @@ tool first; if you have not received a tool result for it, the step is not
 done. Report ids, amounts and other details exactly as the tools returned them.
 If a tool returns an error, report the step as "failed" with the error.
 
-Once you are done, respond with ONLY a JSON object - no markdown code fences, no
-prose outside the JSON - of this exact shape:
-{{
-  "step_id": <int, same as input>,
-  "result": "<what you did / found / produced for this step>",
-  "status": "completed" or "failed"
-}}
+Work in this order: first call the tool(s) the step needs and read their
+results; only then write a short summary of what you did and found. You will
+be asked for the final structured answer separately afterwards.
 """
 
 
@@ -128,6 +124,7 @@ def handle(event, context):
         if domain:
             tools_declarations, execute_tool_fn = domain_tools(domain)
             system_instruction = DOMAIN_INSTRUCTION.format(domain=domain)
+            prompt += "Call the tool(s) this step needs now.\n"
         else:
             tools_declarations, execute_tool_fn = TOOL_DECLARATIONS, execute_tool
             system_instruction = SYSTEM_INSTRUCTION
