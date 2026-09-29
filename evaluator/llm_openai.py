@@ -47,6 +47,7 @@ TEMPERATURE = float(os.environ.get("LLM_TEMPERATURE", "0"))
 SEED = int(os.environ.get("LLM_SEED", "0"))
 TOOL_MODE = os.environ.get("LLM_TOOL_MODE", "prompt")
 _TOOL_OUTPUT_CHARS = 4000  # per tool result fed back to the model
+_TRANSCRIPT_CHARS = 600    # per tool output kept in the actor's result, like the mock
 
 
 def _log(msg):
@@ -171,6 +172,7 @@ def call_gemini_agentic(
     if not native:
         system += _PROMPT_TOOLS.format(tools="\n".join(json.dumps(t) for t in tools))
     messages = [{"role": "system", "content": system}, {"role": "user", "content": prompt}]
+    transcript = []  # "name(args) -> output" per tool call, kept verbatim in the result
 
     for _ in range(max_tool_rounds + 1):
         msg = _chat(messages, max(deadline - time.time(), 5), tools=tools if native else None)
@@ -194,6 +196,8 @@ def call_gemini_agentic(
             except Exception as e:  # bad arguments or a failed call: let the model see it
                 out = {"error": str(e)}
             _log(f"tool {name}({json.dumps(args)[:200]}) -> {str(out)[:200]}")
+            text = out.get("output", out.get("error")) if isinstance(out, dict) else out
+            transcript.append(f"{name}({json.dumps(args)}) -> {str(text)[:_TRANSCRIPT_CHARS]}")
             content = json.dumps(out)[:_TOOL_OUTPUT_CHARS]
             if native:
                 messages.append({"role": "tool", "tool_call_id": call.get("id", name), "name": name,
@@ -213,4 +217,9 @@ def call_gemini_agentic(
         messages.append({"role": "assistant", "content": msg["content"]})
     messages.append({"role": "user", "content": (final_instruction or "Restate your answer as JSON only.")
                      + _schema_hint(final_response_schema)})
-    return _parse_json(_chat(messages, max(deadline - time.time(), 5), json_mode=True).get("content"))
+    answer = _parse_json(_chat(messages, max(deadline - time.time(), 5), json_mode=True).get("content"))
+    # A model's summary tends to drop the ids and prices later steps need, so
+    # keep the raw tool outputs in the result, in the same form as the mock.
+    if transcript and isinstance(answer, dict) and "result" in answer:
+        answer["result"] = f"{answer['result']} Tool calls: " + " | ".join(transcript)
+    return answer

@@ -27,6 +27,11 @@ with their results. Decide whether:
   - the plan itself is flawed/insufficient and needs to be redone ("replan").
 
 Be strict: only say "done" if the history actually demonstrates the goal was met.
+For a goal that asks for changes (modify, cancel, exchange, book, ...), "done"
+requires that each requested change was made by a successful tool call shown in
+the history - a calculation or a plan is not the change itself. Numbers in the
+answer must come from tool outputs in the history, not from guesses.
+When "done", put the final answer for the customer in "feedback".
 """
 
 EVALUATION_SCHEMA = {

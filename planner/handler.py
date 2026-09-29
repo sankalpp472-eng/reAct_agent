@@ -37,6 +37,15 @@ completed so far"). If present:
     completed work leaves off, in order to fully reach the goal.
 If no such section is present, this is the first plan for this goal - plan the
 whole thing from scratch.
+For a customer-service goal (an agent with tools over the customer's account,
+orders or bookings):
+  - Start by identifying/authenticating the customer, unless that is already done.
+  - Every id, price or detail must be looked up with a tool before it is used,
+    so plan those lookups as their own steps.
+  - Include the actual changes the customer asked for (modify, cancel, exchange,
+    book, ...) as steps. The customer has already confirmed them; informing the
+    customer is not a substitute for making the change.
+  - Each step does one thing. Never output an empty or "None" step.
 """
 
 PLAN_SCHEMA = {
