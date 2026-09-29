@@ -42,6 +42,9 @@ import time
 import urllib.request
 from datetime import datetime
 
+# The Conductor API is local; never route it through a proxy set in the shell
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "workloads"))
 from score import _call, score  # noqa: E402
@@ -59,7 +62,7 @@ def _conductor(method, url, body=None, timeout=30):
     req = urllib.request.Request(
         url, data=data, method=method, headers={"Content-Type": "application/json"}
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with _OPENER.open(req, timeout=timeout) as resp:
         return resp.read().decode("utf-8")
 
 

@@ -29,6 +29,11 @@ import os
 import sys
 import urllib.request
 
+# Every call goes to a local service (a faasd gateway or a Kourier ingress), so
+# ignore proxy settings: a VM whose shell has http_proxy set for downloads
+# would otherwise send cluster-internal calls to that proxy.
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 
 def _target(gateway, function):
     """(url, extra headers) for calling `function` through `gateway`."""
@@ -46,7 +51,7 @@ def _call(gateway, function, body):
         headers={"Content-Type": "application/json", **headers},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with _OPENER.open(req, timeout=30) as resp:
         return json.loads(resp.read())
 
 

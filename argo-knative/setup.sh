@@ -9,6 +9,11 @@ KN=https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSIO
 KOURIER=https://github.com/knative/net-kourier/releases/download/knative-${KNATIVE_VERSION}
 ARGO=https://github.com/argoproj/argo-workflows/releases/download/${ARGO_VERSION}
 
+# Download the manifests with curl and apply local copies: curl honours any
+# proxy in the environment (e.g. the cluster VM's socks5h tunnel); kubectl may not.
+MANIFESTS=$(mktemp -d); trap 'rm -rf "$MANIFESTS"' EXIT
+fetch() { curl -fsSL --retry 3 -o "$MANIFESTS/$(basename "$1")" "$1" && echo "$MANIFESTS/$(basename "$1")"; }
+
 # Knative v1.19 needs Kubernetes >= 1.32 (its pods crash-loop on "Version check failed" otherwise)
 minor=$(kubectl version -o json | python3 -c 'import json,sys,re; print(re.sub(r"\D", "", json.load(sys.stdin)["serverVersion"]["minor"]))')
 if [ "${minor}" -lt 32 ]; then
@@ -17,12 +22,12 @@ if [ "${minor}" -lt 32 ]; then
 fi
 
 echo "== Knative Serving ${KNATIVE_VERSION}"
-kubectl apply -f "${KN}/serving-crds.yaml"
+kubectl apply -f "$(fetch "${KN}/serving-crds.yaml")"
 kubectl wait --for=condition=Established crd -l knative.dev/crd-install=true --timeout=120s
-kubectl apply -f "${KN}/serving-core.yaml"
+kubectl apply -f "$(fetch "${KN}/serving-core.yaml")"
 
 echo "== Kourier ingress"
-kubectl apply -f "${KOURIER}/kourier.yaml"
+kubectl apply -f "$(fetch "${KOURIER}/kourier.yaml")"
 kubectl patch configmap/config-network -n knative-serving --type merge \
   -p '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
 # Services get URLs <name>.<namespace>.example.com; the driver reaches them
@@ -32,7 +37,7 @@ kubectl patch configmap/config-domain -n knative-serving --type merge \
 
 echo "== Argo Workflows ${ARGO_VERSION}"
 kubectl create namespace argo --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -n argo -f "${ARGO}/install.yaml"
+kubectl apply -n argo -f "$(fetch "${ARGO}/install.yaml")"
 
 echo "== Waiting for everything to be ready"
 kubectl wait deploy --all -n knative-serving --for=condition=Available --timeout=600s
