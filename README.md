@@ -184,6 +184,11 @@ the default.
 | `LLM_BASE_URL` | `http://<windows-host-ip>:11434/v1` (must end in `/v1`) |
 | `LLM_MODEL` | `qwen2.5:3b` |
 | `LLM_API_KEY` | only for hosted APIs |
+| `LLM_TOOL_MODE` | `prompt` (default): tools described in the system prompt, calls parsed from the model's text. `native`: the API's `tools` field |
+
+Use `prompt` mode with small local models. Ollama's own tool parser silently drops a small model's
+slightly malformed tool call: the reply comes back empty, with no tool call. `native` suits hosted
+APIs with reliable tool calling.
 
 Temperature and seed default to 0 (`LLM_TEMPERATURE`, `LLM_SEED`), so runs are as
 repeatable as the model allows. Every model call counts toward T_LLM in `_timing`, so all

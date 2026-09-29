@@ -15,6 +15,13 @@ Environment variables:
   LLM_API_KEY      only for hosted APIs (Ollama ignores it)
   LLM_TEMPERATURE  default 0, so runs are as repeatable as the model allows
   LLM_SEED         default 0
+  LLM_TOOL_MODE    "prompt" (default): the tool list goes into the system
+                   prompt in Qwen/Hermes <tools>/<tool_call> format and this
+                   file parses the calls from the model's text. Works with
+                   any model and avoids Ollama's tool parser, which drops a
+                   small model's slightly malformed calls (empty reply, no
+                   tool_calls). "native": send tools via the API's `tools`
+                   field (hosted APIs with reliable tool calling).
 
 Every HTTP call to the model counts toward T_LLM (telemetry.record_llm), like
 the mock's sleeps did, so all the experiment metrics keep working.
@@ -38,6 +45,7 @@ MODEL = os.environ.get("LLM_MODEL", "qwen2.5:3b")
 API_KEY = os.environ.get("LLM_API_KEY", "")
 TEMPERATURE = float(os.environ.get("LLM_TEMPERATURE", "0"))
 SEED = int(os.environ.get("LLM_SEED", "0"))
+TOOL_MODE = os.environ.get("LLM_TOOL_MODE", "prompt")
 _TOOL_OUTPUT_CHARS = 4000  # per tool result fed back to the model
 
 
@@ -100,6 +108,24 @@ def _openai_tools(declarations):
     return out
 
 
+_PROMPT_TOOLS = """
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within <tools></tools> XML tags:
+<tools>
+{tools}
+</tools>
+
+For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
+<tool_call>
+{{"name": <function-name>, "arguments": <args-json-object>}}
+</tool_call>
+Call tools this way until you have what the step needs. When you are done, reply with a short summary and no <tool_call>."""
+
+
 def _text_tool_calls(content, names):
     """Small models often write a tool call as JSON in their text, e.g.
     {"name": "get_order_details", "arguments": {...}}, sometimes inside
@@ -139,21 +165,28 @@ def call_gemini_agentic(
 ):
     deadline = time.time() + timeout
     tools = _openai_tools(tools_declarations)
-    messages = [{"role": "system", "content": system_instruction or ""}, {"role": "user", "content": prompt}]
-
     names = {t["function"]["name"] for t in tools}
+    native = TOOL_MODE == "native"
+    system = system_instruction or ""
+    if not native:
+        system += _PROMPT_TOOLS.format(tools="\n".join(json.dumps(t) for t in tools))
+    messages = [{"role": "system", "content": system}, {"role": "user", "content": prompt}]
+
     for _ in range(max_tool_rounds + 1):
-        msg = _chat(messages, max(deadline - time.time(), 5), tools=tools)
+        msg = _chat(messages, max(deadline - time.time(), 5), tools=tools if native else None)
         calls = msg.get("tool_calls") or _text_tool_calls(msg.get("content"), names)
         if not calls:
             _log(f"answer: {(msg.get('content') or '')[:300]!r}")
             break
-        if not msg.get("tool_calls"):
-            _log(f"tool call(s) written as text, recovered: {[c['function']['name'] for c in calls]}")
-            msg["content"] = ""
-        messages.append({"role": "assistant", "content": msg.get("content") or "", "tool_calls": calls})
+        if native:
+            messages.append({"role": "assistant", "content": "" if not msg.get("tool_calls") else
+                             (msg.get("content") or ""), "tool_calls": calls})
+        else:
+            messages.append({"role": "assistant", "content": msg.get("content") or ""})
+        results = []
         for call in calls:
             name = call["function"]["name"]
+            args = {}
             try:
                 args = call["function"].get("arguments") or {}
                 args = json.loads(args) if isinstance(args, str) else args
@@ -161,8 +194,14 @@ def call_gemini_agentic(
             except Exception as e:  # bad arguments or a failed call: let the model see it
                 out = {"error": str(e)}
             _log(f"tool {name}({json.dumps(args)[:200]}) -> {str(out)[:200]}")
-            messages.append({"role": "tool", "tool_call_id": call.get("id", name), "name": name,
-                             "content": json.dumps(out)[:_TOOL_OUTPUT_CHARS]})
+            content = json.dumps(out)[:_TOOL_OUTPUT_CHARS]
+            if native:
+                messages.append({"role": "tool", "tool_call_id": call.get("id", name), "name": name,
+                                 "content": content})
+            else:
+                results.append(f"<tool_response>\n{content}\n</tool_response>")
+        if results:
+            messages.append({"role": "user", "content": "\n".join(results)})
     else:
         _log(f"stopped after {max_tool_rounds} tool rounds")
         msg = {"content": ""}
