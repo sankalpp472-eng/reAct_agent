@@ -1,5 +1,31 @@
 # Running the experiments on a cluster node
 
+Two ways, depending on whether an admin can help:
+- **Without root: a KVM virtual machine** (`vm/`, below). It works on any node where
+  `/dev/kvm` is usable by everyone and QEMU is installed; `check_node.sh` shows both.
+- **With a one-time admin setup:** `admin_setup.sh`.
+
+## Without root: a VM on the compute node (`vm/`)
+
+Inside the VM you are root on Ubuntu 24.04, so both stacks install as on a laptop.
+Everything runs inside the VM, drivers included, so measurements never cross the VM
+boundary. The compute node has no internet; the VM reaches it through an SSH SOCKS tunnel
+from the node to the head node.
+
+| Stage | Where | Command |
+|---|---|---|
+| 1. Tools, Ubuntu image, VM key, cloud-init disk (once) | head node | `bash cluster/vm/prepare.sh` |
+| 2. Passwordless SSH node → head (once) | head node | `ssh-keygen -t ed25519` (if you have no key), then `cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys` (home is shared, so this also works from the node) |
+| 3. Internet tunnel for the VM | compute node | `bash cluster/vm/tunnel.sh` |
+| 4. Boot the VM | compute node | `bash cluster/vm/start_vm.sh` (defaults: 12 vCPUs, 16 GB RAM, 80 GB disk in `/tmp/$USER-pae-vm`) |
+| 5. Log in | compute node | `bash cluster/vm/ssh.sh` |
+
+Stop it with `bash cluster/vm/stop_vm.sh`. The disk stays in `/tmp`, so the next start
+resumes it. If the node is scheduled by Slurm, reserve it while the VM runs
+(e.g. `salloc -w node13`).
+
+## With a one-time admin setup
+
 The study runs two stacks on one node, one at a time: Conductor + faasd, and Argo
 Workflows + Knative on k3s. Both need root to install. After a one-time setup by the
 admin, everything else runs as a normal user.
