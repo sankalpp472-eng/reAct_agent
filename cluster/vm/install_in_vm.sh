@@ -33,8 +33,9 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" -eq 0 ] || die "run with sudo"
 
 # this script's own downloads (curl, git) go through the tunnel too
-export ALL_PROXY=${SOCKS/socks5:/socks5h:} HTTPS_PROXY=${SOCKS/socks5:/socks5h:} HTTP_PROXY=${SOCKS/socks5:/socks5h:}
-export NO_PROXY=$NO_PROXY_LIST all_proxy=$ALL_PROXY https_proxy=$HTTPS_PROXY http_proxy=$HTTP_PROXY no_proxy=$NO_PROXY
+SOCKS_H=${SOCKS/socks5:/socks5h:}   # socks5h: names are resolved through the tunnel too
+export ALL_PROXY=$SOCKS_H HTTPS_PROXY=$SOCKS_H HTTP_PROXY=$SOCKS_H NO_PROXY=$NO_PROXY_LIST
+export all_proxy=$SOCKS_H https_proxy=$SOCKS_H http_proxy=$SOCKS_H no_proxy=$NO_PROXY_LIST
 curl -s -o /dev/null -m 15 https://github.com \
   || die "no internet through the tunnel ($ALL_PROXY). On the node, run: bash cluster/vm/tunnel.sh"
 
