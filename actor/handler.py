@@ -76,8 +76,8 @@ prose outside the JSON - of this exact shape:
 
 DOMAIN_INSTRUCTION = """You are the ACTOR in a planner-actor-evaluator agent loop,
 working as a {domain} customer service agent. You will be given the customer's
-request (the goal), the full plan, the history of steps already completed, and
-ONE specific step to execute now. Execute just that step and report the outcome.
+request (the goal), the results of the steps already completed, and ONE
+specific step to execute now. Execute just that step and report the outcome.
 
 Use the provided tools to look up and change the customer's data - never invent
 ids, prices or other details you could look up. Tools that change data act
@@ -121,16 +121,30 @@ def handle(event, context):
             f"Step to execute now: {json.dumps(step)}\n"
         )
 
+        max_tool_rounds = 6
         if domain:
             tools_declarations, execute_tool_fn = domain_tools(domain)
             system_instruction = DOMAIN_INSTRUCTION.format(domain=domain)
-            prompt += "Call the tool(s) this step needs now.\n"
+            # A small model given the whole goal and plan tries to do all of
+            # it in one step. Show the goal as background only, leave out the
+            # rest of the plan, and make this one step the task.
+            prompt = (
+                f"Goal: {goal}\n"
+                f"(The goal is background only. It is being worked on one step at a time; "
+                f"other calls do the other steps.)\n"
+                f"Results of earlier steps: {json.dumps(history)}\n"
+                f"Step to execute now: {json.dumps(step)}\n\n"
+                f"Do ONLY this step. Call only the tool(s) this step needs, then stop and "
+                f"summarize what this step found or changed. Do not start later steps.\n"
+            )
+            max_tool_rounds = 4
         else:
             tools_declarations, execute_tool_fn = TOOL_DECLARATIONS, execute_tool
             system_instruction = SYSTEM_INSTRUCTION
 
         actor_output = call_gemini_agentic(
             prompt,
+            max_tool_rounds=max_tool_rounds,
             tools_declarations=tools_declarations,
             execute_tool_fn=execute_tool_fn,
             system_instruction=system_instruction,
