@@ -100,6 +100,33 @@ def _openai_tools(declarations):
     return out
 
 
+def _text_tool_calls(content, names):
+    """Small models often write a tool call as JSON in their text, e.g.
+    {"name": "get_order_details", "arguments": {...}}, sometimes inside
+    <tool_call> tags or a code fence, instead of the structured tool_calls
+    the server can parse. Recover those, but only for known tool names."""
+    calls, text, i = [], content or "", 0
+    decoder = json.JSONDecoder()
+    while True:
+        i = text.find("{", i)
+        if i == -1:
+            return calls
+        try:
+            obj, end = decoder.raw_decode(text, i)
+        except ValueError:
+            i += 1
+            continue
+        i = end
+        for o in obj if isinstance(obj, list) else [obj]:
+            if not isinstance(o, dict):
+                continue
+            o = o.get("function") if isinstance(o.get("function"), dict) else o
+            args = o.get("arguments", o.get("parameters", {}))
+            if o.get("name") in names and isinstance(args, (dict, str)):
+                calls.append({"id": f"text-{len(calls)}", "type": "function", "function": {
+                    "name": o["name"], "arguments": args if isinstance(args, str) else json.dumps(args)}})
+
+
 def call_gemini_agentic(
     prompt,
     tools_declarations,
@@ -114,11 +141,16 @@ def call_gemini_agentic(
     tools = _openai_tools(tools_declarations)
     messages = [{"role": "system", "content": system_instruction or ""}, {"role": "user", "content": prompt}]
 
+    names = {t["function"]["name"] for t in tools}
     for _ in range(max_tool_rounds + 1):
         msg = _chat(messages, max(deadline - time.time(), 5), tools=tools)
-        calls = msg.get("tool_calls") or []
+        calls = msg.get("tool_calls") or _text_tool_calls(msg.get("content"), names)
         if not calls:
+            _log(f"answer: {(msg.get('content') or '')[:300]!r}")
             break
+        if not msg.get("tool_calls"):
+            _log(f"tool call(s) written as text, recovered: {[c['function']['name'] for c in calls]}")
+            msg["content"] = ""
         messages.append({"role": "assistant", "content": msg.get("content") or "", "tool_calls": calls})
         for call in calls:
             name = call["function"]["name"]
