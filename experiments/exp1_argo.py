@@ -137,6 +137,7 @@ def run_once(args, api, workload):
     run_row, turn_rows, call_rows = dataplane_metrics(calls, t0, t7) if calls else ({}, [], [])
     run_row.update(
         workflow=name, phase=phase, verdict=verdict, reward=result["reward"],
+        db_state_correct=result["db_state_correct"], outputs_found=all(result["outputs_found"].values()),
         missing_timing=missing > 0, te2e_engine_s=_engine_seconds(wf),
     )
     if args.delete:

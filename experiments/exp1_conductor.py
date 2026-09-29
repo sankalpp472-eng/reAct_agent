@@ -259,7 +259,9 @@ def run_once(args, workload):
     answer = (wf.get("output") or {}).get("final_answer") or ""
     result = score(workload, gw, answer if status == "COMPLETED" else "")
     run_row, cycle_rows, call_rows = compute_metrics(wf, t0, t7)
-    run_row.update(workflow_id=wf_id, status=status, reward=result["reward"])
+    run_row.update(workflow_id=wf_id, status=status, reward=result["reward"],
+                   db_state_correct=result["db_state_correct"],
+                   outputs_found=all(result["outputs_found"].values()))
     dp = dataplane.dataplane_metrics(dataplane_calls(wf), t0, t7)
     return wf, run_row, cycle_rows, call_rows, dp
 
