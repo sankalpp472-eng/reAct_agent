@@ -2,7 +2,8 @@
 # Stage 1 - run ONCE on the head node (polaris, has internet). No sudo needed.
 # Everything goes to your home directory, which the compute nodes share:
 #   ~/.local/bin/micromamba   package manager (conda-forge), no root
-#   ~/pae-env                 Python 3.11 + pycdlib (builds the VM's cloud-init disk) + driver packages
+#   ~/pae-env                 Python 3.11 + pycdlib (builds the VM's cloud-init disk). The drivers
+#                             and plots run inside the VM, so their packages are installed there
 #   ~/pae-vm/noble.img        Ubuntu 24.04 cloud image (~600 MB)
 #   ~/pae-vm/seed.iso         cloud-init config: user "pae" with your VM SSH key, proxy settings
 #   ~/.ssh/pae_vm(.pub)       SSH key for logging into the VM
@@ -25,9 +26,11 @@ if [ ! -x "$ENV/bin/python" ]; then
   echo "== Python env $ENV (python 3.11)"
   "$MM" create -y -p "$ENV" -c conda-forge python=3.11 pip
 fi
-"$ENV/bin/python" -c "import pycdlib, requests, kubernetes, matplotlib, yaml" 2>/dev/null || {
-  echo "== Python packages (pycdlib for the seed disk, plus the drivers' packages)"
-  "$ENV/bin/pip" install -q pycdlib requests kubernetes matplotlib pyyaml
+# pycdlib is pure Python, so pip needs no compiler (CentOS 7's is too old for
+# packages like matplotlib; those are installed inside the VM instead)
+"$ENV/bin/python" -c "import pycdlib" 2>/dev/null || {
+  echo "== pycdlib (writes the seed disk)"
+  "$ENV/bin/pip" install -q --only-binary=:all: pycdlib
 }
 
 if [ ! -f "$VM_HOME/noble.img" ]; then
