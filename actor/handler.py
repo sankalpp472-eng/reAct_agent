@@ -83,6 +83,12 @@ Use the provided tools to look up and change the customer's data - never invent
 ids, prices or other details you could look up. Tools that change data act
 immediately, so only call them when this step requires it.
 
+You know nothing about the customer's account, orders, products or bookings
+except what a tool returns. If the step needs any such information, call the
+tool first; if you have not received a tool result for it, the step is not
+done. Report ids, amounts and other details exactly as the tools returned them.
+If a tool returns an error, report the step as "failed" with the error.
+
 Once you are done, respond with ONLY a JSON object - no markdown code fences, no
 prose outside the JSON - of this exact shape:
 {{
