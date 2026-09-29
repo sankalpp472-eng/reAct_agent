@@ -14,7 +14,7 @@ from the node to the head node.
 
 | Stage | Where | Command |
 |---|---|---|
-| 1. Tools, Ubuntu image, VM key, cloud-init disk (once) | head node | `bash cluster/vm/prepare.sh` |
+| 1. Ubuntu image, VM key, cloud-init disk (once; installs nothing) | head node | `bash cluster/vm/prepare.sh` |
 | 2. Passwordless SSH node → head (once) | head node | `ssh-keygen -t ed25519` (if you have no key), then `cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys` (home is shared, so this also works from the node) |
 | 3. Internet tunnel for the VM | compute node | `bash cluster/vm/tunnel.sh` |
 | 4. Boot the VM | compute node | `bash cluster/vm/start_vm.sh` (defaults: 12 vCPUs, 16 GB RAM, 80 GB disk in `/tmp/$USER-pae-vm`) |

@@ -1,37 +1,15 @@
 #!/usr/bin/env bash
-# Stage 1 - run ONCE on the head node (polaris, has internet). No sudo needed.
-# Everything goes to your home directory, which the compute nodes share:
-#   ~/.local/bin/micromamba   package manager (conda-forge), no root
-#   ~/pae-env                 Python 3.11 + pycdlib (builds the VM's cloud-init disk). The drivers
-#                             and plots run inside the VM, so their packages are installed there
+# Stage 1 - run ONCE on the head node (polaris, has internet). No sudo, and
+# nothing installed: it only downloads the Ubuntu image and writes two small files.
 #   ~/pae-vm/noble.img        Ubuntu 24.04 cloud image (~600 MB)
 #   ~/pae-vm/seed.iso         cloud-init config: user "pae" with your VM SSH key, proxy settings
 #   ~/.ssh/pae_vm(.pub)       SSH key for logging into the VM
+# The seed disk is made with genisoimage/mkisofs/xorriso if the node has one;
+# otherwise with pycdlib (pure Python, ~2 MB), kept in ~/pae-vm/.pycdlib.
 set -euo pipefail
 VM_HOME=${VM_HOME:-$HOME/pae-vm}
-ENV=${ENV:-$HOME/pae-env}
 SOCKS_PORT=${SOCKS_PORT:-1080}   # the node's ssh -D port; the VM reaches it at 10.0.2.2
-mkdir -p "$VM_HOME" "$HOME/.local/bin" "$HOME/.ssh"
-
-MM="$HOME/.local/bin/micromamba"
-if ! "$MM" --version >/dev/null 2>&1; then
-  echo "== micromamba (single static binary from GitHub)"
-  curl -fL --retry 3 -o "$MM.part" \
-    https://github.com/mamba-org/micromamba-releases/releases/latest/download/micromamba-linux-64
-  chmod +x "$MM.part" && mv "$MM.part" "$MM"
-  echo "micromamba $("$MM" --version)"
-fi
-
-if [ ! -x "$ENV/bin/python" ]; then
-  echo "== Python env $ENV (python 3.11)"
-  "$MM" create -y -p "$ENV" -c conda-forge python=3.11 pip
-fi
-# pycdlib is pure Python, so pip needs no compiler (CentOS 7's is too old for
-# packages like matplotlib; those are installed inside the VM instead)
-"$ENV/bin/python" -c "import pycdlib" 2>/dev/null || {
-  echo "== pycdlib (writes the seed disk)"
-  "$ENV/bin/pip" install -q --only-binary=:all: pycdlib
-}
+mkdir -p "$VM_HOME" "$HOME/.ssh"
 
 if [ ! -f "$VM_HOME/noble.img" ]; then
   echo "== Ubuntu 24.04 cloud image"
@@ -72,7 +50,15 @@ write_files:
       export all_proxy=\$ALL_PROXY https_proxy=\$HTTPS_PROXY http_proxy=\$HTTP_PROXY no_proxy=\$NO_PROXY
 USER
 # NoCloud seed: an ISO labelled "cidata" holding user-data and meta-data
-"$ENV/bin/python" - "$VM_HOME/seed.iso" "$TMP/user-data" "$TMP/meta-data" <<'PY'
+ISO_TOOL=$(command -v genisoimage || command -v mkisofs || true)
+if [ -n "$ISO_TOOL" ]; then
+  "$ISO_TOOL" -quiet -output "$VM_HOME/seed.iso" -volid cidata -joliet -rock "$TMP/user-data" "$TMP/meta-data"
+elif command -v xorriso >/dev/null; then
+  xorriso -as mkisofs -quiet -output "$VM_HOME/seed.iso" -volid cidata -joliet -rock "$TMP/user-data" "$TMP/meta-data"
+else
+  python3 -c "import sys; sys.path.insert(0, '$VM_HOME/.pycdlib'); import pycdlib" 2>/dev/null || \
+    python3 -m pip install -q --only-binary=:all: --target "$VM_HOME/.pycdlib" pycdlib
+  PYTHONPATH="$VM_HOME/.pycdlib" python3 - "$VM_HOME/seed.iso" "$TMP/user-data" "$TMP/meta-data" <<'PY'
 import io, sys, pycdlib
 out, *files = sys.argv[1:]
 iso = pycdlib.PyCdlib()
@@ -85,5 +71,6 @@ for path in files:
 iso.write(out)
 iso.close()
 PY
+fi
 rm -rf "$TMP"
 echo "done:"; ls -lh "$VM_HOME"
