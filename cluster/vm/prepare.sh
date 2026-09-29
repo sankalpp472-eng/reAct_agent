@@ -2,7 +2,7 @@
 # Stage 1 - run ONCE on the head node (polaris, has internet). No sudo needed.
 # Everything goes to your home directory, which the compute nodes share:
 #   ~/.local/bin/micromamba   package manager (conda-forge), no root
-#   ~/pae-env                 Python 3.11 + xorriso (builds the VM's cloud-init disk) + driver packages
+#   ~/pae-env                 Python 3.11 + pycdlib (builds the VM's cloud-init disk) + driver packages
 #   ~/pae-vm/noble.img        Ubuntu 24.04 cloud image (~600 MB)
 #   ~/pae-vm/seed.iso         cloud-init config: user "pae" with your VM SSH key, proxy settings
 #   ~/.ssh/pae_vm(.pub)       SSH key for logging into the VM
@@ -22,10 +22,13 @@ if ! "$MM" --version >/dev/null 2>&1; then
 fi
 
 if [ ! -x "$ENV/bin/python" ]; then
-  echo "== Python env $ENV (python 3.11, xorriso, driver packages)"
-  "$MM" create -y -p "$ENV" -c conda-forge python=3.11 xorriso pip
-  "$ENV/bin/pip" install -q requests kubernetes matplotlib pyyaml
+  echo "== Python env $ENV (python 3.11)"
+  "$MM" create -y -p "$ENV" -c conda-forge python=3.11 pip
 fi
+"$ENV/bin/python" -c "import pycdlib, requests, kubernetes, matplotlib, yaml" 2>/dev/null || {
+  echo "== Python packages (pycdlib for the seed disk, plus the drivers' packages)"
+  "$ENV/bin/pip" install -q pycdlib requests kubernetes matplotlib pyyaml
+}
 
 if [ ! -f "$VM_HOME/noble.img" ]; then
   echo "== Ubuntu 24.04 cloud image"
@@ -65,7 +68,19 @@ write_files:
       export NO_PROXY=localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.svc,.cluster.local,.local
       export all_proxy=\$ALL_PROXY https_proxy=\$HTTPS_PROXY http_proxy=\$HTTP_PROXY no_proxy=\$NO_PROXY
 USER
-"$ENV/bin/xorriso" -as mkisofs -quiet -output "$VM_HOME/seed.iso" -volid cidata -joliet -rock \
-  "$TMP/user-data" "$TMP/meta-data"
+# NoCloud seed: an ISO labelled "cidata" holding user-data and meta-data
+"$ENV/bin/python" - "$VM_HOME/seed.iso" "$TMP/user-data" "$TMP/meta-data" <<'PY'
+import io, sys, pycdlib
+out, *files = sys.argv[1:]
+iso = pycdlib.PyCdlib()
+iso.new(interchange_level=3, joliet=3, rock_ridge="1.09", vol_ident="cidata")
+for path in files:
+    name = path.rsplit("/", 1)[-1]
+    data = open(path, "rb").read()
+    iso.add_fp(io.BytesIO(data), len(data), "/" + name.replace("-", "").upper() + ".;1",
+               rr_name=name, joliet_path="/" + name)
+iso.write(out)
+iso.close()
+PY
 rm -rf "$TMP"
 echo "done:"; ls -lh "$VM_HOME"
