@@ -195,6 +195,8 @@ directly and leaves WSL's memory to the stacks.
    - `OLLAMA_HOST=0.0.0.0`, so WSL can reach it;
    - `OLLAMA_CONTEXT_LENGTH=8192`, because the actor's prompt carries all of a domain's
      tool declarations and the default context would silently cut it off.
+   - `OLLAMA_KEEP_ALIVE=-1`, so the model stays loaded. By default Ollama unloads it after
+     5 idle minutes, and reloading (tens of seconds) would land inside a run's LLM time.
 2. `ollama pull qwen2.5:3b`. It fits in 4 GB of VRAM; check with `ollama ps` that it shows `100% GPU`.
 3. From WSL, find Windows' IP and check that the API answers:
    ```bash
