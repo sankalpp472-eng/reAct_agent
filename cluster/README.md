@@ -19,6 +19,7 @@ from the node to the head node.
 | 3. Internet tunnel for the VM | compute node | `bash cluster/vm/tunnel.sh` |
 | 4. Boot the VM | compute node | `bash cluster/vm/start_vm.sh` (defaults: 12 vCPUs, 16 GB RAM, 80 GB disk in `/tmp/$USER-pae-vm`) |
 | 5. Log in | compute node | `bash cluster/vm/ssh.sh` |
+| 6. Install the experiment stacks in the VM (once) | inside the VM | `sudo bash cluster/vm/install_in_vm.sh`: Docker + Conductor (`conductoross/conductor`, API :8082), faasd (gateway :8080), k3s (installed, stopped), drivers' Python packages |
 
 Stop it with `bash cluster/vm/stop_vm.sh`. The disk stays in `/tmp`, so the next start
 resumes it. If the node is scheduled by Slurm, reserve it while the VM runs
