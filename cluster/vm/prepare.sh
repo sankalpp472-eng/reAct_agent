@@ -12,11 +12,14 @@ ENV=${ENV:-$HOME/pae-env}
 SOCKS_PORT=${SOCKS_PORT:-1080}   # the node's ssh -D port; the VM reaches it at 10.0.2.2
 mkdir -p "$VM_HOME" "$HOME/.local/bin" "$HOME/.ssh"
 
-if [ ! -x "$HOME/.local/bin/micromamba" ]; then
-  echo "== micromamba"
-  curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj -C "$HOME/.local" bin/micromamba
-fi
 MM="$HOME/.local/bin/micromamba"
+if ! "$MM" --version >/dev/null 2>&1; then
+  echo "== micromamba (single static binary from GitHub)"
+  curl -fL --retry 3 -o "$MM.part" \
+    https://github.com/mamba-org/micromamba-releases/releases/latest/download/micromamba-linux-64
+  chmod +x "$MM.part" && mv "$MM.part" "$MM"
+  echo "micromamba $("$MM" --version)"
+fi
 
 if [ ! -x "$ENV/bin/python" ]; then
   echo "== Python env $ENV (python 3.11, xorriso, driver packages)"
@@ -26,7 +29,7 @@ fi
 
 if [ ! -f "$VM_HOME/noble.img" ]; then
   echo "== Ubuntu 24.04 cloud image"
-  curl -L -o "$VM_HOME/noble.img.part" \
+  curl -fL --retry 3 -o "$VM_HOME/noble.img.part" \
     https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
   mv "$VM_HOME/noble.img.part" "$VM_HOME/noble.img"
 fi
