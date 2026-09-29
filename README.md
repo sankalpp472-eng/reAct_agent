@@ -173,9 +173,47 @@ python workloads/run_local.py workloads/retail-44.json --gateway http://127.0.0.
 
 ## Using a real LLM
 
-`gemini_client.py` keeps the real client's function signatures (`call_gemini_json`,
-`call_gemini_agentic`). To run with Gemini, swap the mock for a real client, then create
-the `gemini-api-key` secret with a real key. The key is mounted at
-`/var/openfaas/secrets/gemini-api-key`; never put it in `stack.yaml` or the image.
-Expect longer and more variable LLM times, which would change Rfriction but not the
-orchestration and routing overheads.
+The planner, actor and evaluator can use a real model instead of the mock, through any
+OpenAI-compatible API (`llm_openai.py`): a local Ollama, vLLM, or a hosted API such as
+Groq or OpenRouter. Choose it with three variables. The mock (`LLM_BACKEND=mock`) stays
+the default.
+
+| Variable | Example |
+|---|---|
+| `LLM_BACKEND` | `openai` |
+| `LLM_BASE_URL` | `http://<windows-host-ip>:11434/v1` (must end in `/v1`) |
+| `LLM_MODEL` | `qwen2.5:3b` |
+| `LLM_API_KEY` | only for hosted APIs |
+
+Temperature and seed default to 0 (`LLM_TEMPERATURE`, `LLM_SEED`), so runs are as
+repeatable as the model allows. Every model call counts toward T_LLM in `_timing`, so all
+the experiment scripts and plots work unchanged.
+
+**Local model with Ollama on Windows (WSL setup).** Running Ollama on Windows uses the GPU
+directly and leaves WSL's memory to the stacks.
+1. Install Ollama for Windows. Set these user environment variables, then restart Ollama:
+   - `OLLAMA_HOST=0.0.0.0`, so WSL can reach it;
+   - `OLLAMA_CONTEXT_LENGTH=8192`, because the actor's prompt carries all of a domain's
+     tool declarations and the default context would silently cut it off.
+2. `ollama pull qwen2.5:3b`. It fits in 4 GB of VRAM; check with `ollama ps` that it shows `100% GPU`.
+3. From WSL, find Windows' IP and check that the API answers:
+   ```bash
+   WINHOST=$(ip route show default | awk '{print $3}')
+   curl -s http://$WINHOST:11434/v1/models
+   ```
+4. Deploy with the real LLM:
+   ```bash
+   export LLM_BACKEND=openai LLM_BASE_URL=http://$WINHOST:11434/v1 LLM_MODEL=qwen2.5:3b
+   faas-cli up -f stack.yaml                                   # Stack A
+   REGISTRY=<you> ./argo-knative/deploy.sh                     # Stack B
+   ```
+   Unset `LLM_BACKEND` (or set it to `mock`) and redeploy to go back to the mock.
+
+What changes with a real model:
+- **Run times and turn counts vary,** because the model decides the plan and tool calls.
+- **A small model will fail some tasks.** Pass% becomes meaningful, and fewer runs pass the
+  reward-1 filter.
+- **The LLM shares the machine with the stack being measured.** Keep one request at a time.
+
+For the orchestrator and FaaS overhead metrics the mock remains the controlled
+baseline; real-LLM runs show how much that overhead matters next to real LLM time.

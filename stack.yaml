@@ -12,6 +12,11 @@ functions:
     handler: ./planner
     image: sankalps2003/planner:latest        # change to your own registry, e.g. docker.io/you/planner:latest
     environment:
+      # LLM: "mock" (scripted, sleeps) or "openai" (any OpenAI-compatible API, e.g. Ollama).
+      # Set these in your shell before faas-cli up, see README "Using a real LLM"
+      LLM_BACKEND: ${LLM_BACKEND:-mock}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
       MOCK_LATENCY_S: "2.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_NUM_STEPS: "4"
@@ -27,6 +32,11 @@ functions:
     handler: ./actor
     image: sankalps2003/actor:latest          # change to your own registry
     environment:
+      # LLM: "mock" (scripted, sleeps) or "openai" (any OpenAI-compatible API, e.g. Ollama).
+      # Set these in your shell before faas-cli up, see README "Using a real LLM"
+      LLM_BACKEND: ${LLM_BACKEND:-mock}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
       MOCK_LATENCY_S: "2.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_ACTOR_TOOL_ROUNDS: "1"
@@ -46,6 +56,11 @@ functions:
     handler: ./evaluator
     image: sankalps2003/evaluator:latest      # change to your own registry
     environment:
+      # LLM: "mock" (scripted, sleeps) or "openai" (any OpenAI-compatible API, e.g. Ollama).
+      # Set these in your shell before faas-cli up, see README "Using a real LLM"
+      LLM_BACKEND: ${LLM_BACKEND:-mock}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
       MOCK_LATENCY_S: "1.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       write_debug: "true"

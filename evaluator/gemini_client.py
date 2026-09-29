@@ -1,5 +1,6 @@
 """
 MOCK Gemini client - drop-in replacement for the real gemini_client.py.
+Set LLM_BACKEND=openai to use a real model instead (llm_openai.py, bottom of this file).
 
 Same public API as the real client:
     call_gemini_json(prompt, system_instruction=None, response_schema=None, timeout=85)
@@ -312,3 +313,15 @@ def call_gemini_agentic(
     # Final "restate as JSON" turn
     _simulate_latency("actor final structuring turn")
     return answer
+
+
+# ----------------------------------------------------------------------------
+# real LLM: LLM_BACKEND=openai replaces the mock with any OpenAI-compatible
+# API (a local Ollama, vLLM, Groq, ...). See llm_openai.py.
+# ----------------------------------------------------------------------------
+
+BACKEND = os.environ.get("LLM_BACKEND", "mock")
+if BACKEND == "openai":
+    from .llm_openai import MODEL, call_gemini_agentic, call_gemini_json  # noqa: F401,F811
+elif BACKEND != "mock":
+    raise RuntimeError(f"LLM_BACKEND must be 'mock' or 'openai', not {BACKEND!r}")

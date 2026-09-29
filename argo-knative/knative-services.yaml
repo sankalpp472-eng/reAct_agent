@@ -32,6 +32,12 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: LLM_BACKEND
+              value: "LLM_BACKEND_VALUE"
+            - name: LLM_BASE_URL
+              value: "LLM_BASE_URL_VALUE"
+            - name: LLM_MODEL
+              value: "LLM_MODEL_VALUE"
             - name: MOCK_LATENCY_S
               value: "2.0"
             - name: MOCK_LATENCY_JITTER_S
@@ -70,6 +76,12 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: LLM_BACKEND
+              value: "LLM_BACKEND_VALUE"
+            - name: LLM_BASE_URL
+              value: "LLM_BASE_URL_VALUE"
+            - name: LLM_MODEL
+              value: "LLM_MODEL_VALUE"
             - name: MOCK_LATENCY_S
               value: "2.0"
             - name: MOCK_LATENCY_JITTER_S
@@ -112,6 +124,12 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: LLM_BACKEND
+              value: "LLM_BACKEND_VALUE"
+            - name: LLM_BASE_URL
+              value: "LLM_BASE_URL_VALUE"
+            - name: LLM_MODEL
+              value: "LLM_MODEL_VALUE"
             - name: MOCK_LATENCY_S
               value: "1.0"
             - name: MOCK_LATENCY_JITTER_S
