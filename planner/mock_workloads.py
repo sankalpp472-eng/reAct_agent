@@ -181,6 +181,28 @@ WORKLOADS = [
         ],
         "final_answer": "Your order #W9300146 is currently pending. You paid $153.23 for it, with your gift card.",
     },
+    {
+        "id": "airline-status",
+        "domain": "airline",
+        "match": ["harper_garcia_8677", "7IG5PW", "cabin class"],
+        "steps": [
+            {
+                "description": "Get the profile of user harper_garcia_8677 and check that reservation 7IG5PW is theirs",
+                "calls": [
+                    ("get_user_details", {"user_id": "harper_garcia_8677"}),
+                ],
+                "result": "User harper_garcia_8677 found; 7IG5PW is one of their reservations.",
+            },
+            {
+                "description": "Get reservation 7IG5PW and read its cabin class and payment",
+                "calls": [
+                    ("get_reservation_details", {"reservation_id": "7IG5PW"}),
+                ],
+                "result": "Reservation 7IG5PW (ATL-ORD round trip) is in business class; $2091 was paid with credit_card_5865555.",
+            },
+        ],
+        "final_answer": "Your reservation 7IG5PW is booked in business class. You paid $2091 for it, with your credit card.",
+    },
 ]
 
 

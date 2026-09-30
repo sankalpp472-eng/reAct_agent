@@ -3,7 +3,7 @@
 # Re-run after rebuilding/pushing the images or changing the YAML.
 #   REGISTRY  image registry/user the faas-cli images were pushed to
 #   TAG       image tag
-#   LLM_BACKEND / LLM_BASE_URL / LLM_MODEL   see the root README, "Using a real LLM"
+#   LLM_BACKEND / LLM_BASE_URL / LLM_MODEL / LLM_TOOL_MODE / LLM_PROXY   see the root README, "Using a real LLM"
 set -euo pipefail
 cd "$(dirname "$0")"
 REGISTRY=${REGISTRY:-sankalps2003}
@@ -13,9 +13,10 @@ LLM_BACKEND=${LLM_BACKEND:-mock}
 LLM_BASE_URL=${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
 LLM_MODEL=${LLM_MODEL:-qwen2.5:3b}
 LLM_TOOL_MODE=${LLM_TOOL_MODE:-prompt}
+LLM_PROXY=${LLM_PROXY:-}
 
 sed -e "s|REGISTRY/|${REGISTRY}/|" -e "s|:TAG\$|:${TAG}|" -e "s|DEPLOYED_AT|$(date +%s)|" \
-  -e "s|LLM_BACKEND_VALUE|${LLM_BACKEND}|" -e "s|LLM_BASE_URL_VALUE|${LLM_BASE_URL}|" -e "s|LLM_MODEL_VALUE|${LLM_MODEL}|" -e "s|LLM_TOOL_MODE_VALUE|${LLM_TOOL_MODE}|" \
+  -e "s|LLM_BACKEND_VALUE|${LLM_BACKEND}|" -e "s|LLM_BASE_URL_VALUE|${LLM_BASE_URL}|" -e "s|LLM_MODEL_VALUE|${LLM_MODEL}|" -e "s|LLM_TOOL_MODE_VALUE|${LLM_TOOL_MODE}|" -e "s|LLM_PROXY_VALUE|${LLM_PROXY}|" \
   knative-services.yaml | kubectl apply -f -
 kubectl wait ksvc --all -n default --for=condition=Ready --timeout=300s
 

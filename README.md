@@ -184,6 +184,7 @@ the default.
 | `LLM_BASE_URL` | `http://<windows-host-ip>:11434/v1` (must end in `/v1`) |
 | `LLM_MODEL` | `qwen2.5:3b` |
 | `LLM_API_KEY` | only for hosted APIs; comes from the secret `llm-api-key` (below), never from `stack.yaml` |
+| `LLM_PROXY` | proxy for the model API only, e.g. `socks5h://10.0.2.2:1080` in the cluster VM |
 | `LLM_TOOL_MODE` | `prompt` (default): tools described in the system prompt, calls parsed from the model's text. `native`: the API's `tools` field |
 
 Use `prompt` mode with small local models. Ollama's own tool parser silently drops a small model's
@@ -245,9 +246,18 @@ That waiting counts toward T_LLM, and each wait is logged as `[llm] HTTP 429, re
    sudo systemctl restart faasd
    ```
    Re-register the workflow afterwards (its HTTP timeouts are now 300 s too).
-4. The functions need to reach `api.groq.com`. That works from a laptop. In the cluster VM,
-   which only reaches the internet through the SSH SOCKS tunnel, the calls would also have
-   to go through the tunnel, adding the tunnel's latency to every LLM call.
+4. The functions need to reach `api.groq.com`. From a laptop they do directly. In the
+   cluster VM, whose only way out is the SSH SOCKS tunnel, set `LLM_PROXY=socks5h://10.0.2.2:1080`:
+   the model calls then go through the tunnel (the calls between functions don't).
+   `cluster/vm/use_llm.sh` does steps 1–3 and this in the VM; see `cluster/README.md`.
+5. Use the short read-only workloads, `workloads/retail-status.json` and
+   `workloads/airline-status.json`, with a pause between runs so each starts with a fresh
+   per-minute token budget (`--pause 60`). retail-44 and airline-26 need about 25 model calls
+   each and mostly end up waiting on the rate limit.
+
+Rate-limit waits are recorded on their own (`_timing.llm_wait_ms`). The metrics report
+them as `T_LLM_wait_ms` and add `Rfriction_net`, the friction ratio against the model's own
+time without the waits. With the mock both are the same as before (waits are 0).
 
 What changes with a real model:
 - **Run times and turn counts vary,** because the model decides the plan and tool calls.

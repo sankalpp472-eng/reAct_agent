@@ -43,7 +43,8 @@ def _argo_calls(wf):
         timing = body.get("_timing") if isinstance(body, dict) else None
         if timing:
             calls.append({"name": node["displayName"], "t3": timing["t3"], "t4": timing["t4"],
-                          "llm_ms": timing["llm_ms"], "tool_calls": timing.get("tool_calls", []),
+                          "llm_ms": timing["llm_ms"], "llm_wait_ms": timing.get("llm_wait_ms", 0.0),
+                          "tool_calls": timing.get("tool_calls", []),
                           "hop_ms": None, "body": body})
     return calls
 

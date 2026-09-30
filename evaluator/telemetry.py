@@ -11,6 +11,7 @@ Each handler calls begin() when it is entered (t3) and attach() on the way out
     "handler_ms": t4 - t3,               # Twarm for this function
     "llm_ms": <total simulated/real LLM time in this request>,
     "llm_calls": <number of LLM calls>,
+    "llm_wait_ms": <part of llm_ms spent waiting out API rate limits (real LLM only)>,
     "tool_calls": [                      # actor only: calls to the tool functions
       {"tool", "t2", "t3", "t4", "t5", "http_ms", "twarm_ms", "troute_ms"}, ...
     ]
@@ -33,14 +34,18 @@ def now_ms():
 
 
 def begin():
-    _local.timing = {"t3": now_ms(), "llm_ms": 0.0, "llm_calls": 0, "tool_calls": []}
+    _local.timing = {"t3": now_ms(), "llm_ms": 0.0, "llm_calls": 0, "llm_wait_ms": 0.0,
+                     "tool_calls": []}
 
 
-def record_llm(ms):
+def record_llm(ms, wait_ms=0.0):
+    """ms: one LLM call's wall time. wait_ms: the part of it spent sleeping on
+    API rate limits (429 + Retry-After), so the metrics can leave it out."""
     timing = getattr(_local, "timing", None)
     if timing is not None:
         timing["llm_ms"] += ms
         timing["llm_calls"] += 1
+        timing["llm_wait_ms"] += wait_ms
 
 
 def record_tool_call(tool, t2, t5, callee_timing, error=None, attempts=1):

@@ -106,7 +106,8 @@ def extract_calls(wf):
             continue
         calls.append({
             "name": node["displayName"], "t3": timing["t3"], "t4": timing["t4"],
-            "llm_ms": timing["llm_ms"], "tool_calls": timing.get("tool_calls", []),
+            "llm_ms": timing["llm_ms"], "llm_wait_ms": timing.get("llm_wait_ms", 0.0),
+            "tool_calls": timing.get("tool_calls", []),
             "hop_ms": None,  # Argo has no ms-precise per-node times; see dataplane.py
             "body": body,
         })

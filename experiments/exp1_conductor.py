@@ -127,7 +127,7 @@ def compute_metrics(wf, t0, t7):
         tasks = cycles[it]
         t1 = min(t["scheduledTime"] for t in tasks)
         t6 = max(t["endTime"] for t in tasks)
-        t_llm = http_total = troute = 0.0
+        t_llm = t_llm_wait = http_total = troute = 0.0
         n_tool_calls = 0
         missing_timing = False
 
@@ -143,6 +143,7 @@ def compute_metrics(wf, t0, t7):
                 continue
             twarm = timing["handler_ms"]  # t4 - t3, function's clock
             t_llm += timing["llm_ms"]
+            t_llm_wait += timing.get("llm_wait_ms", 0.0)
             troute += http_ms - twarm
             call_rows.append({
                 "iteration": it, "kind": "function", "name": _ref(t).replace("_task", ""),
@@ -164,6 +165,7 @@ def compute_metrics(wf, t0, t7):
             "iteration": it,
             "tcycle_ms": tcycle,
             "t_llm_ms": t_llm,
+            "t_llm_wait_ms": t_llm_wait,
             "t_faas_http_ms": http_total - t_llm,
             "torch_ms": tcycle - http_total,  # = Tcycle - (T_LLM + T_FaaS_HTTP)
             "troute_ms": troute,
@@ -174,6 +176,7 @@ def compute_metrics(wf, t0, t7):
     t_llm_total = sum(c["t_llm_ms"] for c in cycle_rows)
     torch_total = sum(c["torch_ms"] for c in cycle_rows)
     troute_total = sum(c["troute_ms"] for c in cycle_rows)
+    wait_total = sum(c["t_llm_wait_ms"] for c in cycle_rows)
     tool_calls = [c for c in call_rows if c["kind"] == "tool" and c["twarm_ms"] is not None]
     run_row = {
         "status": wf.get("status"),
@@ -187,6 +190,10 @@ def compute_metrics(wf, t0, t7):
         "torch_ms": torch_total,
         "troute_ms": troute_total,
         "rfriction": (torch_total + troute_total) / t_llm_total if t_llm_total else None,
+        # real LLM: rate-limit waits (part of T_LLM) and Rfriction without them
+        "t_llm_wait_ms": wait_total,
+        "rfriction_net": ((torch_total + troute_total) / (t_llm_total - wait_total)
+                          if t_llm_total > wait_total else None),
         "n_tool_calls": len(tool_calls),
         "twarm_tool_mean_ms": _mean([c["twarm_ms"] for c in tool_calls]),
         "troute_tool_mean_ms": _mean([c["troute_ms"] for c in tool_calls]),
@@ -234,6 +241,8 @@ def summarize(runs, cycles, calls):
             "Torch_ms": _stats([r["torch_ms"] for r in ok_runs]),
             "Troute_ms": _stats([r["troute_ms"] for r in ok_runs]),
             "Rfriction": _stats([r["rfriction"] for r in ok_runs]),
+            "T_LLM_wait_ms": _stats([r["t_llm_wait_ms"] for r in ok_runs]),
+            "Rfriction_net": _stats([r["rfriction_net"] for r in ok_runs]),
         },
         "per_cycle": {
             "Tcycle_ms": _stats([c["tcycle_ms"] for c in ok_cycles]),
@@ -289,7 +298,8 @@ def dataplane_calls(wf):
             continue
         calls.append({
             "name": _ref(t).replace("_task", ""), "t3": timing["t3"], "t4": timing["t4"],
-            "llm_ms": timing["llm_ms"], "tool_calls": timing.get("tool_calls", []),
+            "llm_ms": timing["llm_ms"], "llm_wait_ms": timing.get("llm_wait_ms", 0.0),
+            "tool_calls": timing.get("tool_calls", []),
             "hop_ms": t["endTime"] - t["startTime"],
         })
     return calls

@@ -25,6 +25,37 @@ Stop it with `bash cluster/vm/stop_vm.sh`. The disk stays in `/tmp`, so the next
 resumes it. If the node is scheduled by Slurm, reserve it while the VM runs
 (e.g. `salloc -w node13`).
 
+### Real LLM (Groq) in the VM
+
+The two short read-only workloads (`retail-status`, `airline-status`) stay within Groq's
+free-tier limits. The functions reach Groq through the node's tunnel, so keep
+`tunnel.sh` running on the node.
+
+On the laptop, once (the function images need `PySocks` for the tunnel):
+```bash
+faas-cli build -f stack.yaml && faas-cli push -f stack.yaml
+```
+In the VM:
+```bash
+(umask 077; read -rs k; printf %s "$k" > ~/.llm-api-key)      # paste the Groq key, Enter
+export LLM_MODEL=openai/gpt-oss-120b                         # a name from Groq's model list
+W="workloads/retail-status.json workloads/airline-status.json"
+
+bash cluster/vm/switch_stack.sh a && bash cluster/vm/use_llm.sh a
+python3 experiments/exp1_conductor.py --conductor http://127.0.0.1:8082/api \
+    --gateway http://127.0.0.1:8080 --workloads $W --runs 10 --warmup 1 --pause 60
+
+bash cluster/vm/switch_stack.sh b && bash cluster/vm/use_llm.sh b
+python3 experiments/exp1_argo.py --ingress knative://<kourier-ip>:80/default.example.com \
+    --workloads $W --runs 10 --warmup 1 --pause 60
+
+LLM_BACKEND=mock bash cluster/vm/use_llm.sh a|b              # back to the mock
+```
+`use_llm.sh` checks that Groq answers through the tunnel and knows the model, stores the
+key as the `llm-api-key` secret, deploys the functions with `LLM_PROXY` set, and on
+Stack A also raises faasd's gateway timeouts to 300 s and re-registers the workflow.
+Each stack takes roughly 1–1.5 h for 2 × 11 runs, so run the drivers inside `tmux`.
+
 ## With a one-time admin setup
 
 The study runs two stacks on one node, one at a time: Conductor + faasd, and Argo

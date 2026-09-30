@@ -40,6 +40,8 @@ spec:
               value: "LLM_MODEL_VALUE"
             - name: LLM_TOOL_MODE
               value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_PROXY
+              value: "LLM_PROXY_VALUE"
             - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
               valueFrom:
                 secretKeyRef: {name: llm-api-key, key: value, optional: true}
@@ -89,6 +91,8 @@ spec:
               value: "LLM_MODEL_VALUE"
             - name: LLM_TOOL_MODE
               value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_PROXY
+              value: "LLM_PROXY_VALUE"
             - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
               valueFrom:
                 secretKeyRef: {name: llm-api-key, key: value, optional: true}
@@ -142,6 +146,8 @@ spec:
               value: "LLM_MODEL_VALUE"
             - name: LLM_TOOL_MODE
               value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_PROXY
+              value: "LLM_PROXY_VALUE"
             - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
               valueFrom:
                 secretKeyRef: {name: llm-api-key, key: value, optional: true}

@@ -10,6 +10,11 @@ few-shot agent).
 | [`retail-44`](retail-44.json) | `retail-tools` | `find_user_id_by_name_zip` → `get_order_details` → `get_product_details` → `calculate` → `modify_pending_order_items` | Swap a desk lamp in a pending order for the cheapest available one, refund the difference to a gift card, and report the amount (`17.99`). |
 | [`airline-26`](airline-26.json) | `airline-tools` | `cancel_reservation` → `get_reservation_details` → `search_direct_flight` ×2 → `calculate` → `update_reservation_flights` | Cancel two reservations and upgrade a third to business class. **Policy trap:** `IFOYYZ` is basic economy, has no insurance and was booked more than 24h ago, so it must *not* be cancelled. Only `NQNU5R` is. |
 | [`retail-status`](retail-status.json) | `retail-tools` | `find_user_id_by_name_zip` → `get_order_details` | **Smoke test for real LLMs, not a tau-bench task.** Read-only: report the status (`pending`) and amount paid (`153.23`) of order #W9300146. Two tool calls and no data changes, so few LLM calls and little risk of API rate limits. The database must stay unchanged |
+| [`airline-status`](airline-status.json) | `airline-tools` | `get_user_details` → `get_reservation_details` | **Airline twin of `retail-status`, also made for this study.** Read-only: report the cabin class (`business`) and amount paid (`2091`) of reservation 7IG5PW. The database must stay unchanged |
+
+`retail-status` and `airline-status` are the workloads for real-LLM runs on a free-tier
+API: about 10 model calls per run instead of about 25, so they mostly stay within the
+tokens-per-minute limit.
 
 ## Why these two
 

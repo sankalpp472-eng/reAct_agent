@@ -1,0 +1,16 @@
+{
+  "id": "airline-status",
+  "domain": "airline",
+  "tool_function": "airline-tools",
+  "source": "Made for this study (not a tau-bench task), on tau-bench's airline data",
+  "why_chosen": "A short, read-only task for real LLMs, the airline twin of retail-status: 2 tool calls (check the customer's profile, read the reservation), no data changes, and an exact answer to check. Few LLM calls, so it stays within free-tier API rate limits.",
+  "user_id": "harper_garcia_8677",
+  "goal": "A customer with user id harper_garcia_8677 asks about their reservation 7IG5PW: which cabin class is it booked in, and how much did they pay for it? Only look this up; do not change anything.",
+  "policy_file": "policies/airline.md",
+  "expected_actions": [
+    {"name": "get_user_details", "kwargs": {"user_id": "harper_garcia_8677"}},
+    {"name": "get_reservation_details", "kwargs": {"reservation_id": "7IG5PW"}}
+  ],
+  "expected_outputs": ["business", "2091"],
+  "expected_db_hash": "4587e6b48ad2b2c4f3e1fecb40aabec7bb2286513273b8f8cec3f5865222f290"
+}

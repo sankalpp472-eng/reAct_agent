@@ -27,6 +27,8 @@ Metrics (all ms):
               (includes dispatch, the loop-backs and completion - everything
               the orchestrator does outside the function calls)
   Rfriction = (Torch_run + sum Troute (orchestrator hops + tool hops)) / T_LLM
+  Rfriction_net: the same over T_LLM minus API rate-limit waits (real LLM only;
+             equal to Rfriction with the mock)
 
 All t3/t4 differences between *different* functions (Tcycle) assume the
 functions share a clock, i.e. run on one host / one node.
@@ -57,13 +59,13 @@ def dataplane_metrics(calls, t0, t7):
         call_rows.append({
             "turn": turn, "kind": "function", "name": c["name"], "t3": c["t3"],
             "twarm_ms": twarm, "troute_ms": troute, "troute_estimated": estimated,
-            "llm_ms": c.get("llm_ms", 0.0),
+            "llm_ms": c.get("llm_ms", 0.0), "llm_wait_ms": c.get("llm_wait_ms", 0.0),
         })
         for tc in c.get("tool_calls", []):
             call_rows.append({
                 "turn": turn, "kind": "tool", "name": tc["tool"], "t3": tc.get("t3"),
                 "twarm_ms": tc.get("twarm_ms"), "troute_ms": tc.get("troute_ms"),
-                "troute_estimated": False, "llm_ms": 0.0,
+                "troute_estimated": False, "llm_ms": 0.0, "llm_wait_ms": 0.0,
             })
 
     fn_rows = [r for r in call_rows if r["kind"] == "function"]
@@ -84,6 +86,7 @@ def dataplane_metrics(calls, t0, t7):
 
     te2e = t7 - t0
     t_llm = sum(r["llm_ms"] for r in fn_rows)
+    t_llm_wait = sum(r["llm_wait_ms"] for r in fn_rows)
     troute_orch = sum(r["troute_ms"] or 0.0 for r in fn_rows)
     troute_tool = sum(tc["troute_ms"] for tc in tool_calls)
     torch_run = te2e - sum(r["twarm_ms"] for r in fn_rows) - troute_orch
@@ -96,6 +99,11 @@ def dataplane_metrics(calls, t0, t7):
         "troute_tool_ms": troute_tool,
         "troute_orch_estimated": any(r["troute_estimated"] for r in fn_rows),
         "rfriction": (torch_run + troute_orch + troute_tool) / t_llm if t_llm else None,
+        # real LLM only: time spent waiting out API rate limits (part of T_LLM),
+        # and Rfriction against the model's own time without those waits
+        "t_llm_wait_ms": t_llm_wait,
+        "rfriction_net": ((torch_run + troute_orch + troute_tool) / (t_llm - t_llm_wait)
+                          if t_llm - t_llm_wait > 0 else None),
         "twarm_tool_mean_ms": statistics.fmean([tc["twarm_ms"] for tc in tool_calls]) if tool_calls else None,
         "troute_tool_mean_ms": statistics.fmean([tc["troute_ms"] for tc in tool_calls]) if tool_calls else None,
     }
@@ -134,6 +142,8 @@ def summarize(runs, turns, calls):
             "Troute_orch_ms": stats([r["troute_orch_ms"] for r in runs]),
             "Troute_tool_ms": stats([r["troute_tool_ms"] for r in runs]),
             "Rfriction": stats([r["rfriction"] for r in runs]),
+            "T_LLM_wait_ms": stats([r["t_llm_wait_ms"] for r in runs]),
+            "Rfriction_net": stats([r["rfriction_net"] for r in runs]),
         },
         "per_turn": {
             "Tcycle_ms": stats([t["tcycle_ms"] for t in turns]),
@@ -164,6 +174,8 @@ def print_table(summary, title):
         ("Troute orch (per run)", summary["per_run"]["Troute_orch_ms"]),
         ("T_LLM (per run)", summary["per_run"]["T_LLM_ms"]),
         ("Rfriction (per run)", summary["per_run"]["Rfriction"]),
+        ("T_LLM rate-limit wait", summary["per_run"]["T_LLM_wait_ms"]),
+        ("Rfriction_net (per run)", summary["per_run"]["Rfriction_net"]),
     ]
     print(f"\n{title}")
     print(f"{'metric':<24}{'n':>5}{'mean':>12}{'p50':>12}{'p95':>12}{'std':>12}")

@@ -18,7 +18,12 @@ Environment variables:
                    Kubernetes secret llm-api-key as this env var
   LLM_MAX_RETRIES  retries on 429 (rate limit) / 500 / 502 / 503 / 504, default 6.
                    Waits Retry-After if the API sends it, else 1, 2, 4 ... 30 s.
-                   The wait counts toward T_LLM: it's time spent waiting for the model
+                   The wait counts toward T_LLM (wall time spent on the model) and
+                   is also recorded on its own as _timing.llm_wait_ms
+  LLM_PROXY        proxy for the model API only, e.g. socks5h://10.0.2.2:1080 on the
+                   cluster VM (its only way out is the node's SSH SOCKS tunnel).
+                   Calls to the tool functions never use it. SOCKS needs PySocks
+                   (in requirements.txt)
   LLM_TEMPERATURE  default 0, so runs are as repeatable as the model allows
   LLM_SEED         default 0
   LLM_TOOL_MODE    "prompt" (default): the tool list goes into the system
@@ -51,6 +56,8 @@ MODEL = os.environ.get("LLM_MODEL", "qwen2.5:3b")
 _KEY_FILE = os.environ.get("LLM_API_KEY_FILE", "/var/openfaas/secrets/llm-api-key")
 API_KEY = os.environ.get("LLM_API_KEY") or (
     open(_KEY_FILE).read().strip() if os.path.exists(_KEY_FILE) else "")
+_PROXY = os.environ.get("LLM_PROXY", "")
+PROXIES = {"http": _PROXY, "https": _PROXY} if _PROXY else None
 MAX_RETRIES = int(os.environ.get("LLM_MAX_RETRIES", "6"))
 _RETRY_STATUS = (429, 500, 502, 503, 504)
 _json_mode_ok = True  # set to False once the API says the model has no JSON mode
@@ -95,7 +102,7 @@ def _chat_once(messages, timeout, tools, json_mode):
     try:
         while True:
             resp = requests.post(f"{BASE_URL}/chat/completions", json=body, headers=headers,
-                                 timeout=max(deadline - time.time(), 1))
+                                 proxies=PROXIES, timeout=max(deadline - time.time(), 1))
             if resp.status_code not in _RETRY_STATUS or retries >= MAX_RETRIES:
                 break
             wait = _retry_after(resp) or min(2 ** retries, 30)
@@ -107,7 +114,9 @@ def _chat_once(messages, timeout, tools, json_mode):
             time.sleep(wait)
     finally:
         elapsed = time.time() - start
-        record_llm(elapsed * 1000.0)  # includes rate-limit waits: time spent waiting for the model
+        # the wall time includes rate-limit waits; they're also reported on
+        # their own (llm_wait_ms) so the metrics can leave them out
+        record_llm(elapsed * 1000.0, waited * 1000.0)
     if resp.status_code == 400 and json_mode and "response_format" in resp.text:
         raise _JsonModeUnsupported(resp.text[:300])
     if resp.status_code >= 400:
