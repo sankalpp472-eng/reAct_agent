@@ -62,7 +62,7 @@
               "uri": "http://172.17.0.1:8080/function/planner",
               "method": "POST",
               "connectionTimeOut": 10000,
-              "readTimeOut": 90000,
+              "readTimeOut": 300000,
               "body": {
                 "goal": "${workflow.input.goal}",
                 "context": "${build_planner_context.output.result}",
@@ -80,7 +80,7 @@
               "uri": "http://172.17.0.1:8080/function/actor",
               "method": "POST",
               "connectionTimeOut": 10000,
-              "readTimeOut": 180000,
+              "readTimeOut": 300000,
               "body": {
                 "goal": "${workflow.input.goal}",
                 "plan": "${planner_task.output.response.body.plan}",
@@ -118,7 +118,7 @@
               "uri": "http://172.17.0.1:8080/function/evaluator",
               "method": "POST",
               "connectionTimeOut": 10000,
-              "readTimeOut": 90000,
+              "readTimeOut": 300000,
               "body": {
                 "goal": "${workflow.input.goal}",
                 "plan": "${planner_task.output.response.body.plan}",

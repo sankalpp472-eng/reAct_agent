@@ -236,7 +236,16 @@ That waiting counts toward T_LLM, and each wait is logged as `[llm] HTTP 429, re
    faas-cli deploy -f stack.yaml                                 # Stack A
    REGISTRY=<you> ./argo-knative/deploy.sh                       # Stack B
    ```
-3. The functions need to reach `api.groq.com`. That works from a laptop. In the cluster VM,
+3. Raise faasd's gateway timeout. It cuts off any function call after 60 s, and with
+   rate-limit waits an actor step can take longer ("172.17.0.1:8080 failed to respond").
+   The functions and the Conductor workflow already allow 300 s:
+   ```bash
+   sudo sed -i -E 's/(read_timeout|write_timeout)=60s/\1=300s/; s/upstream_timeout=65s/upstream_timeout=305s/' \
+       /var/lib/faasd/docker-compose.yaml
+   sudo systemctl restart faasd
+   ```
+   Re-register the workflow afterwards (its HTTP timeouts are now 300 s too).
+4. The functions need to reach `api.groq.com`. That works from a laptop. In the cluster VM,
    which only reaches the internet through the SSH SOCKS tunnel, the calls would also have
    to go through the tunnel, adding the tunnel's latency to every LLM call.
 

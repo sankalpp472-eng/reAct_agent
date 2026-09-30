@@ -22,9 +22,9 @@ functions:
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_NUM_STEPS: "4"
       write_debug: "true"
-      read_timeout: "90s"
-      write_timeout: "90s"
-      exec_timeout: "90s"
+      read_timeout: "300s"
+      write_timeout: "300s"
+      exec_timeout: "300s"
     secrets:
       - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key
@@ -48,9 +48,9 @@ functions:
       # re-send a tool call that hit a not-yet-listening cold function (see actor/tools.py)
       TOOL_COLD_RETRY_S: "30"
       write_debug: "true"
-      read_timeout: "180s"
-      write_timeout: "180s"
-      exec_timeout: "180s"
+      read_timeout: "300s"
+      write_timeout: "300s"
+      exec_timeout: "300s"
     secrets:
       - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key
@@ -69,9 +69,9 @@ functions:
       MOCK_LATENCY_S: "1.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       write_debug: "true"
-      read_timeout: "90s"
-      write_timeout: "90s"
-      exec_timeout: "90s"
+      read_timeout: "300s"
+      write_timeout: "300s"
+      exec_timeout: "300s"
     secrets:
       - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key

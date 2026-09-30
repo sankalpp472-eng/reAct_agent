@@ -145,7 +145,7 @@ def _parse_json(text):
         return json.loads(m.group(0))
 
 
-def call_gemini_json(prompt, system_instruction=None, response_schema=None, timeout=85):
+def call_gemini_json(prompt, system_instruction=None, response_schema=None, timeout=240):
     system = (system_instruction or "") + (_schema_hint(response_schema) if response_schema else "")
     messages = [{"role": "system", "content": system}, {"role": "user", "content": prompt}]
     return _parse_json(_chat(messages, timeout, json_mode=True).get("content"))
@@ -212,7 +212,7 @@ def call_gemini_agentic(
     execute_tool_fn,
     system_instruction=None,
     max_tool_rounds=6,
-    timeout=175,
+    timeout=270,  # under the 300 s function/gateway limits, with rate-limit waits
     final_response_schema=None,
     final_instruction=None,
 ):
