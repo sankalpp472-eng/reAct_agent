@@ -1,0 +1,10 @@
+workload,run,te2e_ms,n_turns,t_llm_ms,torch_run_ms,troute_orch_ms,troute_tool_ms,troute_orch_estimated,rfriction,t_llm_wait_ms,rfriction_net,twarm_tool_mean_ms,troute_tool_mean_ms,workflow,phase,verdict,reward,reward_verified,missing_timing,te2e_source
+airline-status,1,120000.0,2,11687.782,108206.234,71.859,23.953,True,9.266,0.0,9.266,0.129,11.976,pae-agentic-loop-6rxvw,Failed,,0.0,False,False,k8s timestamps (1 s resolution)
+airline-status,2,79000.0,1,24698.65,54299.866,0.0,0,True,2.198,23000.0,31.966,,,pae-agentic-loop-xfrrx,Failed,,0.0,False,False,k8s timestamps (1 s resolution)
+airline-status,3,30000.0,1,297.227,29702.615,0.0,0,True,99.932,0.0,99.932,,,pae-agentic-loop-fcbtg,Failed,,0.0,False,False,k8s timestamps (1 s resolution)
+airline-status,4,28000.0,1,214.457,27785.396,0.0,0,True,129.561,0.0,129.561,,,pae-agentic-loop-nncb6,Failed,,0.0,False,False,k8s timestamps (1 s resolution)
+retail-status,1,131000.0,2,13678.459,117216.506,70.786,23.595,True,8.576,0.0,8.576,0.097,11.798,pae-agentic-loop-jr65b,Succeeded,done,1.0,False,False,k8s timestamps (1 s resolution)
+retail-status,2,120000.0,2,8787.596,111113.258,66.418,22.139,True,12.654,0.0,12.654,0.094,11.07,pae-agentic-loop-rqv2z,Succeeded,done,1.0,False,False,k8s timestamps (1 s resolution)
+retail-status,3,130000.0,2,9677.219,120214.167,73.519,24.506,True,12.433,0.0,12.433,0.098,12.253,pae-agentic-loop-dp9c7,Succeeded,done,1.0,False,False,k8s timestamps (1 s resolution)
+retail-status,4,111000.0,2,10523.779,100372.957,70.104,23.368,True,9.547,0.0,9.547,0.108,11.684,pae-agentic-loop-98q88,Succeeded,done,1.0,False,False,k8s timestamps (1 s resolution)
+retail-status,5,120000.0,2,9099.341,110799.81,67.441,22.48,True,12.187,0.0,12.187,0.118,11.24,pae-agentic-loop-82hz9,Succeeded,done,1.0,False,False,k8s timestamps (1 s resolution)

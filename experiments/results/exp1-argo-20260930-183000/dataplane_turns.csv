@@ -1,0 +1,16 @@
+workload,run,turn,tcycle_ms,t_llm_ms,busy_ms,torch_ms
+airline-status,1,1,50626.253,6529.216,6583.644,44042.608
+airline-status,1,2,,5158.566,5210.122,
+airline-status,2,1,,24698.65,24700.134,
+airline-status,3,1,,297.227,297.385,
+airline-status,4,1,,214.457,214.604,
+retail-status,1,1,61359.542,4379.608,4432.265,56927.277
+retail-status,1,2,,9298.851,9351.229,
+retail-status,2,1,61609.982,5058.21,5107.947,56502.035
+retail-status,2,2,,3729.385,3778.795,
+retail-status,3,1,61387.063,4273.409,4327.554,57059.509
+retail-status,3,2,,5403.81,5458.279,
+retail-status,4,1,41724.253,5779.531,5831.529,35892.724
+retail-status,4,2,,4744.248,4795.514,
+retail-status,5,1,50600.017,3861.162,3911.982,46688.035
+retail-status,5,2,,5238.179,5288.208,
