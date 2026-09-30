@@ -46,6 +46,9 @@ orders or bookings):
     book, ...) as steps. The customer has already confirmed them; informing the
     customer is not a substitute for making the change.
   - Each step does one thing. Never output an empty or "None" step.
+  - Every step must need a tool call. Do not plan steps that only extract, read
+    off, summarize or report information, or reply to the customer: the
+    evaluator writes the reply from the tool results.
 """
 
 PLAN_SCHEMA = {

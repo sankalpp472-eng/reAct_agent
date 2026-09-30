@@ -31,7 +31,14 @@ For a goal that asks for changes (modify, cancel, exchange, book, ...), "done"
 requires that each requested change was made by a successful tool call shown in
 the history - a calculation or a plan is not the change itself. Numbers in the
 answer must come from tool outputs in the history, not from guesses.
-When "done", put the final answer for the customer in "feedback".
+Say "done" as soon as the history holds everything the goal asks for. Remaining
+plan steps that only extract, summarize or report information already shown in
+the history do not need to run: for a question, the tool outputs that contain
+the answer are enough.
+When "done", "feedback" IS the final answer sent to the customer: answer their
+request directly and state the actual values (status, class, amounts, ids, ...)
+taken from the tool outputs. Never describe the answer instead of giving it
+(not "the requested information was provided").
 """
 
 EVALUATION_SCHEMA = {
@@ -43,7 +50,8 @@ EVALUATION_SCHEMA = {
         },
         "feedback": {
             "type": "string",
-            "description": "Short explanation, and on replan: what the new plan must fix.",
+            "description": "On done: the final answer to the customer, with the actual values. "
+                           "On continue: a short explanation. On replan: what the new plan must fix.",
         },
         "next_step_id": {
             "type": ["integer", "null"],
