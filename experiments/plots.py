@@ -22,7 +22,7 @@ import statistics
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.ticker import FuncFormatter  # noqa: E402
+from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 # ---- palette (dataviz reference palette, light mode; validated) --------------
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3de"
@@ -92,6 +92,13 @@ def _sec(ms):
     return ms / 1000.0
 
 
+def _log_axis(axis, unit=""):
+    """Log-scale axis with plain 1-2-5 tick labels (no 2x10^1 minor labels)."""
+    axis.set_major_locator(LogLocator(base=10, subs=(1, 2, 5)))
+    axis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}{unit}"))
+    axis.set_minor_formatter(NullFormatter())
+
+
 def _jitter(i, n, width=0.18):
     return (i - (n - 1) / 2) / max(n - 1, 1) * width if n > 1 else 0.0
 
@@ -116,7 +123,8 @@ def fig_te2e(stacks, out):
                         va="center", fontsize=9, color=INK)
     ax.set_xticks(range(len(WORKLOADS)), WORKLOADS)
     ax.set_ylabel("end-to-end latency, Te2e (s)")
-    ax.set_ylim(bottom=0)
+    top = max((_sec(v) for s in stacks for v in s.run_vals("te2e_ms")), default=1)
+    ax.set_ylim(0, top * 1.35)  # headroom so the legend never covers a series
     ax.set_title("End-to-end task latency per run")
     ax.legend(loc="upper left")
     ax.text(0, -0.2, "Dots: individual runs. Bars: median. Same functions, images and mock LLM on both stacks.",
@@ -224,7 +232,7 @@ def fig_timeline(stacks, out, workload="retail-44"):
 
 def fig_route_ecdf(stacks, out):
     fig, ax = plt.subplots(figsize=(7, 3.6))
-    for s in stacks:
+    for si, s in enumerate(stacks):
         vals = sorted(_f(c["troute_ms"]) for c in s.calls
                       if c["kind"] == "tool" and _f(c.get("troute_ms")) is not None)
         if not vals:
@@ -233,15 +241,15 @@ def fig_route_ecdf(stacks, out):
         ax.step(vals, ys, where="post", color=s.color, lw=2, label=f"{s.label} (n={len(vals)})")
         med = statistics.median(vals)
         ax.plot([med], [0.5], "o", ms=8, color=s.color, markeredgecolor=SURFACE, markeredgewidth=2, zorder=4)
-        ax.annotate(f"median {med:.0f} ms", (med, 0.5), xytext=(6, -12), textcoords="offset points",
-                    fontsize=9)
+        ax.annotate(f"median {med:.0f} ms", (med, 0.5), xytext=(6, -12 - 13 * si), textcoords="offset points",
+                    fontsize=9)  # staggered, so close medians don't overprint
     ax.set_xscale("log")
-    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g} ms"))
+    _log_axis(ax.xaxis, " ms")
     ax.set_xlabel("routing time per tool call, Troute = (t5 − t2) − Twarm (ms, log scale)")
     ax.set_ylabel("fraction of tool calls ≤ x")
     ax.set_ylim(0, 1.02)
     ax.set_title("Routing cost per tool call (actor → tool function)")
-    ax.legend(loc="lower right")
+    ax.legend(loc="upper left", bbox_to_anchor=(0, -0.3), ncol=1)
     ax.text(0, -0.24, "faasd: gateway → watchdog → handler.  Knative: Kourier → queue-proxy → watchdog → handler.",
             transform=ax.transAxes, fontsize=8, color=INK2)
     _save(fig, out, "fig5_route_ecdf")
@@ -296,7 +304,7 @@ def fig_rfriction(stacks, out):
     ax.set_yticks(range(len(stacks)), [s.label for s in stacks])
     ax.set_ylim(len(stacks) - 0.5, -0.7)
     ax.grid(axis="y", visible=False)
-    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+    _log_axis(ax.xaxis)
     ax.set_xlabel("Rfriction = (Torch_run + ΣTroute) / T_LLM  (log scale)")
     ax.set_title("System friction per run")
     ax2.set_yticks(range(len(stacks)), [""] * len(stacks))
@@ -333,7 +341,7 @@ def fig_torch_by_turn(stacks, out):
         ax.set_xlabel("loop turn")
         ax.set_ylabel("Torch in that turn (s)")
         ax.set_ylim(bottom=0)
-        ax.legend(loc="upper right")
+        ax.legend(loc="lower right")
     fig.suptitle("Does orchestration overhead grow as the agent's history grows?", x=0.01, ha="left",
                  fontweight="bold", fontsize=12, y=1.04)
     fig.text(0.01, -0.08, "Lines: median per turn; faint dots: individual runs. Each panel has its own y-scale.",
@@ -346,13 +354,16 @@ def main():
     p.add_argument("--conductor", nargs="+", required=True)
     p.add_argument("--argo", nargs="+", required=True, help="Argo run(s) at the default requeue time")
     p.add_argument("--argo-tuned", nargs="*", default=[], help="optional: Argo run(s) with a tuned requeue time")
+    p.add_argument("--argo-label", default=None,
+                   help='default "Argo + Knative", or "Argo + Knative (10 s requeue)" when --argo-tuned is given')
     p.add_argument("--tuned-label", default="Argo + Knative (2 s requeue)")
     p.add_argument("--out", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "plots"))
     args = p.parse_args()
     os.makedirs(args.out, exist_ok=True)
 
     stacks = [Stack("Conductor + faasd", args.conductor, STACK_COLORS[0]),
-              Stack("Argo + Knative", args.argo, STACK_COLORS[1])]
+              Stack(args.argo_label or ("Argo + Knative (10 s requeue)" if args.argo_tuned else "Argo + Knative"),
+                    args.argo, STACK_COLORS[1])]
     if args.argo_tuned:
         stacks.append(Stack(args.tuned_label, args.argo_tuned, STACK_COLORS[2]))
     for s in stacks:
