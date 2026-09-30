@@ -1,0 +1,11 @@
+workload,run,te2e_ms,n_turns,t_llm_ms,torch_run_ms,troute_orch_ms,troute_tool_ms,troute_orch_estimated,rfriction,t_llm_wait_ms,rfriction_net,twarm_tool_mean_ms,troute_tool_mean_ms,workflow,phase,verdict,reward,db_state_correct,outputs_found,missing_timing,te2e_engine_s
+retail-status,1,80067.081,2,39602.191,40344.366,71.346,23.782,True,1.021,30000.0,4.211,0.1,11.891,pae-agentic-loop-74qnf,Succeeded,done,1.0,True,True,False,80.0
+retail-status,2,61070.81,2,22119.443,38848.599,69.519,23.173,True,1.761,12000.0,3.848,0.112,11.587,pae-agentic-loop-v5p7t,Succeeded,done,1.0,True,True,False,61.0
+retail-status,3,77086.879,2,38631.221,38348.609,72.404,24.135,True,0.995,30000.0,4.454,0.107,12.067,pae-agentic-loop-25hkg,Succeeded,done,1.0,True,True,False,77.0
+retail-status,4,60916.246,2,30258.467,30555.443,69.421,23.14,True,1.013,22000.0,3.711,0.098,11.57,pae-agentic-loop-6kfm5,Succeeded,done,1.0,True,True,False,61.0
+retail-status,5,47322.825,2,13616.455,33605.523,67.315,22.438,True,2.475,5000.0,3.911,0.13,11.219,pae-agentic-loop-lw89x,Succeeded,done,1.0,True,True,False,47.0
+airline-status,1,62828.431,2,34538.481,28184.557,64.475,21.492,True,0.819,24000.0,2.683,0.12,10.746,pae-agentic-loop-mtcj5,Succeeded,done,1.0,True,True,False,62.0
+airline-status,2,79002.021,2,45923.024,32979.685,67.103,22.368,True,0.72,36000.0,3.333,0.116,11.184,pae-agentic-loop-xkddw,Succeeded,done,1.0,True,True,False,79.0
+airline-status,3,73195.095,2,35037.421,38055.977,68.717,22.906,True,1.089,26000.0,4.221,0.135,11.453,pae-agentic-loop-nx6zz,Succeeded,done,1.0,True,True,False,73.0
+airline-status,4,51198.679,2,12959.031,38137.462,69.065,23.022,True,2.95,1000.0,3.197,0.137,11.511,pae-agentic-loop-ncbhp,Succeeded,done,1.0,True,True,False,52.0
+airline-status,5,50848.494,2,14867.29,35869.991,75.379,25.126,True,2.419,6000.0,4.057,0.148,12.563,pae-agentic-loop-dlbvl,Succeeded,done,1.0,True,True,False,51.0
