@@ -41,6 +41,11 @@ b)
       HTTPS_PROXY="$SOCKS" HTTP_PROXY="$SOCKS" NO_PROXY="$NO_PROXY_LIST"
     kubectl -n knative-serving rollout status deploy/controller --timeout=300s
   fi
+  # After a k3s restart the ksvc can still read Ready from before the restart,
+  # so also wait for Knative's own pods (its webhook must be up to accept a deploy)
+  wait_for "Knative and Argo" sh -c "kubectl -n knative-serving wait deploy --all --for=condition=Available --timeout=5s \
+    && kubectl -n kourier-system wait deploy --all --for=condition=Available --timeout=5s \
+    && kubectl -n argo wait deploy --all --for=condition=Available --timeout=5s"
   # Each deploy makes new Knative revisions, which look their images up on Docker
   # Hub (tunnel needed). So only deploy the first time, or with DEPLOY=1.
   if [ "${DEPLOY:-0}" = 1 ] || ! kubectl -n argo get workflowtemplate pae-agentic-loop >/dev/null 2>&1; then

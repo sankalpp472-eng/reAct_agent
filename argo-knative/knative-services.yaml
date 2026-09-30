@@ -54,11 +54,11 @@ spec:
             - name: write_debug
               value: "true"
             - name: read_timeout
-              value: "90s"
+              value: "300s"
             - name: write_timeout
-              value: "90s"
+              value: "300s"
             - name: exec_timeout
-              value: "90s"
+              value: "300s"
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -109,11 +109,11 @@ spec:
             - name: write_debug
               value: "true"
             - name: read_timeout
-              value: "180s"
+              value: "300s"
             - name: write_timeout
-              value: "180s"
+              value: "300s"
             - name: exec_timeout
-              value: "180s"
+              value: "300s"
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -158,11 +158,11 @@ spec:
             - name: write_debug
               value: "true"
             - name: read_timeout
-              value: "90s"
+              value: "300s"
             - name: write_timeout
-              value: "90s"
+              value: "300s"
             - name: exec_timeout
-              value: "90s"
+              value: "300s"
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
