@@ -133,14 +133,17 @@ class ArgoKnative:
             "serving.knative.dev", "v1", "default", "revisions", svc["status"]["latestReadyRevisionName"])
         digest = next((c.get("imageDigest") for c in rev.get("status", {}).get("containerStatuses", [])
                        if c.get("imageDigest")), None)
-        ops = [{"op": "add", "path": "/spec/template/metadata/annotations/autoscaling.knative.dev~1min-scale",
-                "value": "0"}]
+        # Edit the object and write it back (PUT). A JSON patch would need a
+        # client option (_content_type) that older kubernetes clients, such as
+        # Ubuntu's python3-kubernetes, don't have; a merge patch would replace
+        # the whole containers list.
+        tmpl = svc["spec"]["template"]
+        tmpl.setdefault("metadata", {}).setdefault("annotations", {})["autoscaling.knative.dev/min-scale"] = "0"
         if digest:
-            ops.append({"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": digest})
+            tmpl["spec"]["containers"][0]["image"] = digest
             print(f"  {fn}: pinned to {digest}", flush=True)
-        self.api.patch_namespaced_custom_object(
-            "serving.knative.dev", "v1", "default", "services", fn, ops,
-            _content_type="application/json-patch+json")
+        self.api.replace_namespaced_custom_object(
+            "serving.knative.dev", "v1", "default", "services", fn, svc)
 
     def _wait_revision_ready(self, fn, timeout=180):
         """Changing min-scale creates a new revision. Make sure it becomes
