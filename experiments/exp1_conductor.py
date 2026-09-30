@@ -45,6 +45,15 @@ from datetime import datetime
 # The Conductor API is local; never route it through a proxy set in the shell
 _OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
+
+def task_body(task):
+    """The function's JSON response body of a Conductor HTTP task, or None.
+    A failed task (timeout, connection error) stores a plain string as its
+    response instead of a {"body": ...} object."""
+    response = (task.get("outputData") or {}).get("response")
+    body = response.get("body") if isinstance(response, dict) else None
+    return body if isinstance(body, dict) else None
+
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "workloads"))
 from score import _call, score  # noqa: E402
@@ -127,7 +136,7 @@ def compute_metrics(wf, t0, t7):
                 continue
             http_ms = t["endTime"] - t["startTime"]  # t5 - t2, Conductor clock
             http_total += http_ms
-            body = ((t.get("outputData") or {}).get("response") or {}).get("body")
+            body = task_body(t)
             timing = body.get("_timing") if isinstance(body, dict) else None
             if timing is None:
                 missing_timing = True
@@ -274,7 +283,7 @@ def dataplane_calls(wf):
     HTTP task's start/end (Conductor clock)."""
     calls = []
     for t in wf.get("tasks", []):
-        body = ((t.get("outputData") or {}).get("response") or {}).get("body")
+        body = task_body(t)
         timing = body.get("_timing") if isinstance(body, dict) else None
         if t.get("taskType") != "HTTP" or timing is None:
             continue

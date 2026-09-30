@@ -22,8 +22,11 @@ def _calls(wf):
     if "tasks" in wf:  # Conductor execution
         for t in wf["tasks"]:
             name = (t.get("referenceTaskName") or "").replace("_task", "").split("__")[0]
-            body = ((t.get("outputData") or {}).get("response") or {}).get("body")
-            if t.get("taskType") == "HTTP" and name in FUNCTIONS and isinstance(body, dict):
+            response = (t.get("outputData") or {}).get("response")
+            body = response.get("body") if isinstance(response, dict) else None
+            if t.get("taskType") == "HTTP" and name in FUNCTIONS:
+                if not isinstance(body, dict):  # failed task: show why instead of skipping it
+                    body = {"error": f"task {t.get('status')}: {t.get('reasonForIncompletion') or response}"}
                 out.append((t.get("startTime") or 0, name, body))
     else:  # Argo Workflow
         for n in ((wf.get("status") or {}).get("nodes") or {}).values():
@@ -34,8 +37,12 @@ def _calls(wf):
                     continue
                 out.append((n.get("startedAt") or "", n["displayName"], body))
     # order by the function's own entry time when present (ms-precise on both stacks)
-    return [(name, body) for _, name, body in
-            sorted(out, key=lambda c: ((c[2].get("_timing") or {}).get("t3") or 0, c[0]))]
+    # the function's own entry time (ms-precise on both stacks); for a failed
+    # call without one, the orchestrator's start time (also epoch ms on Conductor)
+    def when(c):
+        t3 = (c[2].get("_timing") or {}).get("t3")
+        return t3 if t3 else (c[0] if isinstance(c[0], (int, float)) else 0)
+    return [(name, body) for _, name, body in sorted(out, key=when)]
 
 
 def _wrap(text, indent="      "):
