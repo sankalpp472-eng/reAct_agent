@@ -1,0 +1,15 @@
+{
+  "id": "retail-status",
+  "domain": "retail",
+  "tool_function": "retail-tools",
+  "source": "Made for this study (not a tau-bench task), on tau-bench's retail data",
+  "why_chosen": "A short, read-only smoke test for real LLMs: 2 tool calls (identify the customer, read the order), no data changes, and an exact answer to check. Few LLM calls, so it stays within free-tier API rate limits.",
+  "user_id": "aarav_anderson_8794",
+  "goal": "A customer, Aarav Anderson (zip code 19031), asks about their order #W9300146: what is its current status, and how much did they pay for it? Only look this up; do not change anything.",
+  "expected_actions": [
+    {"name": "find_user_id_by_name_zip", "kwargs": {"first_name": "Aarav", "last_name": "Anderson", "zip": "19031"}},
+    {"name": "get_order_details", "kwargs": {"order_id": "#W9300146"}}
+  ],
+  "expected_outputs": ["pending", "153.23"],
+  "expected_db_hash": "5a4b2cb59f4d12dea7e4adff24a7f8fada510ead49372ea4a729a82bbb5f49b5"
+}

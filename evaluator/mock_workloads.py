@@ -158,6 +158,29 @@ WORKLOADS = [
             "which the cancellation policy does not allow."
         ),
     },
+    {
+        "id": "retail-status",
+        "domain": "retail",
+        "match": ["#W9300146", "current status"],
+        "steps": [
+            {
+                "description": "Authenticate the customer: look up the user id for Aarav Anderson, zip 19031",
+                "calls": [
+                    ("find_user_id_by_name_zip",
+                     {"first_name": "Aarav", "last_name": "Anderson", "zip": "19031"}),
+                ],
+                "result": "Customer authenticated as user aarav_anderson_8794.",
+            },
+            {
+                "description": "Get order #W9300146 and read its status and payment",
+                "calls": [
+                    ("get_order_details", {"order_id": "#W9300146"}),
+                ],
+                "result": "Order #W9300146 is pending; the customer paid $153.23 with gift card gift_card_7245904.",
+            },
+        ],
+        "final_answer": "Your order #W9300146 is currently pending. You paid $153.23 for it, with your gift card.",
+    },
 ]
 
 
