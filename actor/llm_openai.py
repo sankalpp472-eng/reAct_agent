@@ -53,6 +53,7 @@ API_KEY = os.environ.get("LLM_API_KEY") or (
     open(_KEY_FILE).read().strip() if os.path.exists(_KEY_FILE) else "")
 MAX_RETRIES = int(os.environ.get("LLM_MAX_RETRIES", "6"))
 _RETRY_STATUS = (429, 500, 502, 503, 504)
+_json_mode_ok = True  # set to False once the API says the model has no JSON mode
 TEMPERATURE = float(os.environ.get("LLM_TEMPERATURE", "0"))
 SEED = int(os.environ.get("LLM_SEED", "0"))
 TOOL_MODE = os.environ.get("LLM_TOOL_MODE", "prompt")
@@ -65,6 +66,23 @@ def _log(msg):
 
 
 def _chat(messages, timeout, tools=None, json_mode=False):
+    """One chat completion. If the model rejects JSON mode (some hosted models
+    do), ask again without it: the prompt already requests JSON and _parse_json
+    tolerates code fences and stray text."""
+    global _json_mode_ok
+    try:
+        return _chat_once(messages, timeout, tools, json_mode and _json_mode_ok)
+    except _JsonModeUnsupported:
+        _json_mode_ok = False
+        _log("model has no JSON mode; asking for JSON in the prompt only")
+        return _chat_once(messages, timeout, tools, False)
+
+
+class _JsonModeUnsupported(RuntimeError):
+    pass
+
+
+def _chat_once(messages, timeout, tools, json_mode):
     body = {"model": MODEL, "messages": messages, "temperature": TEMPERATURE, "seed": SEED}
     if tools:
         body["tools"] = tools
@@ -90,6 +108,8 @@ def _chat(messages, timeout, tools=None, json_mode=False):
     finally:
         elapsed = time.time() - start
         record_llm(elapsed * 1000.0)  # includes rate-limit waits: time spent waiting for the model
+    if resp.status_code == 400 and json_mode and "response_format" in resp.text:
+        raise _JsonModeUnsupported(resp.text[:300])
     if resp.status_code >= 400:
         raise RuntimeError(f"LLM HTTP {resp.status_code}: {resp.text[:500]}")
     data = resp.json()
