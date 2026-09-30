@@ -1,0 +1,2 @@
+workload,run,status,te2e_ms,te2e_engine_ms,n_cycles,tcycle_sum_ms,t_llm_ms,t_faas_http_ms,torch_ms,troute_ms,rfriction,n_tool_calls,twarm_tool_mean_ms,troute_tool_mean_ms,missing_timing,workflow_id,reward,db_state_correct,outputs_found
+retail-44,1,COMPLETED,59876.913,59794,5,55990,47004.49,1866.51,7119.0,1826.548,0.19,6,0.232,23.519,False,e49753be-fa79-4a6b-bdbc-d3430b1024b0,1.0,True,True

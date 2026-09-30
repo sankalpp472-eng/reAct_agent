@@ -1,0 +1,2 @@
+workload,run,te2e_ms,n_turns,t_llm_ms,torch_run_ms,troute_orch_ms,troute_tool_ms,troute_orch_estimated,rfriction,twarm_tool_mean_ms,troute_tool_mean_ms,status,reward,missing_timing
+retail-44,1,59876.913,5,47004.49,11005.913,1685.434,141.114,False,0.273,0.232,23.519,COMPLETED,1.0,False
