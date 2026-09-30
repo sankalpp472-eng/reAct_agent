@@ -12,9 +12,10 @@ TAG=${TAG:-latest}
 LLM_BACKEND=${LLM_BACKEND:-mock}
 LLM_BASE_URL=${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
 LLM_MODEL=${LLM_MODEL:-qwen2.5:3b}
+LLM_TOOL_MODE=${LLM_TOOL_MODE:-prompt}
 
 sed -e "s|REGISTRY/|${REGISTRY}/|" -e "s|:TAG\$|:${TAG}|" -e "s|DEPLOYED_AT|$(date +%s)|" \
-  -e "s|LLM_BACKEND_VALUE|${LLM_BACKEND}|" -e "s|LLM_BASE_URL_VALUE|${LLM_BASE_URL}|" -e "s|LLM_MODEL_VALUE|${LLM_MODEL}|" \
+  -e "s|LLM_BACKEND_VALUE|${LLM_BACKEND}|" -e "s|LLM_BASE_URL_VALUE|${LLM_BASE_URL}|" -e "s|LLM_MODEL_VALUE|${LLM_MODEL}|" -e "s|LLM_TOOL_MODE_VALUE|${LLM_TOOL_MODE}|" \
   knative-services.yaml | kubectl apply -f -
 kubectl wait ksvc --all -n default --for=condition=Ready --timeout=300s
 

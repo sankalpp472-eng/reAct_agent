@@ -17,6 +17,7 @@ functions:
       LLM_BACKEND: ${LLM_BACKEND:-mock}
       LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
       LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
+      LLM_TOOL_MODE: ${LLM_TOOL_MODE:-prompt}
       MOCK_LATENCY_S: "2.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_NUM_STEPS: "4"
@@ -25,6 +26,7 @@ functions:
       write_timeout: "90s"
       exec_timeout: "90s"
     secrets:
+      - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key
 
   actor:
@@ -37,6 +39,7 @@ functions:
       LLM_BACKEND: ${LLM_BACKEND:-mock}
       LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
       LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
+      LLM_TOOL_MODE: ${LLM_TOOL_MODE:-prompt}
       MOCK_LATENCY_S: "2.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       MOCK_ACTOR_TOOL_ROUNDS: "1"
@@ -49,6 +52,7 @@ functions:
       write_timeout: "180s"
       exec_timeout: "180s"
     secrets:
+      - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key
       - tavily-api-key
   evaluator:
@@ -61,6 +65,7 @@ functions:
       LLM_BACKEND: ${LLM_BACKEND:-mock}
       LLM_BASE_URL: ${LLM_BASE_URL:-http://172.17.0.1:11434/v1}
       LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
+      LLM_TOOL_MODE: ${LLM_TOOL_MODE:-prompt}
       MOCK_LATENCY_S: "1.0"
       MOCK_LATENCY_JITTER_S: "0.0"
       write_debug: "true"
@@ -68,6 +73,7 @@ functions:
       write_timeout: "90s"
       exec_timeout: "90s"
     secrets:
+      - llm-api-key        # real-LLM API key (e.g. Groq); a placeholder is fine for the mock
       - gemini-api-key
 
   # tau-bench (https://github.com/sierra-research/tau-bench) tool servers.

@@ -183,7 +183,7 @@ the default.
 | `LLM_BACKEND` | `openai` |
 | `LLM_BASE_URL` | `http://<windows-host-ip>:11434/v1` (must end in `/v1`) |
 | `LLM_MODEL` | `qwen2.5:3b` |
-| `LLM_API_KEY` | only for hosted APIs |
+| `LLM_API_KEY` | only for hosted APIs; comes from the secret `llm-api-key` (below), never from `stack.yaml` |
 | `LLM_TOOL_MODE` | `prompt` (default): tools described in the system prompt, calls parsed from the model's text. `native`: the API's `tools` field |
 
 Use `prompt` mode with small local models. Ollama's own tool parser silently drops a small model's
@@ -216,11 +216,36 @@ directly and leaves WSL's memory to the stacks.
    ```
    Unset `LLM_BACKEND` (or set it to `mock`) and redeploy to go back to the mock.
 
+**Hosted model with Groq.** Groq's API is OpenAI-compatible and handles tool calls
+properly, so use `native` tool mode. Pick a model with tool calling from
+`curl -s https://api.groq.com/openai/v1/models -H "Authorization: Bearer $GROQ_API_KEY" | jq -r '.data[].id'`,
+e.g. `llama-3.3-70b-versatile`. Free-tier rate limits apply (see Groq's console): on a 429
+the backend waits for Groq's `Retry-After` and retries (`LLM_MAX_RETRIES`, default 6).
+That waiting counts toward T_LLM, and each wait is logged as `[llm] HTTP 429, retry ...`.
+1. Store the key as a secret, never in a file in the repo:
+   ```bash
+   read -rs GROQ_API_KEY                                         # paste the key, press Enter
+   faas-cli secret create llm-api-key --from-literal="$GROQ_API_KEY"                         # Stack A
+   kubectl create secret generic llm-api-key --from-literal=value="$GROQ_API_KEY"            # Stack B
+   ```
+   (For mock runs the functions still expect the faasd secret to exist: create it with any placeholder.)
+2. Deploy with Groq:
+   ```bash
+   export LLM_BACKEND=openai LLM_BASE_URL=https://api.groq.com/openai/v1 \
+          LLM_MODEL=llama-3.3-70b-versatile LLM_TOOL_MODE=native
+   faas-cli deploy -f stack.yaml                                 # Stack A
+   REGISTRY=<you> ./argo-knative/deploy.sh                       # Stack B
+   ```
+3. The functions need to reach `api.groq.com`. That works from a laptop. In the cluster VM,
+   which only reaches the internet through the SSH SOCKS tunnel, the calls would also have
+   to go through the tunnel, adding the tunnel's latency to every LLM call.
+
 What changes with a real model:
 - **Run times and turn counts vary,** because the model decides the plan and tool calls.
 - **A small model will fail some tasks.** Pass% becomes meaningful, and fewer runs pass the
   reward-1 filter.
-- **The LLM shares the machine with the stack being measured.** Keep one request at a time.
+- **The LLM shares the machine with the stack being measured (local models).** Keep one request at a time.
+- **A hosted API adds network latency and its own queueing** to T_LLM, and both vary between runs.
 
 For the orchestrator and FaaS overhead metrics the mock remains the controlled
 baseline; real-LLM runs show how much that overhead matters next to real LLM time.

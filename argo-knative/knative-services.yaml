@@ -38,6 +38,11 @@ spec:
               value: "LLM_BASE_URL_VALUE"
             - name: LLM_MODEL
               value: "LLM_MODEL_VALUE"
+            - name: LLM_TOOL_MODE
+              value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
+              valueFrom:
+                secretKeyRef: {name: llm-api-key, key: value, optional: true}
             - name: MOCK_LATENCY_S
               value: "2.0"
             - name: MOCK_LATENCY_JITTER_S
@@ -82,6 +87,11 @@ spec:
               value: "LLM_BASE_URL_VALUE"
             - name: LLM_MODEL
               value: "LLM_MODEL_VALUE"
+            - name: LLM_TOOL_MODE
+              value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
+              valueFrom:
+                secretKeyRef: {name: llm-api-key, key: value, optional: true}
             - name: MOCK_LATENCY_S
               value: "2.0"
             - name: MOCK_LATENCY_JITTER_S
@@ -130,6 +140,11 @@ spec:
               value: "LLM_BASE_URL_VALUE"
             - name: LLM_MODEL
               value: "LLM_MODEL_VALUE"
+            - name: LLM_TOOL_MODE
+              value: "LLM_TOOL_MODE_VALUE"
+            - name: LLM_API_KEY      # from the secret llm-api-key, if it exists (mock: not needed)
+              valueFrom:
+                secretKeyRef: {name: llm-api-key, key: value, optional: true}
             - name: MOCK_LATENCY_S
               value: "1.0"
             - name: MOCK_LATENCY_JITTER_S

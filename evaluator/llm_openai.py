@@ -12,7 +12,13 @@ Environment variables:
   LLM_BACKEND      "openai" to use this backend (default "mock")
   LLM_BASE_URL     e.g. http://172.17.0.1:11434/v1 (Ollama); must end in /v1
   LLM_MODEL        e.g. qwen2.5:3b
-  LLM_API_KEY      only for hosted APIs (Ollama ignores it)
+  LLM_API_KEY      only for hosted APIs (Ollama ignores it). On faasd put it in the
+                   OpenFaaS secret "llm-api-key" instead (read from
+                   /var/openfaas/secrets/llm-api-key); on Knative it comes from the
+                   Kubernetes secret llm-api-key as this env var
+  LLM_MAX_RETRIES  retries on 429 (rate limit) / 500 / 502 / 503 / 504, default 6.
+                   Waits Retry-After if the API sends it, else 1, 2, 4 ... 30 s.
+                   The wait counts toward T_LLM: it's time spent waiting for the model
   LLM_TEMPERATURE  default 0, so runs are as repeatable as the model allows
   LLM_SEED         default 0
   LLM_TOOL_MODE    "prompt" (default): the tool list goes into the system
@@ -42,7 +48,11 @@ from .telemetry import record_llm
 
 BASE_URL = os.environ.get("LLM_BASE_URL", "http://172.17.0.1:11434/v1").rstrip("/")
 MODEL = os.environ.get("LLM_MODEL", "qwen2.5:3b")
-API_KEY = os.environ.get("LLM_API_KEY", "")
+_KEY_FILE = os.environ.get("LLM_API_KEY_FILE", "/var/openfaas/secrets/llm-api-key")
+API_KEY = os.environ.get("LLM_API_KEY") or (
+    open(_KEY_FILE).read().strip() if os.path.exists(_KEY_FILE) else "")
+MAX_RETRIES = int(os.environ.get("LLM_MAX_RETRIES", "6"))
+_RETRY_STATUS = (429, 500, 502, 503, 504)
 TEMPERATURE = float(os.environ.get("LLM_TEMPERATURE", "0"))
 SEED = int(os.environ.get("LLM_SEED", "0"))
 TOOL_MODE = os.environ.get("LLM_TOOL_MODE", "prompt")
@@ -62,17 +72,39 @@ def _chat(messages, timeout, tools=None, json_mode=False):
         body["response_format"] = {"type": "json_object"}
     headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else {}
     start = time.time()
+    deadline = start + timeout
+    retries, waited = 0, 0.0
     try:
-        resp = requests.post(f"{BASE_URL}/chat/completions", json=body, headers=headers, timeout=timeout)
+        while True:
+            resp = requests.post(f"{BASE_URL}/chat/completions", json=body, headers=headers,
+                                 timeout=max(deadline - time.time(), 1))
+            if resp.status_code not in _RETRY_STATUS or retries >= MAX_RETRIES:
+                break
+            wait = _retry_after(resp) or min(2 ** retries, 30)
+            if time.time() + wait >= deadline:
+                break  # no time left for another attempt: report this error
+            retries += 1
+            waited += wait
+            _log(f"HTTP {resp.status_code}, retry {retries}/{MAX_RETRIES} in {wait:.1f}s")
+            time.sleep(wait)
     finally:
         elapsed = time.time() - start
-        record_llm(elapsed * 1000.0)
+        record_llm(elapsed * 1000.0)  # includes rate-limit waits: time spent waiting for the model
     if resp.status_code >= 400:
         raise RuntimeError(f"LLM HTTP {resp.status_code}: {resp.text[:500]}")
     data = resp.json()
     usage = data.get("usage") or {}
-    _log(f"{elapsed:.2f}s, {usage.get('prompt_tokens')} prompt / {usage.get('completion_tokens')} completion tokens")
+    _log(f"{elapsed:.2f}s ({waited:.1f}s rate-limit wait, {retries} retries), "
+         f"{usage.get('prompt_tokens')} prompt / {usage.get('completion_tokens')} completion tokens")
     return data["choices"][0]["message"]
+
+
+def _retry_after(resp):
+    """Seconds to wait from a Retry-After header (Groq, OpenAI and others send it on 429)."""
+    try:
+        return max(float(resp.headers.get("retry-after", "")), 0.5)
+    except ValueError:
+        return None
 
 
 def _schema_hint(schema):
