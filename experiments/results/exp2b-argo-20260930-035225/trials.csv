@@ -1,0 +1,11 @@
+workload,trial,status_cold,reward_cold,status_warm,reward_warm,te2e_cold_ms,te2e_warm_ms,delta_te2e_ms,turns_cold,turns_warm,first_tool,first_call_error,first_call_attempts,first_call_error_detail,failed_tool_calls_cold,cold_first_call_http_ms,cold_handler_ms,warm_tool_http_median_ms,tcold_tool_ms,time_to_first_tool_ok_ms,torch_run_cold_ms,torch_run_warm_ms
+retail-44,1,Succeeded,1.0,Succeeded,1.0,130471.411,131726.117,-1254.706,5,5,find_user_id_by_name_zip,False,1,,0,2283.567,87.238,12.986,2270.581,2283.567,80897.684,84433.808
+retail-44,2,Succeeded,1.0,Succeeded,1.0,131864.287,129401.412,2462.875,5,5,find_user_id_by_name_zip,False,1,,0,3074.511,71.451,12.454,3062.057,3074.511,81526.42,82125.215
+retail-44,3,Succeeded,1.0,Succeeded,1.0,129033.457,131519.503,-2486.046,5,5,find_user_id_by_name_zip,False,1,,0,2098.036,60.833,13.003,2085.033,2098.036,79667.072,84231.668
+retail-44,4,Succeeded,1.0,Succeeded,1.0,131175.827,131211.451,-35.624,5,5,find_user_id_by_name_zip,False,1,,0,2682.65,55.605,12.141,2670.509,2682.65,81208.9,83939.021
+retail-44,5,Succeeded,1.0,Succeeded,1.0,128602.043,128170.394,431.649,5,5,find_user_id_by_name_zip,False,1,,0,2295.271,62.288,12.513,2282.758,2295.271,79006.156,80890.916
+airline-26,1,Succeeded,1.0,Succeeded,1.0,156885.13,153042.638,3842.492,6,6,get_user_details,False,1,,0,2322.062,125.992,12.198,2309.863,2322.062,96226.224,94702.069
+airline-26,2,Succeeded,1.0,Succeeded,1.0,155789.385,155435.389,353.996,6,6,get_user_details,False,1,,0,3060.99,113.637,11.968,3049.021,3060.99,94381.97,97099.779
+airline-26,3,Succeeded,1.0,Succeeded,1.0,157637.948,153997.93,3640.018,6,6,get_user_details,False,1,,0,2892.366,103.798,11.894,2880.473,2892.366,96409.61,95671.373
+airline-26,4,Succeeded,1.0,Succeeded,1.0,157453.866,151726.346,5727.521,6,6,get_user_details,False,1,,0,2099.958,115.373,11.853,2088.105,2099.958,97024.829,93401.015
+airline-26,5,Succeeded,1.0,Succeeded,1.0,155787.272,153761.25,2026.022,6,6,get_user_details,False,1,,0,2909.129,108.285,11.911,2897.218,2909.129,94536.449,95431.541

@@ -1,0 +1,223 @@
+{
+  "stack": "argo+knative",
+  "cold_mechanism": "Knative scale to zero; activator",
+  "argo_requeue_time": "2s",
+  "config": {
+    "stack": "argo",
+    "conductor": null,
+    "gateway": null,
+    "ctr": "sudo ctr",
+    "ingress": "knative://10.43.136.243:80/default.example.com",
+    "scale_down_timeout": 600,
+    "workloads": [
+      "/home/pae/reAct_agent/workloads/retail-44.json",
+      "/home/pae/reAct_agent/workloads/airline-26.json"
+    ],
+    "trials": 5,
+    "timeout": 900,
+    "out": "/home/pae/reAct_agent/experiments/results"
+  },
+  "trials_total": 10,
+  "trials_used": 10,
+  "overall": {
+    "trials": 10,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 10,
+      "mean": 0.0,
+      "p50": 0.0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 10,
+      "mean": 2571.854,
+      "p50": 2502.356,
+      "p95": 3068.426,
+      "std": 392.976,
+      "min": 2098.036,
+      "max": 3074.511
+    },
+    "delta_te2e_ms": {
+      "n": 10,
+      "mean": 1470.82,
+      "p50": 1228.835,
+      "p95": 4879.258,
+      "std": 2525.954,
+      "min": -2486.046,
+      "max": 5727.521
+    },
+    "tcold_tool_ms": {
+      "n": 10,
+      "mean": 2559.562,
+      "p50": 2490.186,
+      "p95": 3056.191,
+      "std": 393.179,
+      "min": 2085.033,
+      "max": 3062.057
+    },
+    "cold_first_call_http_ms": {
+      "n": 10,
+      "mean": 2571.854,
+      "p50": 2502.356,
+      "p95": 3068.426,
+      "std": 392.976,
+      "min": 2098.036,
+      "max": 3074.511
+    },
+    "cold_handler_ms": {
+      "n": 10,
+      "mean": 90.45,
+      "p50": 95.518,
+      "p95": 121.213,
+      "std": 26.192,
+      "min": 55.605,
+      "max": 125.992
+    },
+    "warm_tool_http_median_ms": {
+      "n": 10,
+      "mean": 12.292,
+      "p50": 12.17,
+      "p95": 12.995,
+      "std": 0.434,
+      "min": 11.853,
+      "max": 13.003
+    }
+  },
+  "airline-26": {
+    "trials": 5,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 5,
+      "mean": 0.0,
+      "p50": 0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 5,
+      "mean": 2656.901,
+      "p50": 2892.366,
+      "p95": 3030.618,
+      "std": 419.718,
+      "min": 2099.958,
+      "max": 3060.99
+    },
+    "delta_te2e_ms": {
+      "n": 5,
+      "mean": 3118.01,
+      "p50": 3640.018,
+      "p95": 5350.515,
+      "std": 2027.259,
+      "min": 353.996,
+      "max": 5727.521
+    },
+    "tcold_tool_ms": {
+      "n": 5,
+      "mean": 2644.936,
+      "p50": 2880.473,
+      "p95": 3018.661,
+      "std": 419.745,
+      "min": 2088.105,
+      "max": 3049.021
+    },
+    "cold_first_call_http_ms": {
+      "n": 5,
+      "mean": 2656.901,
+      "p50": 2892.366,
+      "p95": 3030.618,
+      "std": 419.718,
+      "min": 2099.958,
+      "max": 3060.99
+    },
+    "cold_handler_ms": {
+      "n": 5,
+      "mean": 113.417,
+      "p50": 113.637,
+      "p95": 123.868,
+      "std": 8.379,
+      "min": 103.798,
+      "max": 125.992
+    },
+    "warm_tool_http_median_ms": {
+      "n": 5,
+      "mean": 11.965,
+      "p50": 11.911,
+      "p95": 12.152,
+      "std": 0.137,
+      "min": 11.853,
+      "max": 12.198
+    }
+  },
+  "retail-44": {
+    "trials": 5,
+    "first_call_failed": 0,
+    "extra_turns": {
+      "n": 5,
+      "mean": 0.0,
+      "p50": 0,
+      "p95": 0.0,
+      "std": 0.0,
+      "min": 0,
+      "max": 0
+    },
+    "time_to_first_tool_ok_ms": {
+      "n": 5,
+      "mean": 2486.807,
+      "p50": 2295.271,
+      "p95": 2996.139,
+      "std": 391.435,
+      "min": 2098.036,
+      "max": 3074.511
+    },
+    "delta_te2e_ms": {
+      "n": 5,
+      "mean": -176.371,
+      "p50": -35.624,
+      "p95": 2056.629,
+      "std": 1860.949,
+      "min": -2486.046,
+      "max": 2462.875
+    },
+    "tcold_tool_ms": {
+      "n": 5,
+      "mean": 2474.188,
+      "p50": 2282.758,
+      "p95": 2983.747,
+      "std": 391.687,
+      "min": 2085.033,
+      "max": 3062.057
+    },
+    "cold_first_call_http_ms": {
+      "n": 5,
+      "mean": 2486.807,
+      "p50": 2295.271,
+      "p95": 2996.139,
+      "std": 391.435,
+      "min": 2098.036,
+      "max": 3074.511
+    },
+    "cold_handler_ms": {
+      "n": 5,
+      "mean": 67.483,
+      "p50": 62.288,
+      "p95": 84.081,
+      "std": 12.433,
+      "min": 55.605,
+      "max": 87.238
+    },
+    "warm_tool_http_median_ms": {
+      "n": 5,
+      "mean": 12.619,
+      "p50": 12.513,
+      "p95": 13.0,
+      "std": 0.371,
+      "min": 12.141,
+      "max": 13.003
+    }
+  }
+}
