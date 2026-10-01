@@ -1,0 +1,45 @@
+configuration,folder,task,run,used,turn,tool,twarm_ms,troute_ms
+Conductor + faasd,exp1-conductor-20261001-072147,airline-status,1,True,1,get_reservation_details,0.186,25.338
+Conductor + faasd,exp1-conductor-20261001-072147,airline-status,2,True,1,get_reservation_details,0.107,25.185
+Conductor + faasd,exp1-conductor-20261001-072147,airline-status,3,True,1,get_reservation_details,0.113,21.81
+Conductor + faasd,exp1-conductor-20261001-072147,airline-status,4,True,1,get_reservation_details,0.115,25.041
+Conductor + faasd,exp1-conductor-20261001-072147,airline-status,5,True,1,get_reservation_details,0.113,23.809
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,1,True,1,find_user_id_by_name_zip,0.076,23.544
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,1,True,2,get_order_details,0.145,20.508
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,2,True,1,find_user_id_by_name_zip,0.127,25.329
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,2,True,2,get_order_details,0.125,21.03
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,3,True,1,find_user_id_by_name_zip,0.106,22.252
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,3,True,2,get_order_details,0.113,18.516
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,4,True,1,find_user_id_by_name_zip,0.068,19.829
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,4,True,2,get_order_details,0.103,23.705
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,5,True,1,find_user_id_by_name_zip,0.072,23.87
+Conductor + faasd,exp1-conductor-20261001-072147,retail-status,5,True,2,get_order_details,0.105,23.013
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,1,True,1,get_reservation_details,0.127,11.357
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,2,True,1,get_reservation_details,0.116,10.594
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,3,True,1,get_reservation_details,0.131,11.921
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,4,True,1,get_reservation_details,0.138,13.442
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,5,True,1,get_reservation_details,0.189,12.652
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,1,True,1,find_user_id_by_name_zip,0.089,10.849
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,1,True,2,get_order_details,0.13,12.311
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,2,True,1,find_user_id_by_name_zip,0.08,10.574
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,2,True,2,get_order_details,0.116,11.646
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,3,True,1,find_user_id_by_name_zip,0.069,10.939
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,3,True,2,get_order_details,0.151,15.072
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,4,True,1,find_user_id_by_name_zip,0.077,10.944
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,4,True,2,get_order_details,0.126,13.274
+"Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,5,False,1,find_user_id_by_name_zip,0.074,11.871
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,1,True,1,get_reservation_details,0.143,12.319
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,2,True,1,get_reservation_details,0.123,11.487
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,3,True,1,get_reservation_details,0.129,11.961
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,4,True,1,get_reservation_details,0.158,11.659
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,5,True,1,get_reservation_details,0.125,11.206
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,1,True,1,find_user_id_by_name_zip,0.084,11.201
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,1,True,2,get_order_details,0.177,12.321
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,2,True,1,find_user_id_by_name_zip,0.075,11.925
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,2,True,2,get_order_details,0.157,11.58
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,3,True,1,find_user_id_by_name_zip,0.076,12.186
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,3,True,2,get_order_details,0.13,11.085
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,4,True,1,find_user_id_by_name_zip,0.075,11.227
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,4,True,2,get_order_details,0.127,11.876
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,5,True,1,find_user_id_by_name_zip,0.073,12.606
+"Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,5,True,2,get_order_details,0.15,11.817
