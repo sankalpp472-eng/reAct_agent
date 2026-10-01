@@ -23,7 +23,7 @@ compare Conductor with Argo 2 s (same model) only.
 
 ## Metrics (medians)
 
-See [`metrics.md`](metrics.md) (per workload too) and `metrics.csv`.
+Per task: [`metrics.md`](metrics.md); every experiment, per task: [`../ALL_RESULTS.md`](../ALL_RESULTS.md).
 
 | | Conductor + faasd | Argo 2 s | Argo 10 s |
 |---|---|---|---|
@@ -36,7 +36,7 @@ See [`metrics.md`](metrics.md) (per workload too) and `metrics.csv`.
 
 ## Figures
 
-| Figure | What it shows |
+| Figure (one panel or row per task) | What it shows |
 |---|---|
 | `figG1_breakdown` | Mean Te2e split into model time, Groq rate-limit waits (hatched), Torch, Troute and the functions' own work |
 | `figG2_torch_per_turn` | Orchestration overhead per agent turn, per run (log scale) |

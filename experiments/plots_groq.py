@@ -46,11 +46,22 @@ class Config(Stack):
         """All runs of a workload, successful or not (for "runs used")."""
         return [r for r in _read(self.folders, "dataplane_runs.csv") if workload in (None, r["workload"])]
 
-    def per_turn(self, key):
-        return [_f(r[key]) / int(r["n_turns"]) for r in self.runs if int(r["n_turns"] or 0) > 0]
+    def runs_of(self, task):
+        return [r for r in self.runs if task in (None, r["workload"])]
 
-    def tool_calls(self, key):
-        return [_f(c[key]) for c in self.calls if c["kind"] == "tool" and _f(c[key]) is not None]
+    def per_turn(self, key, task=None):
+        return [_f(r[key]) / int(r["n_turns"]) for r in self.runs_of(task) if int(r["n_turns"] or 0) > 0]
+
+    def tool_calls(self, key, task=None):
+        return [_f(c[key]) for c in self.calls if c["kind"] == "tool" and task in (None, c["workload"])
+                and _f(c[key]) is not None]
+
+    def task_vals(self, key, task=None):
+        return [_f(r[key]) for r in self.runs_of(task) if _f(r[key]) is not None]
+
+
+def _tasks(configs):
+    return sorted({r["workload"] for c in configs for r in c.runs})
 
 
 def _sec(ms):
@@ -61,25 +72,34 @@ def _mean(xs):
     return statistics.fmean(xs) if xs else 0.0
 
 
-def _strip(ax, configs, values_of, xlabel, title, fmt, log=False):
-    for ci, c in enumerate(configs):
-        vals = values_of(c)
-        if not vals:
-            continue
-        ax.scatter(vals, [ci + _jitter(i % 7, 7, 0.3) for i in range(len(vals))], s=26, color=c.color,
-                   alpha=0.8, edgecolors=SURFACE, linewidths=0.8, zorder=3)
-        med = statistics.median(vals)
-        ax.plot([med, med], [ci - 0.28, ci + 0.28], color=INK, lw=2, zorder=4)
-        ax.text(med, ci - 0.34, f"median {fmt(med)}", ha="center", va="bottom", fontsize=9,
-                bbox=dict(boxstyle="round,pad=0.15", fc=SURFACE, ec="none", alpha=0.9))
-    if log:
-        ax.set_xscale("log")
-        _log_axis(ax.xaxis)
-    ax.set_yticks(range(len(configs)), [c.name for c in configs])
-    ax.set_ylim(len(configs) - 0.5, -0.75)
-    ax.grid(axis="y", visible=False)
-    ax.set_xlabel(xlabel)
-    ax.set_title(title)
+def _strip(configs, values_of, xlabel, title, fmt, log=False):
+    """One panel per task, configurations as rows; values_of(config, task) -> list."""
+    tasks = _tasks(configs)
+    fig, axes = plt.subplots(1, len(tasks), figsize=(5.2 * len(tasks) + 1.5, 3.0), sharey=True, squeeze=False)
+    for ax, task in zip(axes[0], tasks):
+        for ci, c in enumerate(configs):
+            vals = values_of(c, task)
+            if not vals:
+                ax.text(0.5, ci, "no successful runs", transform=ax.get_yaxis_transform(), ha="center",
+                        va="center", fontsize=8, color="#52514e")
+                continue
+            ax.scatter(vals, [ci + _jitter(i % 7, 7, 0.3) for i in range(len(vals))], s=26, color=c.color,
+                       alpha=0.8, edgecolors=SURFACE, linewidths=0.8, zorder=3)
+            med = statistics.median(vals)
+            ax.plot([med, med], [ci - 0.28, ci + 0.28], color=INK, lw=2, zorder=4)
+            ax.text(med, ci - 0.34, f"median {fmt(med)}", ha="center", va="bottom", fontsize=9,
+                    bbox=dict(boxstyle="round,pad=0.15", fc=SURFACE, ec="none", alpha=0.9))
+        if log:
+            ax.set_xscale("log")
+            _log_axis(ax.xaxis)
+        ax.set_yticks(range(len(configs)), [c.name for c in configs])
+        ax.set_ylim(len(configs) - 0.5, -0.75)
+        ax.grid(axis="y", visible=False)
+        ax.set_title(task, fontsize=10)
+    fig.suptitle(title, x=0.01, ha="left", fontweight="bold", fontsize=12)
+    fig.supxlabel(xlabel, fontsize=10, color="#52514e")
+    fig.tight_layout()
+    return fig, axes[0]
 
 
 def _model_note(fig, configs, y=-0.04):
@@ -104,49 +124,52 @@ def fig_breakdown(configs, out):
         return _f(r["te2e_ms"]) - sum(fn(r) for _, _, fn in measured)
 
     parts.append(("functions' own work (tools, parsing)", PART_COLORS[3], other))
-    fig, ax = plt.subplots(figsize=(9, 3.3))
-    for ci, c in enumerate(configs):
+    rows = [(c, t) for c in configs for t in _tasks(configs)]
+    fig, ax = plt.subplots(figsize=(9, 0.55 * len(rows) + 1.6))
+    for ri, (c, task) in enumerate(rows):
+        runs = c.runs_of(task)
+        if not runs:
+            ax.text(0, ri, "  no successful runs", va="center", fontsize=9, color="#52514e")
+            continue
         left = 0.0
         for name, color, fn in parts:
-            v = _sec(_mean([fn(r) for r in c.runs]))
-            ax.barh(ci, v, left=left, color=color, height=0.55, edgecolor=SURFACE, linewidth=2,
-                    hatch="//" if color == WAIT_COLOR else None, label=name if ci == 0 else None)
+            v = _sec(_mean([fn(r) for r in runs]))
+            ax.barh(ri, v, left=left, color=color, height=0.6, edgecolor=SURFACE, linewidth=2,
+                    hatch="//" if color == WAIT_COLOR else None, label=name if ri == 0 else None)
             left += v
-        ax.text(left, ci, f"  {left:.0f} s", va="center", fontsize=9, color=INK)
-    ax.set_yticks(range(len(configs)), [c.name for c in configs])
-    ax.set_ylim(len(configs) - 0.5, -0.5)
+        ax.text(left, ri, f"  {left:.0f} s", va="center", fontsize=9, color=INK)
+    ax.set_yticks(range(len(rows)), [f"{c.label} ({c.model})  ·  {t}" for c, t in rows], fontsize=8.5)
+    ax.set_ylim(len(rows) - 0.5, -0.5)
     ax.grid(axis="y", visible=False)
     ax.set_xlim(0, ax.get_xlim()[1] * 1.08)
     ax.set_xlabel("mean end-to-end time per run, Te2e (s)")
     ax.set_title("Where a run's time goes, with a real LLM")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.24), ncol=3)
-    _model_note(fig, configs, y=-0.16)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=3)
+    _model_note(fig, configs, y=-0.1)
     _save(fig, out, "figG1_breakdown")
 
 
 def fig_torch(configs, out):
-    fig, ax = plt.subplots(figsize=(8, 2.9))
-    _strip(ax, configs, lambda c: [_sec(v) for v in c.per_turn("torch_run_ms")],
+    fig, _ = _strip(configs, lambda c, t: [_sec(v) for v in c.per_turn("torch_run_ms", t)],
            "orchestration overhead per turn, Torch_run / turns (s, log scale)",
            "Orchestrator overhead per agent turn", lambda v: f"{v:.1f} s", log=True)
     _save(fig, out, "figG2_torch_per_turn")
 
 
 def fig_troute(configs, out):
-    fig, ax = plt.subplots(figsize=(8, 2.9))
-    _strip(ax, configs, lambda c: c.tool_calls("troute_ms"),
+    fig, axes = _strip(configs, lambda c, t: c.tool_calls("troute_ms", t),
            "routing overhead per actor → tool call, Troute (ms)",
            "FaaS routing overhead per tool call", lambda v: f"{v:.1f} ms")
-    ax.set_xlim(left=0)
+    for ax in axes:
+        ax.set_xlim(left=0)
     _save(fig, out, "figG3_troute_tool")
 
 
 def fig_rfriction(configs, out):
-    fig, ax = plt.subplots(figsize=(8, 2.9))
-    _strip(ax, configs, lambda c: c.run_vals("rfriction_net"),
+    fig, _ = _strip(configs, lambda c, t: c.task_vals("rfriction_net", t),
            "Rfriction_net = (Torch_run + ΣTroute) / (T_LLM − rate-limit wait)  (log scale)",
            "System friction relative to the model's own time", lambda v: f"{v:.2f}", log=True)
-    _model_note(fig, configs, y=-0.08)
+    _model_note(fig, configs, y=-0.06)
     _save(fig, out, "figG4_rfriction_net")
 
 
