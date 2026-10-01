@@ -37,7 +37,8 @@ DATASETS = [
       (A10, "exp1-argo-20260930-183000")]),
     ("Real LLM (Groq gpt-oss-20b), cluster VM",
      "5 runs per task, no warm-up, 60 s pause.",
-     [(A10, "exp1-argo-20261001-054740")]),
+     [(C, "exp1-conductor-20261001-072147"), (A2, "exp1-argo-20261001-064730"),
+      (A10, "exp1-argo-20261001-054740")]),
 ]
 
 COLD = [
