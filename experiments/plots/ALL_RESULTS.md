@@ -52,14 +52,18 @@ Folders: Argo + Knative, 10 s requeue: `exp1-argo-20260930-183000`; Argo + Knati
 
 ## Experiment 1: Real LLM (Groq gpt-oss-20b), cluster VM
 
-5 runs per task, no warm-up, 60 s pause.
+5 runs per task, no warm-up, 60 s pause. Argo 2 s: retail-status run 5 hit Groq's daily token limit.
 
 | Configuration | Task | Runs | Turns | Te2e (s) | T_LLM (s) | rate-limit wait (s) | Torch / turn (s) | Torch_run (s) | Troute orch (ms/run) | Troute tool (ms) | Twarm tool (ms) | Rfriction | Rfriction_net | Sworkflow (KB) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Conductor + faasd | airline-status | 5/5 | 1 | 5.9 | 3.9 | 0.0 | – | 1.7 | 269 | 25.0 | 0.11 | 0.52 | 0.52 | – |
+| Conductor + faasd | retail-status | 5/5 | 2 | 69.1 | 66.7 | 58.0 | 0.91 | 2.6 | 535 | 22.6 | 0.11 | 0.05 | 0.33 | – |
+| Argo + Knative, 2 s requeue | airline-status | 5/5 | 1 | 26.9 | 3.7 | 0.0 | – | 23.1 | 36 | 11.9 | 0.13 | 5.61 | 5.61 | – |
+| Argo + Knative, 2 s requeue | retail-status | 4/5 | 2 | 56.4 | 19.1 | 9.0 | 13.43 | 35.1 | 71 | 11.3 | 0.10 | 1.96 | 4.29 | – |
 | Argo + Knative, 10 s requeue | airline-status | 5/5 | 1 | 69.3 | 3.9 | 0.0 | – | 65.6 | 35 | 11.7 | 0.13 | 16.27 | 16.27 | – |
 | Argo + Knative, 10 s requeue | retail-status | 5/5 | 2 | 130.6 | 8.7 | 0.0 | 57.58 | 121.5 | 71 | 11.8 | 0.11 | 14.04 | 14.04 | – |
 
-Folders: Argo + Knative, 10 s requeue: `exp1-argo-20261001-054740`
+Folders: Argo + Knative, 10 s requeue: `exp1-argo-20261001-054740`; Argo + Knative, 2 s requeue: `exp1-argo-20261001-064730`; Conductor + faasd: `exp1-conductor-20261001-072147`
 
 ## Experiment 2b: cold start of a tool function (mock LLM)
 

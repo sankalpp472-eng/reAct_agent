@@ -1,0 +1,10 @@
+configuration,model,workload,runs_used,turns_mean,Te2e_s,T_LLM_s,T_LLM_wait_s,Torch_per_turn_s,Troute_tool_ms,Twarm_tool_ms,Rfriction,Rfriction_net
+Conductor + faasd,gpt-oss-20b,all,10/10,1.5,34.074,29.444,23.0,1.434,23.544,0.113,0.197,0.364
+Conductor + faasd,gpt-oss-20b,airline-status,5/5,1.0,5.863,3.859,0.0,1.718,25.041,0.113,0.519,0.519
+Conductor + faasd,gpt-oss-20b,retail-status,5/5,2.0,69.149,66.686,58.0,1.283,22.633,0.105,0.05,0.334
+"Argo + Knative, 2 s requeue",gpt-oss-20b,all,9/10,1.444,29.052,4.581,0.0,20.939,11.646,0.126,5.341,5.341
+"Argo + Knative, 2 s requeue",gpt-oss-20b,airline-status,5/5,1.0,26.883,3.745,0.0,23.068,11.921,0.131,5.605,5.605
+"Argo + Knative, 2 s requeue",gpt-oss-20b,retail-status,4/5,2.0,56.373,19.079,9.0,17.534,11.295,0.103,1.959,4.295
+"Argo + Knative, 10 s requeue",gpt-oss-20b,all,10/10,1.5,100.232,5.812,0.0,60.915,11.817,0.127,15.119,15.119
+"Argo + Knative, 10 s requeue",gpt-oss-20b,airline-status,5/5,1.0,69.305,3.889,0.0,65.563,11.659,0.129,16.274,16.274
+"Argo + Knative, 10 s requeue",gpt-oss-20b,retail-status,5/5,2.0,130.634,8.708,0.0,60.726,11.846,0.106,14.044,14.044
