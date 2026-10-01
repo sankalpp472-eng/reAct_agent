@@ -1,0 +1,757 @@
+dataset,configuration,folder,task,run,used,turn,tool,twarm_ms,troute_ms
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,1,find_user_id_by_name_zip,0.056,14.321
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,2,get_order_details,0.074,29.106
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,3,get_product_details,0.493,15.399
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,4,calculate,6.125,23.758
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,5,get_user_details,1.565,59.305
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,5,modify_pending_order_items,1.104,17.809
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,1,find_user_id_by_name_zip,0.141,12.972
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,2,get_order_details,0.062,11.887
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,3,get_product_details,1.388,49.035
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,4,calculate,1.392,15.543
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,5,get_user_details,1.25,52.339
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,5,modify_pending_order_items,1.116,24.825
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,1,find_user_id_by_name_zip,0.048,13.636
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,2,get_order_details,1.819,65.708
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,3,get_product_details,2.611,60.569
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,4,calculate,1.868,17.426
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,5,get_user_details,0.459,14.999
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,5,modify_pending_order_items,0.817,15.656
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,1,find_user_id_by_name_zip,0.111,24.208
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,2,get_order_details,0.294,25.693
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,3,get_product_details,0.518,12.836
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,4,calculate,1.304,12.29
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,5,get_user_details,0.275,12.267
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,5,modify_pending_order_items,0.552,13.167
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,1,find_user_id_by_name_zip,0.187,111.308
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,2,get_order_details,1.926,71.106
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,3,get_product_details,0.915,136.613
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,4,calculate,3.693,75.683
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,5,get_user_details,0.475,15.634
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,5,modify_pending_order_items,1.274,15.833
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,1,find_user_id_by_name_zip,0.117,40.26
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,2,get_order_details,1.767,69.632
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,3,get_product_details,3.243,47.237
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,4,calculate,23.211,34.385
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,5,get_user_details,1.178,20.872
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,5,modify_pending_order_items,2.145,22.542
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,1,find_user_id_by_name_zip,0.063,14.61
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,2,get_order_details,0.516,19.209
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,3,get_product_details,1.895,47.976
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,4,calculate,4.655,83.754
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,5,get_user_details,3.431,93.263
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,5,modify_pending_order_items,1.95,20.906
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,1,find_user_id_by_name_zip,0.127,29.678
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,2,get_order_details,0.146,16.883
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,3,get_product_details,0.513,20.249
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,4,calculate,1.703,27.258
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,5,get_user_details,1.33,16.191
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,5,modify_pending_order_items,1.745,13.601
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,1,find_user_id_by_name_zip,0.058,20.729
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,2,get_order_details,1.721,104.004
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,3,get_product_details,3.382,69.3
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,4,calculate,2.08,16.956
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,5,get_user_details,0.409,12.639
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,5,modify_pending_order_items,0.781,14.878
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,1,find_user_id_by_name_zip,0.067,35.721
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,2,get_order_details,0.201,27.49
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,3,get_product_details,0.979,22.517
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,4,calculate,8.256,59.867
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,5,get_user_details,1.375,63.36
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,5,modify_pending_order_items,1.918,42.731
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,1,get_user_details,0.822,81.565
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,2,get_reservation_details,1.838,90.084
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,3,cancel_reservation,1.466,62.205
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,4,get_reservation_details,0.255,24.244
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,4,search_direct_flight,11.134,19.552
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,4,search_direct_flight,0.65,17.656
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,5,calculate,5.685,79.649
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,6,update_reservation_flights,4.36,76.755
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,1,get_user_details,0.087,48.228
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,2,get_reservation_details,2.271,83.587
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,3,cancel_reservation,2.14,63.005
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,4,get_reservation_details,1.704,25.173
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,4,search_direct_flight,29.268,20.02
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,4,search_direct_flight,1.866,16.152
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,5,calculate,6.742,19.464
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,6,update_reservation_flights,6.804,54.066
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,1,get_user_details,0.075,35.666
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,2,get_reservation_details,1.2,55.805
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,3,cancel_reservation,1.759,57.214
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,4,get_reservation_details,0.326,18.061
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,4,search_direct_flight,12.427,24.109
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,4,search_direct_flight,1.051,22.746
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,5,calculate,3.378,20.667
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,6,update_reservation_flights,3.108,20.299
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,1,get_user_details,0.071,40.742
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,2,get_reservation_details,0.623,20.907
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,3,cancel_reservation,0.619,16.065
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,4,get_reservation_details,0.889,42.311
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,4,search_direct_flight,13.535,16.467
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,4,search_direct_flight,0.943,14.462
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,5,calculate,2.775,17.271
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,6,update_reservation_flights,3.347,21.682
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,1,get_user_details,0.603,40.76
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,2,get_reservation_details,0.719,15.674
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,3,cancel_reservation,0.783,20.362
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,4,get_reservation_details,0.93,34.512
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,4,search_direct_flight,22.513,24.731
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,4,search_direct_flight,1.448,33.481
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,5,calculate,4.151,107.844
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,6,update_reservation_flights,2.206,23.147
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,1,get_user_details,0.062,17.728
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,2,get_reservation_details,0.436,28.105
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,3,cancel_reservation,0.536,13.815
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,4,get_reservation_details,0.443,14.187
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,4,search_direct_flight,10.927,28.099
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,4,search_direct_flight,1.582,20.568
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,5,calculate,2.197,30.752
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,6,update_reservation_flights,2.211,31.232
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,1,get_user_details,0.057,11.373
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,2,get_reservation_details,0.075,18.864
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,3,cancel_reservation,0.151,13.23
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,4,get_reservation_details,0.415,11.906
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,4,search_direct_flight,9.845,13.05
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,4,search_direct_flight,1.009,15.232
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,5,calculate,1.763,13.021
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,6,update_reservation_flights,1.3,14.01
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,1,get_user_details,0.063,13.211
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,2,get_reservation_details,0.209,12.391
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,3,cancel_reservation,0.415,11.643
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,4,get_reservation_details,0.334,13.088
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,4,search_direct_flight,10.626,13.777
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,4,search_direct_flight,0.788,11.868
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,5,calculate,1.731,14.629
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,6,update_reservation_flights,1.898,14.847
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,1,get_user_details,0.087,42.783
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,2,get_reservation_details,0.618,15.436
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,3,cancel_reservation,0.466,15.13
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,4,get_reservation_details,0.265,13.315
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,4,search_direct_flight,11.016,13.573
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,4,search_direct_flight,0.542,12.982
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,5,calculate,4.704,13.089
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,6,update_reservation_flights,2.345,16.98
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,1,get_user_details,0.057,13.843
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,2,get_reservation_details,0.104,16.827
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,3,cancel_reservation,0.102,12.334
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,4,get_reservation_details,0.069,12.553
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,4,search_direct_flight,0.599,14.057
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,4,search_direct_flight,0.182,10.194
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,5,calculate,1.216,20.799
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,6,update_reservation_flights,0.84,10.936
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,1,get_user_details,0.68,145.802
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,2,get_reservation_details,10.625,116.111
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,3,cancel_reservation,2.889,93.713
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,4,get_reservation_details,1.301,59.754
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,4,search_direct_flight,44.479,44.529
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,4,search_direct_flight,2.295,267.989
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,5,calculate,7.399,87.448
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,6,update_reservation_flights,5.699,81.829
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,1,get_user_details,1.61,148.881
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,2,get_reservation_details,5.665,302.719
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,3,cancel_reservation,1.9,93.287
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,4,get_reservation_details,1.474,242.774
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,4,search_direct_flight,11.938,40.494
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,4,search_direct_flight,1.52,43.141
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,5,calculate,2.8,75.866
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,6,update_reservation_flights,10.783,333.035
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,1,get_user_details,2.854,325.789
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,2,get_reservation_details,7.246,279.243
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,3,cancel_reservation,5.343,229.776
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,4,get_reservation_details,3.304,210.991
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,4,search_direct_flight,52.538,103.111
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,4,search_direct_flight,3.703,62.626
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,5,calculate,7.727,207.024
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,6,update_reservation_flights,7.289,189.983
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,1,get_user_details,5.777,291.561
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,2,get_reservation_details,5.845,209.189
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,3,cancel_reservation,5.316,207.345
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,4,get_reservation_details,20.857,595.142
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,4,search_direct_flight,65.665,48.528
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,4,search_direct_flight,3.098,42.131
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,5,calculate,37.808,264.363
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,6,update_reservation_flights,7.361,151.133
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,1,get_user_details,3.245,189.233
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,2,get_reservation_details,7.508,433.117
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,3,cancel_reservation,6.961,2184.548
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,4,get_reservation_details,4.269,229.947
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,4,search_direct_flight,47.633,46.099
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,4,search_direct_flight,14.612,186.237
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,5,calculate,7.997,154.283
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,6,update_reservation_flights,7.141,112.307
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,1,find_user_id_by_name_zip,1.765,105.924
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,2,get_order_details,5.827,200.487
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,3,get_product_details,2.221,98.432
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,4,calculate,9.989,118.264
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,5,get_user_details,2.896,138.307
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,5,modify_pending_order_items,2.283,46.918
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,1,find_user_id_by_name_zip,1.833,162.517
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,2,get_order_details,3.76,157.061
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,3,get_product_details,2.022,126.865
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,4,calculate,3.83,349.118
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,5,get_user_details,2.273,217.764
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,5,modify_pending_order_items,1.543,66.569
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,1,find_user_id_by_name_zip,1.658,112.79
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,2,get_order_details,2.958,112.304
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,3,get_product_details,3.976,148.273
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,4,calculate,8.065,142.895
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,5,get_user_details,2.091,98.135
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,5,modify_pending_order_items,2.772,42.055
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,1,find_user_id_by_name_zip,1.221,90.788
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,2,get_order_details,1.912,84.694
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,3,get_product_details,5.634,148.782
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,4,calculate,11.749,195.898
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,5,get_user_details,2.969,259.504
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,5,modify_pending_order_items,3.433,49.149
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,1,find_user_id_by_name_zip,2.937,181.535
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,2,get_order_details,5.546,169.445
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,3,get_product_details,5.329,152.117
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,4,calculate,9.189,122.824
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,5,get_user_details,4.86,362.748
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,5,modify_pending_order_items,22.304,89.492
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,1,find_user_id_by_name_zip,1.825,115.858
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,2,get_order_details,7.277,606.097
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,3,get_product_details,8.541,217.416
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,4,calculate,6.488,112.356
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,5,get_user_details,2.951,117.398
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,5,modify_pending_order_items,8.01,52.552
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,1,find_user_id_by_name_zip,1.379,145.241
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,2,get_order_details,2.755,126.154
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,3,get_product_details,5.516,130.969
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,4,calculate,5.495,103.759
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,5,get_user_details,8.768,175.668
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,5,modify_pending_order_items,2.234,42.812
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,1,find_user_id_by_name_zip,1.801,101.053
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,2,get_order_details,3.175,89.687
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,3,get_product_details,4.293,105.354
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,4,calculate,5.269,98.817
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,5,get_user_details,2.896,107.18
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,5,modify_pending_order_items,5.605,46.832
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,1,find_user_id_by_name_zip,2.277,113.233
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,2,get_order_details,3.104,92.086
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,3,get_product_details,4.661,125.178
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,4,calculate,7.678,90.012
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,5,get_user_details,1.909,94.604
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,5,modify_pending_order_items,3.25,54.344
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,1,find_user_id_by_name_zip,1.617,134.713
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,2,get_order_details,5.307,224.856
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,3,get_product_details,3.845,222.87
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,4,calculate,3.83,154.781
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,5,get_user_details,3.794,245.523
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,5,modify_pending_order_items,3.356,46.784
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,1,find_user_id_by_name_zip,0.071,25.088
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,2,get_order_details,0.119,22.676
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,3,get_product_details,0.193,23.787
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,4,calculate,0.213,24.732
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,5,get_user_details,0.135,24.926
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,5,modify_pending_order_items,0.192,23.562
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,1,find_user_id_by_name_zip,0.067,22.569
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,2,get_order_details,0.124,22.042
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,3,get_product_details,0.142,23.061
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,4,calculate,0.276,25.511
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,5,get_user_details,0.128,23.875
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,5,modify_pending_order_items,0.179,23.6
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,1,find_user_id_by_name_zip,0.069,23.546
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,2,get_order_details,0.12,24.448
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,3,get_product_details,0.204,23.573
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,4,calculate,0.292,19.963
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,5,get_user_details,0.112,22.325
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,5,modify_pending_order_items,0.175,21.958
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,1,find_user_id_by_name_zip,0.065,21.882
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,2,get_order_details,0.145,23.465
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,3,get_product_details,0.212,23.655
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,4,calculate,0.225,21.659
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,5,get_user_details,0.1,25.167
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,5,modify_pending_order_items,0.198,22.707
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,1,find_user_id_by_name_zip,0.089,23.16
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,2,get_order_details,0.116,23.535
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,3,get_product_details,0.197,21.811
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,4,calculate,0.351,22.844
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,5,get_user_details,0.106,23.879
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,5,modify_pending_order_items,0.212,23.608
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,1,find_user_id_by_name_zip,0.072,23.104
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,2,get_order_details,0.128,22.96
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,3,get_product_details,0.18,23.043
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,4,calculate,0.309,25.29
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,5,get_user_details,0.173,23.619
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,5,modify_pending_order_items,0.167,24.367
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,1,find_user_id_by_name_zip,0.066,23.147
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,2,get_order_details,0.137,24.281
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,3,get_product_details,0.166,22.031
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,4,calculate,0.365,22.95
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,5,get_user_details,0.102,21.87
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,5,modify_pending_order_items,0.193,24.609
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,1,find_user_id_by_name_zip,0.072,22.515
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,2,get_order_details,0.114,23.953
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,3,get_product_details,0.184,22.876
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,4,calculate,0.295,23.323
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,5,get_user_details,0.11,25.633
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,5,modify_pending_order_items,0.243,22.919
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,1,find_user_id_by_name_zip,0.071,22.66
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,2,get_order_details,0.148,22.406
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,3,get_product_details,0.191,22.458
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,4,calculate,0.256,23.187
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,5,get_user_details,0.106,23.606
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,5,modify_pending_order_items,0.206,21.758
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,1,find_user_id_by_name_zip,0.074,24.12
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,2,get_order_details,0.114,24.586
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,3,get_product_details,0.17,22.903
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,4,calculate,0.334,22.028
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,5,get_user_details,0.088,24.546
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,5,modify_pending_order_items,0.159,20.68
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,1,get_user_details,0.164,25.273
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,2,get_reservation_details,0.131,24.323
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,3,cancel_reservation,0.131,25.382
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,4,get_reservation_details,0.123,23.84
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,4,search_direct_flight,0.339,22.212
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,4,search_direct_flight,0.374,22.39
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,5,calculate,0.436,22.315
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,6,update_reservation_flights,0.191,23.199
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,1,get_user_details,0.164,23.302
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,2,get_reservation_details,0.126,26.371
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,3,cancel_reservation,0.137,21.898
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,4,get_reservation_details,0.151,20.946
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,4,search_direct_flight,0.357,21.584
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,4,search_direct_flight,0.355,21.412
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,5,calculate,0.226,21.0
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,6,update_reservation_flights,0.198,28.262
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,1,get_user_details,0.122,21.5
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,2,get_reservation_details,0.137,22.639
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,3,cancel_reservation,0.128,23.104
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,4,get_reservation_details,0.121,24.881
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,4,search_direct_flight,0.285,21.209
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,4,search_direct_flight,0.361,22.109
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,5,calculate,0.269,23.286
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,6,update_reservation_flights,0.208,22.191
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,1,get_user_details,0.109,25.039
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,2,get_reservation_details,0.118,23.355
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,3,cancel_reservation,0.115,23.851
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,4,get_reservation_details,0.114,23.609
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,4,search_direct_flight,0.452,24.606
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,4,search_direct_flight,0.302,21.677
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,5,calculate,0.211,21.794
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,6,update_reservation_flights,0.24,21.526
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,1,get_user_details,0.106,23.706
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,2,get_reservation_details,0.094,21.898
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,3,cancel_reservation,0.153,23.942
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,4,get_reservation_details,0.111,19.833
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,4,search_direct_flight,0.323,24.976
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,4,search_direct_flight,0.309,24.235
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,5,calculate,0.238,21.5
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,6,update_reservation_flights,0.248,23.099
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,1,get_user_details,0.188,22.705
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,2,get_reservation_details,0.108,22.275
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,3,cancel_reservation,0.126,23.141
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,4,get_reservation_details,0.172,25.376
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,4,search_direct_flight,0.308,21.948
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,4,search_direct_flight,0.388,23.609
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,5,calculate,0.225,25.079
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,6,update_reservation_flights,0.206,21.678
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,1,get_user_details,0.114,22.2
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,2,get_reservation_details,0.108,20.091
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,3,cancel_reservation,0.138,23.407
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,4,get_reservation_details,0.143,22.181
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,4,search_direct_flight,0.421,22.725
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,4,search_direct_flight,0.285,21.854
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,5,calculate,0.202,22.758
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,6,update_reservation_flights,0.196,20.7
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,1,get_user_details,0.107,25.12
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,2,get_reservation_details,0.125,22.135
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,3,cancel_reservation,0.14,23.228
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,4,get_reservation_details,0.128,21.949
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,4,search_direct_flight,0.445,22.802
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,4,search_direct_flight,0.349,23.012
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,5,calculate,0.21,23.528
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,6,update_reservation_flights,0.203,22.939
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,1,get_user_details,0.115,27.535
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,2,get_reservation_details,0.132,22.178
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,3,cancel_reservation,0.171,26.438
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,4,get_reservation_details,0.165,22.438
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,4,search_direct_flight,0.309,22.314
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,4,search_direct_flight,0.356,21.268
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,5,calculate,0.275,24.27
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,6,update_reservation_flights,0.229,23.307
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,1,get_user_details,0.137,21.127
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,2,get_reservation_details,0.172,22.013
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,3,cancel_reservation,0.194,24.642
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,4,get_reservation_details,0.124,23.11
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,4,search_direct_flight,0.344,22.831
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,4,search_direct_flight,0.317,21.849
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,5,calculate,0.233,23.217
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,6,update_reservation_flights,0.245,21.461
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,1,find_user_id_by_name_zip,0.132,12.081
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,2,get_order_details,0.117,13.915
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,3,get_product_details,0.188,12.368
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,4,calculate,0.312,11.762
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,5,get_user_details,0.142,11.75
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,5,modify_pending_order_items,0.198,11.145
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,1,find_user_id_by_name_zip,0.096,11.95
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,2,get_order_details,0.135,13.464
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,3,get_product_details,0.186,11.892
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,4,calculate,0.311,12.226
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,5,get_user_details,0.111,11.573
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,5,modify_pending_order_items,0.218,10.253
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,1,find_user_id_by_name_zip,0.097,11.464
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,2,get_order_details,0.139,13.369
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,3,get_product_details,0.188,12.176
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,4,calculate,0.346,11.458
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,5,get_user_details,0.114,12.445
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,5,modify_pending_order_items,0.191,12.124
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,1,find_user_id_by_name_zip,0.071,13.576
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,2,get_order_details,0.167,15.899
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,3,get_product_details,0.21,13.13
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,4,calculate,0.191,13.235
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,5,get_user_details,0.104,11.941
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,5,modify_pending_order_items,0.189,11.015
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,1,find_user_id_by_name_zip,0.077,11.689
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,2,get_order_details,0.126,13.076
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,3,get_product_details,0.252,12.216
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,4,calculate,0.307,12.098
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,5,get_user_details,0.106,12.69
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,5,modify_pending_order_items,0.177,10.823
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,1,find_user_id_by_name_zip,0.07,12.691
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,2,get_order_details,0.123,13.397
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,3,get_product_details,0.211,11.163
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,4,calculate,0.323,12.491
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,5,get_user_details,0.119,12.074
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,5,modify_pending_order_items,0.294,10.577
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,1,find_user_id_by_name_zip,0.065,10.777
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,2,get_order_details,0.131,13.251
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,3,get_product_details,0.182,11.395
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,4,calculate,0.394,12.489
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,5,get_user_details,0.13,11.253
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,5,modify_pending_order_items,0.195,11.223
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,1,find_user_id_by_name_zip,0.073,11.299
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,2,get_order_details,0.18,15.737
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,3,get_product_details,0.328,14.985
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,4,calculate,0.288,11.824
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,5,get_user_details,0.112,11.074
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,5,modify_pending_order_items,0.207,10.892
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,1,find_user_id_by_name_zip,0.072,12.316
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,2,get_order_details,0.127,13.494
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,3,get_product_details,0.179,14.176
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,4,calculate,0.295,13.117
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,5,get_user_details,0.19,12.962
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,5,modify_pending_order_items,0.196,10.736
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,1,find_user_id_by_name_zip,0.071,11.688
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,2,get_order_details,0.163,12.564
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,3,get_product_details,0.198,13.003
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,4,calculate,0.343,11.684
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,5,get_user_details,0.118,14.244
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,5,modify_pending_order_items,0.188,12.276
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,1,get_user_details,0.132,12.707
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,2,get_reservation_details,0.17,11.399
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,3,cancel_reservation,0.153,12.794
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,4,get_reservation_details,0.137,12.648
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,4,search_direct_flight,0.398,10.473
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,4,search_direct_flight,0.401,11.35
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,5,calculate,0.336,11.862
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,6,update_reservation_flights,0.246,13.153
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,1,get_user_details,0.124,12.421
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,2,get_reservation_details,0.135,13.865
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,3,cancel_reservation,0.161,11.868
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,4,get_reservation_details,0.143,12.991
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,4,search_direct_flight,0.297,10.961
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,4,search_direct_flight,0.383,10.801
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,5,calculate,0.248,10.515
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,6,update_reservation_flights,0.222,11.453
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,1,get_user_details,0.198,16.112
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,2,get_reservation_details,0.154,12.074
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,3,cancel_reservation,0.134,12.448
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,4,get_reservation_details,0.139,12.752
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,4,search_direct_flight,0.394,10.63
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,4,search_direct_flight,0.383,10.845
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,5,calculate,0.244,10.844
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,6,update_reservation_flights,0.23,12.612
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,1,get_user_details,0.149,11.993
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,2,get_reservation_details,0.197,11.12
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,3,cancel_reservation,0.179,11.67
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,4,get_reservation_details,0.131,12.081
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,4,search_direct_flight,0.405,10.401
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,4,search_direct_flight,0.394,11.03
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,5,calculate,0.231,11.663
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,6,update_reservation_flights,0.223,12.177
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,1,get_user_details,0.141,11.995
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,2,get_reservation_details,0.193,11.084
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,3,cancel_reservation,0.186,12.282
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,4,get_reservation_details,0.128,11.678
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,4,search_direct_flight,0.348,10.669
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,4,search_direct_flight,0.334,10.493
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,5,calculate,0.272,11.654
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,6,update_reservation_flights,0.287,11.901
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,1,get_user_details,0.143,13.267
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,2,get_reservation_details,0.129,11.512
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,3,cancel_reservation,0.193,11.866
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,4,get_reservation_details,0.122,13.424
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,4,search_direct_flight,0.472,10.937
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,4,search_direct_flight,0.369,10.373
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,5,calculate,0.237,11.06
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,6,update_reservation_flights,0.228,12.613
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,1,get_user_details,0.12,10.279
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,2,get_reservation_details,0.129,11.53
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,3,cancel_reservation,0.126,11.622
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,4,get_reservation_details,0.139,12.292
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,4,search_direct_flight,0.338,11.051
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,4,search_direct_flight,0.382,12.051
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,5,calculate,0.27,12.312
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,6,update_reservation_flights,0.202,11.882
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,1,get_user_details,0.177,11.755
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,2,get_reservation_details,0.181,11.788
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,3,cancel_reservation,0.155,12.209
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,4,get_reservation_details,0.142,11.784
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,4,search_direct_flight,0.429,10.533
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,4,search_direct_flight,0.416,10.296
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,5,calculate,0.212,11.647
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,6,update_reservation_flights,0.228,12.324
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,1,get_user_details,0.136,13.211
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,2,get_reservation_details,0.135,11.813
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,3,cancel_reservation,0.14,12.233
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,4,get_reservation_details,0.141,12.041
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,4,search_direct_flight,0.404,10.688
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,4,search_direct_flight,0.334,10.588
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,5,calculate,0.216,12.371
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,6,update_reservation_flights,0.235,11.674
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,1,get_user_details,0.13,11.059
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,2,get_reservation_details,0.134,11.56
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,3,cancel_reservation,0.177,12.255
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,4,get_reservation_details,0.123,11.662
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,4,search_direct_flight,0.416,11.452
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,4,search_direct_flight,0.332,10.575
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,5,calculate,0.222,11.991
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,6,update_reservation_flights,0.22,11.609
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,1,find_user_id_by_name_zip,0.072,11.46
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,2,get_order_details,0.125,13.544
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,3,get_product_details,0.179,13.944
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,4,calculate,0.229,9.86
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,5,get_user_details,0.118,11.578
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,5,modify_pending_order_items,0.213,11.844
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,1,find_user_id_by_name_zip,0.071,11.419
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,2,get_order_details,0.158,11.594
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,3,get_product_details,0.2,11.454
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,4,calculate,0.339,11.908
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,5,get_user_details,0.163,12.299
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,5,modify_pending_order_items,0.185,11.403
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,1,find_user_id_by_name_zip,0.067,11.537
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,2,get_order_details,0.119,13.409
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,3,get_product_details,0.203,11.11
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,4,calculate,0.347,12.933
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,5,get_user_details,0.186,15.743
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,5,modify_pending_order_items,0.182,11.593
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,1,find_user_id_by_name_zip,0.071,11.008
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,2,get_order_details,0.205,12.352
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,3,get_product_details,0.192,12.386
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,4,calculate,0.31,12.479
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,5,get_user_details,0.103,10.921
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,5,modify_pending_order_items,0.263,10.486
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,1,find_user_id_by_name_zip,0.082,12.19
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,2,get_order_details,0.12,12.002
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,3,get_product_details,0.205,12.471
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,4,calculate,0.39,11.702
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,5,get_user_details,0.112,11.172
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,5,modify_pending_order_items,0.231,10.358
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,1,find_user_id_by_name_zip,0.078,11.437
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,2,get_order_details,0.147,11.656
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,3,get_product_details,0.194,14.3
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,4,calculate,0.329,11.137
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,5,get_user_details,0.106,12.221
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,5,modify_pending_order_items,0.179,10.731
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,1,find_user_id_by_name_zip,0.089,12.116
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,2,get_order_details,0.126,13.123
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,3,get_product_details,0.274,15.456
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,4,calculate,0.321,13.173
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,5,get_user_details,0.131,11.103
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,5,modify_pending_order_items,0.193,10.479
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,1,find_user_id_by_name_zip,0.074,10.94
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,2,get_order_details,0.125,12.483
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,3,get_product_details,0.217,11.493
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,4,calculate,0.315,12.881
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,5,get_user_details,0.153,12.328
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,5,modify_pending_order_items,0.197,10.637
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,1,find_user_id_by_name_zip,0.074,11.355
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,2,get_order_details,0.15,14.298
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,3,get_product_details,0.242,13.474
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,4,calculate,0.279,10.931
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,5,get_user_details,0.113,11.549
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,5,modify_pending_order_items,0.197,11.392
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,1,find_user_id_by_name_zip,0.077,11.044
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,2,get_order_details,0.172,13.715
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,3,get_product_details,0.328,11.59
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,4,calculate,0.348,11.058
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,5,get_user_details,0.192,12.615
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,5,modify_pending_order_items,0.188,10.54
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,1,get_user_details,0.214,12.297
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,2,get_reservation_details,0.156,11.61
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,3,cancel_reservation,0.18,11.819
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,4,get_reservation_details,0.129,12.877
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,4,search_direct_flight,0.336,10.313
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,4,search_direct_flight,0.5,10.568
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,5,calculate,0.215,11.964
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,6,update_reservation_flights,0.225,12.294
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,1,get_user_details,0.145,12.25
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,2,get_reservation_details,0.12,12.62
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,3,cancel_reservation,0.145,12.125
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,4,get_reservation_details,0.138,11.97
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,4,search_direct_flight,0.472,10.926
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,4,search_direct_flight,0.353,10.325
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,5,calculate,0.266,11.111
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,6,update_reservation_flights,0.236,11.233
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,1,get_user_details,0.136,11.409
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,2,get_reservation_details,0.129,12.021
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,3,cancel_reservation,0.192,10.687
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,4,get_reservation_details,0.232,12.532
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,4,search_direct_flight,0.378,10.843
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,4,search_direct_flight,0.438,10.664
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,5,calculate,0.216,11.321
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,6,update_reservation_flights,0.303,12.68
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,1,get_user_details,0.142,12.384
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,2,get_reservation_details,0.119,12.028
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,3,cancel_reservation,0.142,11.885
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,4,get_reservation_details,0.124,11.661
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,4,search_direct_flight,0.469,11.433
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,4,search_direct_flight,0.361,10.706
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,5,calculate,0.234,10.664
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,6,update_reservation_flights,0.22,12.159
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,1,get_user_details,0.125,12.037
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,2,get_reservation_details,0.113,11.6
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,3,cancel_reservation,0.153,11.123
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,4,get_reservation_details,0.198,11.174
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,4,search_direct_flight,0.408,11.273
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,4,search_direct_flight,0.438,12.078
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,5,calculate,0.201,12.296
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,6,update_reservation_flights,0.222,12.113
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,1,get_user_details,0.136,13.313
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,2,get_reservation_details,0.104,14.016
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,3,cancel_reservation,0.13,10.029
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,4,get_reservation_details,0.134,11.992
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,4,search_direct_flight,0.363,9.735
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,4,search_direct_flight,0.479,10.986
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,5,calculate,0.262,12.364
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,6,update_reservation_flights,0.271,11.182
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,1,get_user_details,0.157,12.849
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,2,get_reservation_details,0.107,11.506
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,3,cancel_reservation,0.197,11.93
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,4,get_reservation_details,0.129,11.924
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,4,search_direct_flight,0.374,10.304
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,4,search_direct_flight,0.488,10.759
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,5,calculate,0.209,12.028
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,6,update_reservation_flights,0.257,11.246
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,1,get_user_details,0.124,11.111
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,2,get_reservation_details,0.122,13.273
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,3,cancel_reservation,0.144,11.953
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,4,get_reservation_details,0.208,15.267
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,4,search_direct_flight,0.438,10.891
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,4,search_direct_flight,0.44,11.133
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,5,calculate,0.228,13.49
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,6,update_reservation_flights,0.212,12.145
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,1,get_user_details,0.134,12.397
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,2,get_reservation_details,0.132,11.622
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,3,cancel_reservation,0.179,11.728
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,4,get_reservation_details,0.142,11.843
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,4,search_direct_flight,0.398,10.444
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,4,search_direct_flight,0.332,10.959
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,5,calculate,0.209,13.191
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,6,update_reservation_flights,0.248,13.083
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,1,get_user_details,0.126,12.116
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,2,get_reservation_details,0.126,13.22
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,3,cancel_reservation,0.133,14.231
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,4,get_reservation_details,0.116,9.554
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,4,search_direct_flight,0.374,10.744
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,4,search_direct_flight,0.407,10.69
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,5,calculate,0.624,13.154
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,6,update_reservation_flights,0.22,11.287
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,1,True,1,find_user_id_by_name_zip,0.061,22.521
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,1,True,2,get_order_details,0.116,21.747
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,2,True,1,find_user_id_by_name_zip,0.061,20.835
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,2,True,2,get_order_details,0.141,21.193
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,3,True,1,find_user_id_by_name_zip,0.064,23.081
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,3,True,2,get_order_details,0.123,21.729
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,4,True,1,find_user_id_by_name_zip,0.073,25.675
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,4,True,2,get_order_details,0.106,22.363
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,5,True,1,find_user_id_by_name_zip,0.062,17.564
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,5,True,2,get_order_details,0.111,21.422
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,1,True,1,get_user_details,0.136,24.092
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,1,True,2,get_reservation_details,0.125,21.624
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,2,True,1,get_user_details,0.19,23.363
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,2,True,2,get_reservation_details,0.188,22.898
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,3,True,1,get_user_details,0.123,25.463
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,3,True,2,get_reservation_details,0.116,24.427
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,4,True,1,get_user_details,0.149,23.182
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,4,True,2,get_reservation_details,0.099,19.21
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,5,True,1,get_user_details,0.161,22.825
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,5,True,2,get_reservation_details,0.12,25.294
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,1,True,1,find_user_id_by_name_zip,0.078,11.558
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,1,True,2,get_order_details,0.123,12.224
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,2,True,1,find_user_id_by_name_zip,0.112,11.739
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,2,True,2,get_order_details,0.111,11.434
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,3,True,1,find_user_id_by_name_zip,0.07,11.701
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,3,True,2,get_order_details,0.145,12.434
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,4,True,1,find_user_id_by_name_zip,0.076,11.952
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,4,True,2,get_order_details,0.12,11.188
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,5,True,1,find_user_id_by_name_zip,0.115,11.26
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,5,True,2,get_order_details,0.146,11.179
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,1,True,1,get_user_details,0.122,10.495
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,1,True,2,get_reservation_details,0.119,10.996
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,2,True,1,get_user_details,0.126,10.639
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,2,True,2,get_reservation_details,0.106,11.729
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,3,True,1,get_user_details,0.152,10.995
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,3,True,2,get_reservation_details,0.118,11.911
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,4,True,1,get_user_details,0.151,10.74
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,4,True,2,get_reservation_details,0.124,12.281
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,5,True,1,get_user_details,0.153,11.775
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,5,True,2,get_reservation_details,0.143,13.352
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,1,False,1,get_user_details,0.133,12.832
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,1,False,2,get_reservation_details,0.125,11.121
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,1,True,1,find_user_id_by_name_zip,0.072,11.822
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,1,True,2,get_order_details,0.122,11.773
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,2,True,1,find_user_id_by_name_zip,0.069,11.09
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,2,True,2,get_order_details,0.119,11.05
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,3,True,1,find_user_id_by_name_zip,0.078,12.232
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,3,True,2,get_order_details,0.118,12.274
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,4,True,1,find_user_id_by_name_zip,0.072,12.098
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,4,True,2,get_order_details,0.145,11.271
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,5,True,1,find_user_id_by_name_zip,0.124,11.081
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,5,True,2,get_order_details,0.112,11.4
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,airline-status,1,True,1,get_reservation_details,0.186,25.338
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,airline-status,2,True,1,get_reservation_details,0.107,25.185
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,airline-status,3,True,1,get_reservation_details,0.113,21.81
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,airline-status,4,True,1,get_reservation_details,0.115,25.041
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,airline-status,5,True,1,get_reservation_details,0.113,23.809
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,1,True,1,find_user_id_by_name_zip,0.076,23.544
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,1,True,2,get_order_details,0.145,20.508
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,2,True,1,find_user_id_by_name_zip,0.127,25.329
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,2,True,2,get_order_details,0.125,21.03
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,3,True,1,find_user_id_by_name_zip,0.106,22.252
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,3,True,2,get_order_details,0.113,18.516
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,4,True,1,find_user_id_by_name_zip,0.068,19.829
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,4,True,2,get_order_details,0.103,23.705
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,5,True,1,find_user_id_by_name_zip,0.072,23.87
+"Real LLM (Groq gpt-oss-20b), cluster VM",Conductor + faasd,exp1-conductor-20261001-072147,retail-status,5,True,2,get_order_details,0.105,23.013
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,1,True,1,get_reservation_details,0.127,11.357
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,2,True,1,get_reservation_details,0.116,10.594
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,3,True,1,get_reservation_details,0.131,11.921
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,4,True,1,get_reservation_details,0.138,13.442
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,airline-status,5,True,1,get_reservation_details,0.189,12.652
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,1,True,1,find_user_id_by_name_zip,0.089,10.849
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,1,True,2,get_order_details,0.13,12.311
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,2,True,1,find_user_id_by_name_zip,0.08,10.574
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,2,True,2,get_order_details,0.116,11.646
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,3,True,1,find_user_id_by_name_zip,0.069,10.939
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,3,True,2,get_order_details,0.151,15.072
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,4,True,1,find_user_id_by_name_zip,0.077,10.944
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,4,True,2,get_order_details,0.126,13.274
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20261001-064730,retail-status,5,False,1,find_user_id_by_name_zip,0.074,11.871
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,1,True,1,get_reservation_details,0.143,12.319
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,2,True,1,get_reservation_details,0.123,11.487
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,3,True,1,get_reservation_details,0.129,11.961
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,4,True,1,get_reservation_details,0.158,11.659
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,5,True,1,get_reservation_details,0.125,11.206
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,1,True,1,find_user_id_by_name_zip,0.084,11.201
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,1,True,2,get_order_details,0.177,12.321
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,2,True,1,find_user_id_by_name_zip,0.075,11.925
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,2,True,2,get_order_details,0.157,11.58
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,3,True,1,find_user_id_by_name_zip,0.076,12.186
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,3,True,2,get_order_details,0.13,11.085
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,4,True,1,find_user_id_by_name_zip,0.075,11.227
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,4,True,2,get_order_details,0.127,11.876
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,5,True,1,find_user_id_by_name_zip,0.073,12.606
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,5,True,2,get_order_details,0.15,11.817

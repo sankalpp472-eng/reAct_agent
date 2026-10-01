@@ -1,0 +1,9 @@
+dataset,configuration,task,folder,trials,Tcold_ms,first_call_ms,warm_call_ms,app_init_ms,attempts,dTe2e_s
+Laptop (WSL2),Conductor + faasd,airline-26,exp2b-conductor-20260928-104555,5,1812.791,1829.975,20.579,99.978,9.0,1.42117
+Laptop (WSL2),Conductor + faasd,retail-44,exp2b-conductor-20260928-104555,5,1719.114,1741.256,20.334,44.093,10.0,1.564363
+Laptop (WSL2),"Argo + Knative, 2 s requeue",airline-26,exp2b-argo-20260928-115146,5,3036.803,3089.692,64.4,289.753,2.0,2.286158
+Laptop (WSL2),"Argo + Knative, 2 s requeue",retail-44,exp2b-argo-20260928-115146,5,2907.312,3012.591,80.741,124.471,2.0,1.135675
+Cluster (node13 VM),Conductor + faasd,airline-26,exp2b-conductor-20260929-144643,5,949.926,973.672,24.429,91.16,8.0,1.096594
+Cluster (node13 VM),Conductor + faasd,retail-44,exp2b-conductor-20260929-144643,5,918.817,942.563,24.553,51.773,8.0,1.445781
+Cluster (node13 VM),"Argo + Knative, 2 s requeue",airline-26,exp2b-argo-20260930-035225,5,2880.473,2892.366,11.911,113.637,1.0,3.640018
+Cluster (node13 VM),"Argo + Knative, 2 s requeue",retail-44,exp2b-argo-20260930-035225,5,2282.758,2295.271,12.513,62.288,1.0,-0.035624
