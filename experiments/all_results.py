@@ -1,6 +1,8 @@
 """
 Every number collected so far, per configuration and per task, in one place:
-writes experiments/plots/ALL_RESULTS.md and all_results.csv.
+writes experiments/plots/ALL_RESULTS.md and all_results.csv (medians), plus the
+unaggregated data: all_runs.csv (one row per run), all_tool_calls.csv (one row
+per actor -> tool call) and all_cold_trials.csv (one row per Exp 2b trial).
 
   python experiments/all_results.py
 
@@ -122,6 +124,51 @@ def cold_rows():
     return out
 
 
+def raw_exports():
+    """Every run (all_runs.csv) and every tool call (all_tool_calls.csv) of the
+    folders above, unaggregated, labelled with dataset / configuration / task.
+    used = the run scored reward 1 and is in the medians."""
+    runs_out, calls_out, cold_out = [], [], []
+    for title, _, configs in DATASETS:
+        for config, folder in configs:
+            sw = {(r["workload"], r["run"]): r for r in _rows(folder, "sworkflow_runs.csv")}
+            used = set()
+            for r in _rows(folder, "dataplane_runs.csv"):
+                ok = ((r.get("status") or r.get("phase")) in ("COMPLETED", "Succeeded")
+                      and _f(r.get("reward")) == 1.0 and r.get("missing_timing") in ("False", "", None))
+                if ok:
+                    used.add((r["workload"], r["run"]))
+                runs_out.append({
+                    "dataset": title, "configuration": config, "folder": folder, "task": r["workload"],
+                    "run": r["run"], "used": ok, "outcome": r.get("status") or r.get("phase"),
+                    "reward": r.get("reward"), "turns": r["n_turns"], "te2e_ms": r["te2e_ms"],
+                    "t_llm_ms": r["t_llm_ms"], "t_llm_wait_ms": r.get("t_llm_wait_ms") or 0,
+                    "torch_run_ms": r["torch_run_ms"], "troute_orch_ms": r["troute_orch_ms"],
+                    "troute_tool_ms": r["troute_tool_ms"], "twarm_tool_mean_ms": r.get("twarm_tool_mean_ms"),
+                    "troute_tool_mean_ms": r.get("troute_tool_mean_ms"), "rfriction": r["rfriction"],
+                    "rfriction_net": r.get("rfriction_net") or r["rfriction"],
+                    "sworkflow_bytes": (sw.get((r["workload"], r["run"])) or {}).get("total_bytes"),
+                })
+            for c in _rows(folder, "dataplane_calls.csv"):
+                if c["kind"] == "tool":
+                    calls_out.append({
+                        "dataset": title, "configuration": config, "folder": folder, "task": c["workload"],
+                        "run": c["run"], "used": (c["workload"], c["run"]) in used, "turn": c["turn"],
+                        "tool": c["name"], "twarm_ms": c["twarm_ms"], "troute_ms": c["troute_ms"],
+                    })
+    for title, configs in COLD:
+        for config, folder in configs:
+            for r in _rows(folder, "trials.csv"):
+                cold_out.append({"dataset": title, "configuration": config, "folder": folder, **r})
+    for name, rows in (("all_runs.csv", runs_out), ("all_tool_calls.csv", calls_out),
+                       ("all_cold_trials.csv", cold_out)):
+        with open(os.path.join(OUT, name), "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0]))
+            w.writeheader()
+            w.writerows(rows)
+        print(f"wrote {name}: {len(rows)} rows")
+
+
 def _cell(v, nd):
     return "–" if v is None else f"{v:,.{nd}f}"
 
@@ -183,6 +230,7 @@ def main():
     with open(os.path.join(OUT, "ALL_RESULTS.md"), "w") as f:
         f.write("\n".join(md))
     print("\n".join(md))
+    raw_exports()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,135 @@
+dataset,configuration,folder,task,run,used,outcome,reward,turns,te2e_ms,t_llm_ms,t_llm_wait_ms,torch_run_ms,troute_orch_ms,troute_tool_ms,twarm_tool_mean_ms,troute_tool_mean_ms,rfriction,rfriction_net,sworkflow_bytes
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,1,True,COMPLETED,1.0,5,52436.997,47005.409,0,4529.997,713.934,159.698,1.57,26.616,0.115,0.115,299918
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,2,True,COMPLETED,1.0,5,51347.364,47003.403,0,3425.364,730.39,166.602,0.891,27.767,0.092,0.092,299903
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,3,True,COMPLETED,1.0,5,51946.932,47003.623,0,3770.932,953.149,187.993,1.27,31.332,0.105,0.105,299887
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,4,True,COMPLETED,1.0,5,51737.979,47003.622,0,4009.979,608.71,100.462,0.509,16.744,0.1,0.1,299925
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,5,True,COMPLETED,1.0,5,56861.38,47003.65,0,6298.38,3055.218,426.177,1.412,71.03,0.208,0.208,299916
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,6,True,COMPLETED,1.0,5,53275.65,47003.592,0,4793.65,1180.528,234.929,5.277,39.155,0.132,0.132,299874
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,7,True,COMPLETED,1.0,5,55503.732,47005.728,0,6609.732,1554.218,279.718,2.085,46.62,0.18,0.18,299929
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,8,True,COMPLETED,1.0,5,52255.503,47003.041,0,4305.503,803.575,123.86,0.927,20.643,0.111,0.111,299873
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,9,True,COMPLETED,1.0,5,53604.798,47003.547,0,5288.798,1038.144,238.505,1.405,39.751,0.14,0.14,299905
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,retail-44,10,True,COMPLETED,1.0,5,54172.266,47003.549,0,5824.266,1037.768,251.687,2.132,41.948,0.151,0.151,299947
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,1,True,COMPLETED,1.0,6,68136.117,58004.41,0,7093.117,2485.306,451.711,3.276,56.464,0.173,0.173,525155
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,2,True,COMPLETED,1.0,6,69353.435,58005.383,0,8790.435,2113.129,329.695,6.36,41.212,0.194,0.194,525158
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,3,True,COMPLETED,1.0,6,64994.155,58003.833,0,5159.155,1513.912,254.567,2.915,31.821,0.119,0.119,525131
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,4,True,COMPLETED,1.0,6,65113.224,58004.474,0,5086.224,1766.743,189.907,2.85,23.738,0.121,0.121,525117
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,5,True,COMPLETED,1.0,6,64205.452,58003.886,0,4295.452,1532.907,300.511,4.169,37.564,0.106,0.106,525152
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,6,True,COMPLETED,1.0,6,63583.449,58004.505,0,4557.449,794.286,184.487,2.299,23.061,0.095,0.095,525173
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,7,True,COMPLETED,1.0,6,63246.081,58004.319,0,4454.081,646.244,110.687,1.827,13.836,0.09,0.09,525099
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,8,True,COMPLETED,1.0,6,63502.475,58004.648,0,4592.475,766.285,105.453,2.008,13.182,0.094,0.094,525118
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,9,True,COMPLETED,1.0,6,63711.902,58004.391,0,4654.902,866.454,143.288,2.505,17.911,0.098,0.098,525143
+"Mock LLM, laptop (WSL2)",Conductor + faasd,exp1-conductor-20260927-110845,airline-26,10,True,COMPLETED,1.0,6,63483.621,58004.352,0,4699.621,653.071,111.541,0.396,13.943,0.094,0.094,525142
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,1,True,Succeeded,1.0,6,314000.0,58311.701,0,252986.666,1630.45,897.175,9.421,112.147,4.382,4.382,167076
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,2,True,Succeeded,1.0,6,337000.0,58124.055,0,275163.152,2179.514,1280.196,4.711,160.025,4.794,4.794,167059
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,3,True,Succeeded,1.0,6,376000.0,58407.017,0,311573.259,3762.136,1608.543,11.25,201.068,5.426,5.426,167033
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,4,True,Succeeded,1.0,6,318000.0,58257.698,0,253813.864,3748.808,1809.392,18.966,226.174,4.452,4.452,167000
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,airline-26,5,True,Succeeded,1.0,6,362000.0,58435.648,0,296192.753,3379.225,3535.771,12.421,441.971,5.187,5.187,166996
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,1,True,Succeeded,1.0,5,280000.0,47002.251,0,230448.867,1681.41,708.332,4.164,118.055,4.954,4.954,90804
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,10,True,Succeeded,1.0,5,307000.0,47078.112,0,256272.728,2396.83,1079.893,2.544,179.982,5.517,5.517,90801
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,2,True,Succeeded,1.0,5,308000.0,47006.594,0,258511.204,1688.205,656.452,3.587,109.409,5.549,5.549,90806
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,3,True,Succeeded,1.0,5,310000.0,47006.312,0,260140.534,1796.774,828.814,4.486,138.136,5.59,5.59,90781
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,4,True,Succeeded,1.0,5,282000.0,47227.982,0,231094.94,2411.713,1078.161,8.361,179.694,4.967,4.967,90824
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,5,True,Succeeded,1.0,5,332000.0,47060.943,0,281715.796,1749.415,1221.675,5.849,203.613,6.049,6.049,90803
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,6,True,Succeeded,1.0,5,262000.0,47006.143,0,212230.389,1928.423,724.602,4.358,120.767,4.571,4.571,90800
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,7,True,Succeeded,1.0,5,252000.0,47002.976,0,202838.463,1499.02,548.923,3.84,91.487,4.359,4.359,90792
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,8,True,Succeeded,1.0,5,263000.0,47002.68,0,213908.823,1400.175,569.458,3.813,94.91,4.593,4.593,90778
+"Mock LLM, laptop (WSL2)","Argo + Knative, 10 s requeue",exp1-argo-20260927-181019,retail-44,9,True,Succeeded,1.0,5,313000.0,47031.996,0,261869.789,2832.383,1029.528,3.625,171.588,5.65,5.65,90824
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,1,True,COMPLETED,1.0,5,55419.877,47005.107,0,6929.877,1325.129,144.771,0.154,24.128,0.179,0.179,299910
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,2,True,COMPLETED,1.0,5,55567.598,47004.945,0,7031.598,1374.297,140.658,0.153,23.443,0.182,0.182,299909
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,3,True,COMPLETED,1.0,5,54627.953,47004.994,0,6152.953,1319.601,135.813,0.162,22.635,0.162,0.162,299926
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,4,True,COMPLETED,1.0,5,55850.957,47004.512,0,7515.957,1177.47,138.536,0.158,23.089,0.188,0.188,299934
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,5,True,COMPLETED,1.0,5,56215.632,47004.651,0,7766.632,1290.813,138.837,0.178,23.139,0.196,0.196,299864
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,6,True,COMPLETED,1.0,5,55787.383,47004.524,0,7310.383,1314.583,142.382,0.171,23.73,0.187,0.187,299912
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,7,True,COMPLETED,1.0,5,55603.071,47004.654,0,7206.071,1238.035,138.889,0.172,23.148,0.183,0.183,299909
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,8,True,COMPLETED,1.0,5,55068.295,47004.153,0,6698.295,1210.05,141.218,0.17,23.536,0.171,0.171,299926
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,9,True,COMPLETED,1.0,5,56509.979,47004.608,0,8060.979,1293.916,136.075,0.163,22.679,0.202,0.202,299892
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,retail-44,10,True,COMPLETED,1.0,5,54139.047,47004.653,0,5651.047,1329.883,138.862,0.157,23.144,0.151,0.151,299934
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,1,True,COMPLETED,1.0,6,67250.592,58006.298,0,7530.592,1503.495,188.933,0.236,23.617,0.159,0.159,525199
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,2,True,COMPLETED,1.0,6,67600.113,58005.626,0,7579.113,1811.031,184.775,0.214,23.097,0.165,0.165,525165
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,3,True,COMPLETED,1.0,6,71072.329,58006.055,0,10955.329,1908.852,180.92,0.204,22.615,0.225,0.225,525169
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,4,True,COMPLETED,1.0,6,74334.51,58005.636,0,14136.51,1987.077,185.458,0.208,23.182,0.281,0.281,525198
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,5,True,COMPLETED,1.0,6,73295.348,58005.558,0,13322.348,1764.345,183.188,0.198,22.898,0.263,0.263,525173
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,6,True,COMPLETED,1.0,6,73286.012,58005.996,0,13091.012,1983.342,185.812,0.215,23.227,0.263,0.263,525171
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,7,True,COMPLETED,1.0,6,73361.151,58005.356,0,13353.151,1806.762,175.918,0.201,21.99,0.264,0.264,525217
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,8,True,COMPLETED,1.0,6,72927.123,58005.491,0,12995.123,1720.982,184.714,0.213,23.089,0.257,0.257,525180
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,9,True,COMPLETED,1.0,6,72559.245,58005.9,0,12261.245,2082.634,189.748,0.219,23.719,0.251,0.251,525198
+"Mock LLM, cluster (node13 VM)",Conductor + faasd,exp1-conductor-20260929-135611,airline-26,10,True,COMPLETED,1.0,6,74149.926,58005.438,0,14018.926,1925.99,180.248,0.221,22.531,0.278,0.278,525172
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,1,True,Succeeded,1.0,5,321408.014,47004.74,0,274136.35,178.819,73.021,0.181,12.17,5.837,5.837,90773
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,2,True,Succeeded,1.0,5,301747.576,47004.489,0,254477.223,178.817,71.358,0.176,11.893,5.419,5.419,90792
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,3,True,Succeeded,1.0,5,310969.432,47004.847,0,263693.243,182.247,73.036,0.179,12.173,5.615,5.615,90799
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,4,True,Succeeded,1.0,5,328795.652,47004.818,0,281499.2,197.737,78.796,0.155,13.133,5.995,5.995,90777
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,5,True,Succeeded,1.0,5,319593.707,47004.802,0,272317.73,182.349,72.592,0.174,12.099,5.799,5.799,90790
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,6,True,Succeeded,1.0,5,329655.554,47005.16,0,282378.538,184.239,72.393,0.19,12.065,6.013,6.013,90814
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,7,True,Succeeded,1.0,5,329121.784,47004.954,0,281861.825,169.858,70.389,0.183,11.731,6.002,6.002,90799
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,8,True,Succeeded,1.0,5,309494.908,47004.761,0,262226.136,173.421,75.812,0.198,12.635,5.584,5.584,90781
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,9,True,Succeeded,1.0,5,309077.092,47004.697,0,261783.583,195.593,76.801,0.177,12.8,5.575,5.575,90761
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,retail-44,10,True,Succeeded,1.0,5,310164.936,47004.461,0,262882.687,186.302,75.461,0.18,12.577,5.598,5.598,90748
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,1,True,Succeeded,1.0,6,400263.504,58006.212,0,341917.479,220.592,96.387,0.247,12.048,5.9,5.9,166998
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,2,True,Succeeded,1.0,6,380368.177,58005.52,0,322036.363,209.885,94.876,0.214,11.859,5.557,5.557,166963
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,3,True,Succeeded,1.0,6,380733.351,58005.809,0,322386.844,220.7,98.318,0.234,12.29,5.563,5.563,167017
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,4,True,Succeeded,1.0,6,390309.801,58005.844,0,331980.031,209.997,92.136,0.238,11.517,5.728,5.728,167031
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,5,True,Succeeded,1.0,6,390348.339,58005.723,0,332019.39,209.982,91.756,0.236,11.469,5.729,5.729,167009
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,6,True,Succeeded,1.0,6,381071.799,58005.58,0,322740.016,210.399,95.051,0.237,11.881,5.569,5.569,166989
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,7,True,Succeeded,1.0,6,369755.211,58005.473,0,311424.328,211.533,93.017,0.213,11.627,5.374,5.374,166986
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,8,True,Succeeded,1.0,6,389405.059,58005.965,0,331074.051,211.854,92.336,0.242,11.542,5.713,5.713,166960
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,9,True,Succeeded,1.0,6,380674.41,58005.714,0,322337.505,214.684,94.619,0.218,11.827,5.562,5.562,166988
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 10 s requeue",exp1-argo-20260929-213732,airline-26,10,True,Succeeded,1.0,6,370432.058,58005.514,0,312104.772,208.525,92.164,0.219,11.52,5.386,5.386,166993
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,1,True,Succeeded,1.0,5,125427.534,47004.421,0,78160.925,175.668,72.23,0.156,12.038,1.668,1.668,90816
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,2,True,Succeeded,1.0,5,127275.279,47004.577,0,80012.601,172.857,70.077,0.186,11.679,1.707,1.707,90795
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,3,True,Succeeded,1.0,5,129080.429,47010.201,0,81794.831,183.946,76.325,0.184,12.721,1.745,1.745,90764
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,4,True,Succeeded,1.0,5,129587.207,47007.181,0,82320.425,175.197,69.632,0.19,11.605,1.756,1.756,90775
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,5,True,Succeeded,1.0,5,131343.368,47004.676,0,84076.626,177.781,69.895,0.19,11.649,1.794,1.794,90771
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,6,True,Succeeded,1.0,5,130178.53,47004.163,0,82915.76,173.199,71.483,0.172,11.914,1.769,1.769,90792
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,7,True,Succeeded,1.0,5,130896.93,47004.079,0,83612.502,189.294,75.45,0.189,12.575,1.784,1.784,90780
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,8,True,Succeeded,1.0,5,131488.649,47004.08,0,84219.893,178.66,70.763,0.18,11.794,1.797,1.797,90798
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,9,True,Succeeded,1.0,5,127141.006,47004.324,0,79876.715,172.059,73.0,0.176,12.167,1.705,1.705,90819
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,retail-44,10,True,Succeeded,1.0,5,131575.359,47004.326,0,84316.325,169.86,70.562,0.218,11.76,1.799,1.799,90799
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,1,True,Succeeded,1.0,6,156183.616,58005.521,0,97849.991,214.044,93.742,0.244,11.718,1.692,1.692,167002
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,2,True,Succeeded,1.0,6,155249.478,58005.439,0,96920.994,208.824,92.559,0.234,11.57,1.676,1.676,166996
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,3,True,Succeeded,1.0,6,153280.143,58005.391,0,94956.593,204.568,92.157,0.253,11.52,1.642,1.642,167018
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,4,True,Succeeded,1.0,6,155992.739,58005.217,0,97661.839,211.911,92.919,0.226,11.615,1.689,1.689,166988
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,5,True,Succeeded,1.0,6,153495.431,58005.37,0,95163.568,212.733,93.693,0.232,11.712,1.646,1.646,166967
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,6,True,Succeeded,1.0,6,157172.033,58006.215,0,98842.611,208.564,93.616,0.235,11.702,1.709,1.709,167006
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,7,True,Succeeded,1.0,6,155395.854,58005.955,0,97065.249,210.863,92.546,0.24,11.568,1.679,1.679,167025
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,8,True,Succeeded,1.0,6,151685.519,58005.3,0,93343.021,216.879,99.263,0.24,12.408,1.615,1.615,166969
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,9,True,Succeeded,1.0,6,151444.051,58007.27,0,93106.69,212.142,95.267,0.222,11.908,1.61,1.61,167012
+"Mock LLM, cluster (node13 VM)","Argo + Knative, 2 s requeue",exp1-argo-20260929-234613,airline-26,10,True,Succeeded,1.0,6,157140.877,58006.565,0,98806.903,210.621,94.996,0.266,11.874,1.709,1.709,166993
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,1,True,COMPLETED,1.0,2,62458.375,58597.853,47000.0,3182.375,624.653,44.267,0.088,22.134,0.066,0.332,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,2,True,COMPLETED,1.0,2,44672.157,41589.592,32000.0,2525.157,505.384,42.028,0.101,21.014,0.074,0.32,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,3,True,COMPLETED,1.0,2,28782.303,25418.271,16000.0,2690.303,618.625,44.81,0.094,22.405,0.132,0.356,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,4,True,COMPLETED,1.0,2,50202.139,45959.843,34000.0,3735.139,448.615,48.038,0.09,24.019,0.092,0.354,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,retail-status,5,True,COMPLETED,1.0,2,48734.353,44173.5,33000.0,3915.353,597.093,38.986,0.087,19.493,0.103,0.407,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,1,True,COMPLETED,1.0,2,51311.289,47391.253,38000.0,3309.289,555.644,45.716,0.13,22.858,0.083,0.416,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,2,True,COMPLETED,1.0,2,62084.363,58702.383,48000.0,2944.363,380.587,46.261,0.189,23.131,0.057,0.315,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,3,True,COMPLETED,1.0,2,51799.767,47853.796,32000.0,3343.767,540.996,49.89,0.12,24.945,0.082,0.248,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,4,True,COMPLETED,1.0,2,20006.142,15815.57,5000.0,3668.142,470.226,42.392,0.124,21.196,0.264,0.387,
+"Real LLM (Groq gpt-oss-120b), cluster VM",Conductor + faasd,exp1-conductor-20260930-173536,airline-status,5,True,COMPLETED,1.0,2,49513.802,45850.373,35000.0,3117.802,487.939,48.119,0.141,24.059,0.08,0.337,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,1,True,Succeeded,1.0,2,80067.081,39602.191,30000.0,40344.366,71.346,23.782,0.1,11.891,1.021,4.211,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,2,True,Succeeded,1.0,2,61070.81,22119.443,12000.0,38848.599,69.519,23.173,0.112,11.587,1.761,3.848,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,3,True,Succeeded,1.0,2,77086.879,38631.221,30000.0,38348.609,72.404,24.135,0.107,12.067,0.995,4.454,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,4,True,Succeeded,1.0,2,60916.246,30258.467,22000.0,30555.443,69.421,23.14,0.098,11.57,1.013,3.711,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,retail-status,5,True,Succeeded,1.0,2,47322.825,13616.455,5000.0,33605.523,67.315,22.438,0.13,11.219,2.475,3.911,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,1,True,Succeeded,1.0,2,62828.431,34538.481,24000.0,28184.557,64.475,21.492,0.12,10.746,0.819,2.683,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,2,True,Succeeded,1.0,2,79002.021,45923.024,36000.0,32979.685,67.103,22.368,0.116,11.184,0.72,3.333,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,3,True,Succeeded,1.0,2,73195.095,35037.421,26000.0,38055.977,68.717,22.906,0.135,11.453,1.089,4.221,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,4,True,Succeeded,1.0,2,51198.679,12959.031,1000.0,38137.462,69.065,23.022,0.137,11.511,2.95,3.197,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 2 s requeue",exp1-argo-20260930-180520,airline-status,5,True,Succeeded,1.0,2,50848.494,14867.29,6000.0,35869.991,75.379,25.126,0.148,12.563,2.419,4.057,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,1,False,Failed,0.0,2,120000.0,11687.782,0.0,108206.234,71.859,23.953,0.129,11.976,9.266,9.266,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,2,False,Failed,0.0,1,79000.0,24698.65,23000.0,54299.866,0.0,0,,,2.198,31.966,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,3,False,Failed,0.0,1,30000.0,297.227,0.0,29702.615,0.0,0,,,99.932,99.932,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,airline-status,4,False,Failed,0.0,1,28000.0,214.457,0.0,27785.396,0.0,0,,,129.561,129.561,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,1,True,Succeeded,1.0,2,131000.0,13678.459,0.0,117216.506,70.786,23.595,0.097,11.798,8.576,8.576,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,2,True,Succeeded,1.0,2,120000.0,8787.596,0.0,111113.258,66.418,22.139,0.094,11.07,12.654,12.654,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,3,True,Succeeded,1.0,2,130000.0,9677.219,0.0,120214.167,73.519,24.506,0.098,12.253,12.433,12.433,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,4,True,Succeeded,1.0,2,111000.0,10523.779,0.0,100372.957,70.104,23.368,0.108,11.684,9.547,9.547,
+"Real LLM (Groq gpt-oss-120b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20260930-183000,retail-status,5,True,Succeeded,1.0,2,120000.0,9099.341,0.0,110799.81,67.441,22.48,0.118,11.24,12.187,12.187,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,1,True,Succeeded,1.0,1,60550.869,3505.112,0.0,56991.574,36.956,12.319,0.143,12.319,16.274,16.274,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,2,True,Succeeded,1.0,1,70348.049,4064.728,0.0,66231.642,34.461,11.487,0.123,11.487,16.306,16.306,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,3,True,Succeeded,1.0,1,69305.401,3690.317,0.0,65562.536,35.883,11.961,0.129,11.961,17.779,17.779,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,4,True,Succeeded,1.0,1,70912.451,4193.825,0.0,66666.976,34.978,11.659,0.158,11.659,15.908,15.908,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,airline-status,5,True,Succeeded,1.0,1,50283.611,3889.134,0.0,46344.58,33.618,11.206,0.125,11.206,11.928,11.928,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,1,True,Succeeded,1.0,2,130634.042,7429.309,0.0,123087.273,70.567,23.522,0.131,11.761,16.58,16.58,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,2,True,Succeeded,1.0,2,130631.401,9658.404,0.0,120869.031,70.513,23.504,0.116,11.752,12.524,12.524,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,3,True,Succeeded,1.0,2,131020.151,8708.327,0.0,122208.062,69.812,23.271,0.103,11.635,14.044,14.044,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,4,True,Succeeded,1.0,2,130661.597,9105.967,0.0,121452.844,69.308,23.103,0.101,11.551,13.348,13.348,
+"Real LLM (Groq gpt-oss-20b), cluster VM","Argo + Knative, 10 s requeue",exp1-argo-20261001-054740,retail-status,5,True,Succeeded,1.0,2,129551.08,8450.017,0.0,120992.522,73.269,24.423,0.112,12.211,14.33,14.33,
