@@ -369,7 +369,9 @@ def main():
     _write_csv(os.path.join(out_dir, "dataplane_turns.csv"), dp_turns)
     _write_csv(os.path.join(out_dir, "dataplane_calls.csv"), dp_calls)
 
-    summary = {"config": {k: v for k, v in vars(args).items()}, "overall": summarize(runs, cycles, calls)}
+    summary = {"config": {k: v for k, v in vars(args).items()}, "overall": summarize(runs, cycles, calls),
+               # the shell's LLM settings, as exported for use_llm.sh / faas-cli
+               "llm": {k: os.environ.get(k) for k in ("LLM_BACKEND", "LLM_MODEL")}}
     for wid in sorted({r["workload"] for r in runs}):
         pick = lambda rows: [r for r in rows if r["workload"] == wid]  # noqa: E731
         summary[wid] = summarize(pick(runs), pick(cycles), pick(calls))

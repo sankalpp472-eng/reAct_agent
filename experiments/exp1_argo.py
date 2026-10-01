@@ -210,6 +210,8 @@ def main():
 
     ok = [r for r in runs if r["phase"] == "Succeeded" and r["reward"] == 1.0 and not r["missing_timing"]]
     summary = {"config": vars(args), "stack": "argo+knative", "argo_requeue_time": requeue,
+               # the shell's LLM settings, as exported for use_llm.sh / deploy.sh
+               "llm": {k: os.environ.get(k) for k in ("LLM_BACKEND", "LLM_MODEL")},
                "runs_total": len(runs),
                "dataplane": {"overall": summarize(ok, turns, calls)}}
     for wid in sorted({r["workload"] for r in runs}):
