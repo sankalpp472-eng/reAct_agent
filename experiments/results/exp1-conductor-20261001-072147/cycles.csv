@@ -1,0 +1,16 @@
+workload,run,iteration,tcycle_ms,t_llm_ms,t_llm_wait_ms,t_faas_http_ms,torch_ms,troute_ms,n_tool_calls,missing_timing
+airline-status,1,1,6121,3909.943,0.0,675.057,1536.0,650.369,1,False
+airline-status,2,1,5309,3849.138,0.0,282.862,1177.0,277.648,1,False
+airline-status,3,1,4915,3755.492,0.0,295.508,864.0,290.792,1,False
+airline-status,4,1,5515,3858.514,0.0,482.486,1174.0,477.599,1,False
+airline-status,5,1,5684,3936.619,0.0,233.381,1514.0,228.459,1,False
+retail-status,1,1,4694,3540.384,0.0,366.616,787.0,339.517,1,False
+retail-status,1,2,68446,66459.182,61000.0,301.818,1685.0,296.28,1,False
+retail-status,2,1,10482,9658.92,1000.0,225.08,598.0,219.964,1,False
+retail-status,2,2,69004,67418.574,62000.0,302.426,1283.0,297.483,1,False
+retail-status,3,1,4200,3258.347,0.0,318.653,623.0,313.263,1,False
+retail-status,3,2,64491,63428.123,58000.0,266.877,796.0,262.304,1,False
+retail-status,4,1,5305,3678.04,0.0,220.96,1406.0,215.695,1,False
+retail-status,4,2,55504,54302.921,48000.0,317.079,884.0,311.237,1,False
+retail-status,5,1,4890,3544.263,0.0,481.737,864.0,476.778,1,False
+retail-status,5,2,52991,51407.398,46000.0,315.602,1268.0,309.92,1,False
